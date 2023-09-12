@@ -6,8 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import TitanPartTableInfo from './detail-view';
 import RaidLogItem from './raid-log-item';
 
-// const token = 'b9f0f10d-da1f-45ab-b408-db14055422d9';
-
 type RaidLogProps = {
     data: RaidAttack[];
 };

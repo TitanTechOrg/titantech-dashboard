@@ -19,7 +19,7 @@ function RaidLog({ data }: RaidLogProps) {
         <div>
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">Raid attack log</h2>
             <div>
-                {data.map(({ sources, damage, remaining_attacks, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
+                {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
                     return (
                         <Accordion type="single" collapsible key={titan_attack_id}>
                             <AccordionItem value={titan_attack_id}>

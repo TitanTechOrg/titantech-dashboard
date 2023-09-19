@@ -1,5 +1,4 @@
-import { TitanTechLink, instructions } from '@/constants';
-import { Instruction } from '@/types';
+import { TitanTechLink } from '@/constants';
 import {
     Accordion,
     AccordionItem,

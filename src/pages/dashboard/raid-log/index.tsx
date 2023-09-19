@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Avatar, AvatarGroup, Badge } from '@nextui-org/react';
+import { Accordion, AccordionItem, Avatar, AvatarGroup } from '@nextui-org/react';
 
 import '@/App.css';
 import { RaidAttack } from './types';
@@ -26,7 +26,7 @@ type RaidDeckProps = { id: string; sources: string[] };
 const RaidDeck = ({ id, sources }: RaidDeckProps) => {
     return (
         <AvatarGroup isBordered>
-            {sources.filter(excludeTapDamageCard).map((cardName: string, index: number) => (
+            {sources.filter(excludeTapDamageCard).map((cardName: string) => (
                 // <Badge style={index === 0 ? { marginLeft: -8 } : {}} content="5" color="default" placement="bottom-left" shape="rectangle">
                 <Avatar key={id + cardName} src={getImageUrl(cardName)} isBordered radius="md" />
                 // </Badge>

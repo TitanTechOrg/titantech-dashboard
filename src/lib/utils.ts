@@ -8,6 +8,6 @@ export function cn(...inputs: ClassValue[]) {
 export function formatter() {
     return Intl.NumberFormat('en', {
         notation: 'compact',
-        maximumFractionDigits: 3,
+        maximumFractionDigits: 2,
     });
 }

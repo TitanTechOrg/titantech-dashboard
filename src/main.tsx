@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { NextUIProvider } from '@nextui-org/react';
 
 import App from './App.tsx';
 import NoTokenPage from './pages/landing/index.tsx';
@@ -28,9 +29,11 @@ const router = createBrowserRouter([
 root.render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-            <ReactQueryDevtools initialIsOpen={false} />
-            <Toaster />
+            <NextUIProvider>
+                <RouterProvider router={router} />
+                <ReactQueryDevtools initialIsOpen={false} />
+                <Toaster />
+            </NextUIProvider>
         </QueryClientProvider>
     </React.StrictMode>
 );

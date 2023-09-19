@@ -22,17 +22,21 @@ type TableRowProps = {
 };
 
 const TableRowArmour = ({ text }: TableRowProps) => (
-    <div className="w-full col-span-1 row-span-1 border-double border-4 border-gray-400 rounded-md">{text}</div>
+    <div className="w-full col-span-1 row-span-1 border-double border-4 border-gray-400 rounded-md bg-gray-400/10 text-black font-semibold subpixel-antialiased w-[80px]">
+        {text}
+    </div>
 );
 
 const TableRowBody = ({ text }: TableRowProps) => (
-    <div className="w-full col-span-1 row-span-1 border border-2 border-sky-500 rounded-md">{text}</div>
+    <div className="w-full col-span-1 row-span-1 border border-2 border-sky-500 rounded-md bg-sky-500/20 text-black font-semibold subpixel-antialiased w-[80px]">
+        {text}
+    </div>
 );
-
+// before:bg-center before:bg-no-repeat
 function TitanPartTableInfo({ data }: TitanPartTableInfoProps): JSX.Element {
     return (
-        <div className="flex-initial ml-4 w-64">
-            <div className="grid gap-x-4 gap-y-0.5 grid-cols-3">
+        <div className="flex-initial relative mx-auto w-fit before:bg-cover before:bg-center before:bg-no-repeat before:bg-[url(https://cdn.discordapp.com/attachments/1023719138495045652/1148262949870391366/jukk.png)] before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-20">
+            <div className="grid gap-x-3 gap-y-1 grid-cols-3">
                 <TableRowArmour text={getPartDamageText(findPart('Armor Arm Right', data))} />
                 <TableRowArmour text={getPartDamageText(findPart('Armor Head', data))} />
                 <TableRowArmour text={getPartDamageText(findPart('Armor Arm Left', data))} />
@@ -42,7 +46,7 @@ function TitanPartTableInfo({ data }: TitanPartTableInfoProps): JSX.Element {
                 <TableRowBody text={getPartDamageText(findPart('Body Arm Left', data))} />
             </div>
 
-            <div className="grid gap-x-4 gap-y-0.5 my-4 grid-cols-3">
+            <div className="grid gap-x-3 gap-y-1 my-6 grid-cols-3">
                 <TableRowArmour text={getPartDamageText(findPart('Armor Hand Right', data))} />
                 <TableRowArmour text={getPartDamageText(findPart('Armor Chest', data))} />
                 <TableRowArmour text={getPartDamageText(findPart('Armor Hand Left', data))} />
@@ -52,7 +56,7 @@ function TitanPartTableInfo({ data }: TitanPartTableInfoProps): JSX.Element {
                 <TableRowBody text={getPartDamageText(findPart('Body Hand Left', data))} />
             </div>
 
-            <div className="grid gap-x-4 gap-y-0.5 mx-12 items-center grid-cols-2">
+            <div className="grid gap-x-3 gap-y-1 mx-12 items-center grid-cols-2">
                 <TableRowArmour text={getPartDamageText(findPart('Armor Leg Right', data))} />
                 <TableRowArmour text={getPartDamageText(findPart('Armor Leg Left', data))} />
 

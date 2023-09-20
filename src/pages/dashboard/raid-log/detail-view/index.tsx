@@ -22,13 +22,13 @@ type TableRowProps = {
 };
 
 const TableRowArmour = ({ text }: TableRowProps) => (
-    <div className="w-full col-span-1 row-span-1 border-double border-4 border-gray-400 rounded-md bg-gray-400/10 text-black font-semibold subpixel-antialiased w-[80px]">
+    <div className="w-full col-span-1 row-span-1 border-double border-4 border-gray-400 rounded-md bg-gray-400/10 text-black font-semibold subpixel-antialiased min-w-[80px]">
         {text}
     </div>
 );
 
 const TableRowBody = ({ text }: TableRowProps) => (
-    <div className="w-full col-span-1 row-span-1 border border-2 border-sky-500 rounded-md bg-sky-500/20 text-black font-semibold subpixel-antialiased w-[80px]">
+    <div className="w-full col-span-1 row-span-1 border border-2 border-sky-500 rounded-md bg-sky-500/20 text-black font-semibold subpixel-antialiased  min-w-[80px]">
         {text}
     </div>
 );

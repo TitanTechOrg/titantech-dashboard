@@ -1,5 +1,5 @@
 import Dashboard from './pages/dashboard';
-import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { NextUIProvider } from '@nextui-org/react';
@@ -11,7 +11,7 @@ function App() {
     const queryClient = new QueryClient();
     const routes: RouteObject[] = [
         {
-            path: '/',
+            path: '/*',
             element: <NoTokenPage />,
         },
         {
@@ -21,7 +21,7 @@ function App() {
             errorElement: <NoTokenPage />,
         },
     ];
-    const router = createBrowserRouter(routes, { basename: import.meta.env.DEV ? '/' : '/TitanTechOrg.github.io/' });
+    const router = createHashRouter(routes);
 
     return (
         <QueryClientProvider client={queryClient}>

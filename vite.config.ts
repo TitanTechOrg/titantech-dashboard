@@ -13,9 +13,5 @@ export default defineConfig(({ command }) => {
         },
     };
 
-    if (command !== 'serve') {
-        config.base = '/TitanTechOrg.github.io/';
-    }
-
     return config;
 });

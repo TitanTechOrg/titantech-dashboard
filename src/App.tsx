@@ -21,7 +21,7 @@ function App() {
             errorElement: <NoTokenPage />,
         },
     ];
-    const router = createBrowserRouter(routes, { basename: import.meta.env.DEV ? '/' : '/titantech-dashboard/' });
+    const router = createBrowserRouter(routes, { basename: import.meta.env.DEV ? '/' : '/TitanTechOrg.github.io/' });
 
     return (
         <QueryClientProvider client={queryClient}>

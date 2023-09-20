@@ -1,10 +1,11 @@
 import Dashboard from './pages/dashboard';
-import { Toaster } from '@/components/ui/toaster';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { NextUIProvider } from '@nextui-org/react';
 import NoTokenPage from './pages/landing/index.tsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     const queryClient = new QueryClient();
@@ -27,7 +28,7 @@ function App() {
             <NextUIProvider>
                 <RouterProvider router={router} />
                 <ReactQueryDevtools initialIsOpen={false} />
-                <Toaster />
+                <ToastContainer />
             </NextUIProvider>
         </QueryClientProvider>
     );

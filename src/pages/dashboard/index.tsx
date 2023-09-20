@@ -7,8 +7,8 @@ import RaidLog from './raid-log';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useToast } from '@/components/ui/use-toast';
 import { RaidAttack } from './raid-log/types';
+import { toast } from 'react-toastify';
 
 // ChartJS.register(LineElement, TimeScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -79,7 +79,7 @@ import { RaidAttack } from './raid-log/types';
 function Dashboard() {
     const { token } = useParams();
     const navigate = useNavigate();
-    const { toast } = useToast();
+    const notify = () => toast.error('Uh oh! Something went wrong.', { position: toast.POSITION.BOTTOM_RIGHT });
 
     const fetchAttacks = async () => {
         try {
@@ -94,11 +94,7 @@ function Dashboard() {
     };
 
     const handleError = () => {
-        toast({
-            variant: 'destructive',
-            title: 'Uh oh! Something went wrong.',
-            description: 'There was a problem with your token.',
-        });
+        notify();
         navigate('/');
     };
 

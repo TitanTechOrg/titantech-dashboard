@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem, Avatar, AvatarGroup } from '@nextui-org/react';
+import { ChevronUpIcon } from '@nextui-org/shared-icons';
 
 import '@/App.css';
 import { RaidAttack } from './types';
@@ -59,6 +60,8 @@ function RaidLog({ data }: RaidLogProps) {
                                 </p>
                             }
                             title={formatter().format(damage)}
+                            className="[&_span.rotate-0]:data-[open=true]:rotate-180"
+                            indicator={<ChevronUpIcon />}
                         >
                             <TitanPartTableInfo data={parts} />
                         </AccordionItem>

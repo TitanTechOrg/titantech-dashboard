@@ -5,11 +5,10 @@ import RaidLog from './raid-log';
 // import { Chart as ChartJS, LineElement, TimeScale, LinearScale, PointElement, Tooltip, Legend } from 'chart.js';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import { QueryFunction, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { RaidAttack } from './raid-log/types';
 import { toast } from 'react-toastify';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Spinner } from '@nextui-org/react';
 
@@ -79,11 +78,6 @@ import { Spinner } from '@nextui-org/react';
 //     // '23:30',
 // ];
 
-type RaidAttackAPIResults = {
-    results: RaidAttack[];
-    offset: number | null;
-};
-
 let amountDataLoaded: number = 0;
 
 function Dashboard() {
@@ -109,7 +103,7 @@ function Dashboard() {
         navigate('/');
     };
 
-    const { status, data, error, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    const { status, data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: ['raid_attacks'],
         queryFn: async ({ pageParam = 0 }) => {
             try {
@@ -197,7 +191,7 @@ function Dashboard() {
             {status === 'loading' ? (
                 <p>Loading...</p>
             ) : status === 'error' ? (
-                <span>Error: {error.message}</span>
+                <span>Error loading data</span>
             ) : (
                 <>
                     <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">

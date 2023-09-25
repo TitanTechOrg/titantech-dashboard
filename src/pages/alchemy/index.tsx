@@ -172,7 +172,7 @@ function Alchemy() {
                     </Button>
                 </form>
             ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 w-full">
                     <Code className="whitespace-pre text-left overflow-x-auto">{craftingData}</Code>
                     <Button variant="solid" color="primary" onClick={resetData}>
                         Reset

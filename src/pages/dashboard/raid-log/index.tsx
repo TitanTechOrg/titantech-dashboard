@@ -37,13 +37,8 @@ const RaidDeck = ({ id, sources }: RaidDeckProps) => {
 };
 
 function RaidLog({ data }: RaidLogProps) {
-    if (data.length === 0) {
-        return <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">No raid data</h2>;
-    }
-
     return (
         <div>
-            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">Raid attack log</h2>
             <Accordion selectionMode="multiple">
                 {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
                     return (

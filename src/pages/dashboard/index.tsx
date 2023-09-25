@@ -5,10 +5,13 @@ import RaidLog from './raid-log';
 // import { Chart as ChartJS, LineElement, TimeScale, LinearScale, PointElement, Tooltip, Legend } from 'chart.js';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { QueryFunction, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { RaidAttack } from './raid-log/types';
 import { toast } from 'react-toastify';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spinner } from '@nextui-org/react';
 
 // ChartJS.register(LineElement, TimeScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -76,33 +79,67 @@ import { toast } from 'react-toastify';
 //     // '23:30',
 // ];
 
+type RaidAttackAPIResults = {
+    results: RaidAttack[];
+    offset: number | null;
+};
+
+let amountDataLoaded: number = 0;
+
 function Dashboard() {
     const { token } = useParams();
     const navigate = useNavigate();
     const notify = () => toast.error('Uh oh! Something went wrong.', { position: toast.POSITION.BOTTOM_RIGHT });
+    const { ref, inView } = useInView();
 
-    const fetchAttacks = async () => {
-        try {
-            const response = await axios.get('https://titan-tech-api.silical.dev/api/v1/raid/attacks', {
-                headers: { Authorization: token },
-            });
-            return response.data.attack_logs as RaidAttack[];
-        } catch (err) {
-            handleError();
-            return [];
-        }
-    };
+    // const fetchAttacks = async () => {
+    //     try {
+    //         const response = await axios.get('https://titan-tech-api.silical.dev/api/v1/raid/attacks', {
+    //             headers: { Authorization: token },
+    //         });
+    //         return response.data.attack_logs as RaidAttack[];
+    //     } catch (err) {
+    //         handleError();
+    //         return [];
+    //     }
+    // };
 
     const handleError = () => {
         notify();
         navigate('/');
     };
 
-    const postQuery = useQuery({
-        queryKey: ['latest_raid_attacks'],
-        queryFn: fetchAttacks,
-        // onError: handleError,
+    const { status, data, error, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+        queryKey: ['raid_attacks'],
+        queryFn: async ({ pageParam = 0 }) => {
+            try {
+                const res = await axios.get('https://titan-tech-api.silical.dev/api/v1/raid/attacks?offset=' + pageParam, {
+                    headers: { Authorization: token },
+                });
+                amountDataLoaded = amountDataLoaded + res.data.attack_logs.length;
+                return res.data;
+            } catch (err) {
+                handleError();
+            }
+        },
+        getNextPageParam: (lastPage) => {
+            if (amountDataLoaded >= lastPage.count) return undefined;
+            return amountDataLoaded + 25;
+        },
+        onError: handleError,
     });
+
+    useEffect(() => {
+        if (inView) {
+            fetchNextPage();
+        }
+    }, [inView]);
+
+    // const postQuery = useQuery({
+    //     queryKey: ['latest_raid_attacks'],
+    //     queryFn: fetchAttacks,
+    //     // onError: handleError,
+    // });
 
     // const chartData = {
     //     labels: labels.map((time) => '1970-01-01T' + time), //['2022-01-01', '2022-02-04', '2022-03-11'],
@@ -152,16 +189,64 @@ function Dashboard() {
     //     },
     // };
 
-    if (postQuery.isLoading) return <h1>Loading....</h1>;
-    if (postQuery.isError) return <h1>Error loading data!!!</h1>;
+    // if (postQuery.isLoading) return <h1>Loading....</h1>;
+    // if (postQuery.isError) return <h1>Error loading data!!!</h1>;
 
     return (
         <div>
-            {/* <Bar datatype="bar" options={options} data={chartData} /> */}
-            {/* <Line options={options} data={data} /> */}
-            {/* <Line options={options} data={chartData} redraw={true} fallbackContent={<h1>Loading chart....</h1>} /> */}
-            <RaidLog data={postQuery.data} />
+            {status === 'loading' ? (
+                <p>Loading...</p>
+            ) : status === 'error' ? (
+                <span>Error: {error.message}</span>
+            ) : (
+                <>
+                    <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                        {data?.pages?.length === 0 ? 'No raid data' : 'Raid attack log'}
+                    </h2>
+
+                    {data?.pages?.map((page) => {
+                        console.log('page::', page);
+                        return <RaidLog data={page.attack_logs} />;
+                    })}
+                    <div>
+                        <button ref={ref} onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+                            {isFetchingNextPage ? <Spinner /> : hasNextPage ? 'Load Newer' : 'Nothing more to load'}
+                        </button>
+                    </div>
+                    <div>{isFetching && !isFetchingNextPage ? 'Background Updating...' : null}</div>
+                </>
+            )}
         </div>
     );
 }
+
+{
+    /* <Bar datatype="bar" options={options} data={chartData} /> */
+}
+{
+    /* <Line options={options} data={data} /> */
+}
+{
+    /* <Line options={options} data={chartData} redraw={true} fallbackContent={<h1>Loading chart....</h1>} /> */
+}
+{
+    /* <RaidLog data={postQuery.data} /> */
+}
+
+// <React.Fragment key={page.nextId}>
+//     {page.attack_logs.map((attack) => (
+//         <p
+//             style={{
+//                 border: '1px solid gray',
+//                 borderRadius: '5px',
+//                 padding: '4rem',
+//                 background: `hsla(${attack.titan_attack_id * 30}, 60%, 80%, 1)`,
+//             }}
+//             key={attack.player_name + attack.titan_attack_id}
+//         >
+//             {attack.player_name + ' ' + attack.damage}
+//         </p>
+//     ))}
+// </React.Fragment>
+
 export default Dashboard;

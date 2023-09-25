@@ -30,22 +30,86 @@ function getImageUrl(name: string): string {
 }
 
 const schema = z.object({
-    Acorn: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Leaf: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Sand: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Petal: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Steel: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Berries: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Lightning: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Pepper: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Scale: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Power: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Flame: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Crystal: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Egg: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Essence: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Feather: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
-    Spirit: z.number().nonnegative({ message: 'Must be a positive number' }).min(0, { message: 'Required' }),
+    Acorn: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Leaf: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Sand: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Petal: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Steel: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Berries: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Lightning: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Pepper: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Scale: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Power: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Flame: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Crystal: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Egg: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Essence: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Feather: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
+    Spirit: z
+        .number()
+        .nonnegative({ message: 'Must be a positive number' })
+        .min(0, { message: 'Required' })
+        .max(128, { message: 'Must be between 0 and 128' }),
 });
 
 function Alchemy() {

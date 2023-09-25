@@ -67,7 +67,7 @@ function Alchemy() {
                 headers: { 'Content-Type': 'application/json' }, // Overwrite Axios's automatically set Content-Type
             });
 
-            if (response) setCraftingData(response.toString());
+            if (response.data) setCraftingData(response.data);
         } catch (err) {
             setCraftingData(null);
         }

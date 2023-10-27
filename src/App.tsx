@@ -7,6 +7,7 @@ import NoTokenPage from './pages/landing/index.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Alchemy from './pages/alchemy/index.tsx';
+import RaidLog from './pages/dashboard/raid-log/index.tsx';
 
 function App() {
     const queryClient = new QueryClient();
@@ -21,6 +22,12 @@ function App() {
             element: <Dashboard />,
             errorElement: <NoTokenPage />,
         },
+        // {
+        //     path: '/:token/raid-attacks',
+        //     loader: async ({ params }) => params?.token ?? null,
+        //     element: <RaidLog />,
+        //     errorElement: <NoTokenPage />,
+        // },
         {
             path: '/alchemy',
             element: <Alchemy />,

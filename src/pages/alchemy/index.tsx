@@ -1,10 +1,11 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import axios from 'axios';
 
 import { Button, Input, Code, Divider, Avatar } from '@nextui-org/react';
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { ENDPOINTS, instance } from '@/lib/api/axios';
 
 const ingregients: string[] = [
     'Acorn',
@@ -121,23 +122,29 @@ function Alchemy() {
     } = useForm({
         resolver: zodResolver(schema),
     });
-
+    const [isLoading, setLoading] = useState<boolean>(false);
     const [craftingData, setCraftingData] = useState<string | null>(null);
 
     const fetchAlchemyCrafts = async (data: FieldValues) => {
         try {
             const json: string = JSON.stringify(data);
-            const response = await axios.post('https://titantech-dashboard-alchemy-zkrb6b3q4q-ew.a.run.app/api/v3/alchemy', json, {
+            const response = await instance.post(ENDPOINTS.alchemy_crafts, json, {
                 headers: { 'Content-Type': 'application/json' }, // Overwrite Axios's automatically set Content-Type
             });
-
             if (response.data) setCraftingData(response.data);
         } catch (err) {
             setCraftingData(null);
         }
     };
 
-    const onSubmit = handleSubmit((data: FieldValues) => fetchAlchemyCrafts(data));
+    const mutation = useMutation({
+        mutationFn: fetchAlchemyCrafts,
+        onMutate: () => setLoading(true),
+        onSettled: () => setLoading(false),
+    });
+
+    const onSubmit = handleSubmit((data: FieldValues) => mutation.mutate(data));
+
     const resetData = () => {
         setCraftingData(null);
         reset();
@@ -167,7 +174,7 @@ function Alchemy() {
                             />
                         );
                     })}
-                    <Button type="submit" variant="solid" color="primary">
+                    <Button type="submit" variant="solid" color="primary" isLoading={isLoading} disabled={isLoading}>
                         Submit
                     </Button>
                 </form>

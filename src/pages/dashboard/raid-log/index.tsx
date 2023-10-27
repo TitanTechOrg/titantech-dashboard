@@ -38,7 +38,7 @@ const RaidDeck = ({ id, sources }: RaidDeckProps) => {
 
 function RaidLog({ data }: RaidLogProps) {
     return (
-        <div>
+        <>
             <Accordion selectionMode="multiple">
                 {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
                     return (
@@ -63,7 +63,7 @@ function RaidLog({ data }: RaidLogProps) {
                     );
                 })}
             </Accordion>
-        </div>
+        </>
     );
 }
 

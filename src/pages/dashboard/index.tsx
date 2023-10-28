@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 // import { toast } from 'react-toastify';
 import { useMemo, useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Pagination, Spinner, Tab, Tabs } from '@nextui-org/react';
+import { Button, Pagination, Spinner } from '@nextui-org/react';
+// import { Button, Card, CardBody, CardHeader, Pagination, Spinner, Tab, Tabs } from '@nextui-org/react';
 // import { Spinner } from '@nextui-org/react';
 // import { RaidAttack } from '@/lib/api/raid-attacks/model';
-import { Overview } from './Overview';
+// import { Overview } from './Overview';
 import { ENDPOINTS, instance } from '@/lib/api/axios';
 
 // const dataTiles = [{ title: '', icon: '' }];
@@ -75,8 +76,6 @@ export default function Dashboard() {
     const maxPage = useMemo(() => Math.floor(data?.count / PAGE_OFFSET), [data?.count]);
 
     const fetchNextPage = () => {
-        console.log('hasMore', data?.hasMore);
-        console.log(isPlaceholderData, data.count, page, maxPage);
         if (!isPlaceholderData && page / PAGE_OFFSET !== maxPage) {
             setPage((old) => old + PAGE_OFFSET);
             setCurrentPage((prev) => (prev < maxPage ? prev + 1 : prev));
@@ -92,7 +91,7 @@ export default function Dashboard() {
 
     const fetchPage = (pageNumber: number) => {
         setCurrentPage(pageNumber);
-        setPage((pageNumber - 1) * PAGE_OFFSET);
+        setPage(pageNumber === 1 ? pageNumber - 1 : pageNumber * PAGE_OFFSET);
     };
 
     // useEffect(() => {
@@ -171,145 +170,145 @@ export default function Dashboard() {
         </div>
     );
 
-    return (
-        <>
-            <div className="hidden flex-col md:flex">
-                <div className="flex items-center justify-between mt-2">
-                    <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-                    <div className="flex items-center">
-                        <Button>Download</Button>
-                    </div>
-                </div>
-                <Tabs disabledKeys={['past-raids', 'other']} aria-label="Disabled Options" className="mt-4">
-                    <Tab key="overview" title="Overview">
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-2">
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-                                    <p className="text-sm font-medium">Morale Bonus</p>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        className="h-4 w-4 text-muted-foreground"
-                                    >
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                    </svg>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="text-2xl font-bold">36.9%</div>
-                                    <p className="text-xs text-muted-foreground">14 TT this cycle</p>
-                                </CardBody>
-                            </Card>
+    // return (
+    //     <>
+    //         <div className="hidden flex-col md:flex">
+    //             <div className="flex items-center justify-between mt-2">
+    //                 <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+    //                 <div className="flex items-center">
+    //                     <Button>Download</Button>
+    //                 </div>
+    //             </div>
+    //             <Tabs disabledKeys={['past-raids', 'other']} aria-label="Disabled Options" className="mt-4">
+    //                 <Tab key="overview" title="Overview">
+    //                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-2">
+    //                         <Card>
+    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
+    //                                 <p className="text-sm font-medium">Morale Bonus</p>
+    //                                 <svg
+    //                                     xmlns="http://www.w3.org/2000/svg"
+    //                                     viewBox="0 0 24 24"
+    //                                     fill="none"
+    //                                     stroke="currentColor"
+    //                                     strokeLinecap="round"
+    //                                     strokeLinejoin="round"
+    //                                     strokeWidth="2"
+    //                                     className="h-4 w-4 text-muted-foreground"
+    //                                 >
+    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    //                                 </svg>
+    //                             </CardHeader>
+    //                             <CardBody>
+    //                                 <div className="text-2xl font-bold">36.9%</div>
+    //                                 <p className="text-xs text-muted-foreground">14 TT this cycle</p>
+    //                             </CardBody>
+    //                         </Card>
 
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-                                    <p className="text-sm font-medium">Players at 6/6 attacks</p>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        className="h-4 w-4 text-muted-foreground"
-                                    >
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                    </svg>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="text-2xl font-bold">26</div>
-                                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-                                </CardBody>
-                            </Card>
+    //                         <Card>
+    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
+    //                                 <p className="text-sm font-medium">Players at 6/6 attacks</p>
+    //                                 <svg
+    //                                     xmlns="http://www.w3.org/2000/svg"
+    //                                     viewBox="0 0 24 24"
+    //                                     fill="none"
+    //                                     stroke="currentColor"
+    //                                     strokeLinecap="round"
+    //                                     strokeLinejoin="round"
+    //                                     strokeWidth="2"
+    //                                     className="h-4 w-4 text-muted-foreground"
+    //                                 >
+    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    //                                 </svg>
+    //                             </CardHeader>
+    //                             <CardBody>
+    //                                 <div className="text-2xl font-bold">26</div>
+    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+    //                             </CardBody>
+    //                         </Card>
 
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-                                    <p className="text-sm font-medium">Total Revenue</p>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        className="h-4 w-4 text-muted-foreground"
-                                    >
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                    </svg>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="text-2xl font-bold">$45,231.89</div>
-                                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-                                </CardBody>
-                            </Card>
+    //                         <Card>
+    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
+    //                                 <p className="text-sm font-medium">Total Revenue</p>
+    //                                 <svg
+    //                                     xmlns="http://www.w3.org/2000/svg"
+    //                                     viewBox="0 0 24 24"
+    //                                     fill="none"
+    //                                     stroke="currentColor"
+    //                                     strokeLinecap="round"
+    //                                     strokeLinejoin="round"
+    //                                     strokeWidth="2"
+    //                                     className="h-4 w-4 text-muted-foreground"
+    //                                 >
+    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    //                                 </svg>
+    //                             </CardHeader>
+    //                             <CardBody>
+    //                                 <div className="text-2xl font-bold">$45,231.89</div>
+    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+    //                             </CardBody>
+    //                         </Card>
 
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-                                    <p className="text-sm font-medium">Total Revenue</p>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        className="h-4 w-4 text-muted-foreground"
-                                    >
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                    </svg>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="text-2xl font-bold">$45,231.89</div>
-                                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-                                </CardBody>
-                            </Card>
-                        </div>
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
-                            <Card className="col-span-4 p-8">
-                                <CardHeader className="p-0">
-                                    <h3 className="text-xl font-bold">Overview</h3>
-                                </CardHeader>
-                                <CardBody className="p-0">
-                                    <Overview data={remapChartData()} />
-                                </CardBody>
-                            </Card>
-                            <Card className="col-span-3 p-8">
-                                <CardHeader className="p-0 justify-between">
-                                    <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-                                    <Button size="sm" variant="light">
-                                        View all
-                                    </Button>
-                                </CardHeader>
-                                <CardBody className="p-0">{logsWithMockResponse()}</CardBody>
-                            </Card>
-                        </div>
-                    </Tab>
-                    <Tab key="past-raids" title="Past raids">
-                        <Card>
-                            <CardBody>
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            </CardBody>
-                        </Card>
-                    </Tab>
-                    <Tab key="other" title="Other">
-                        <Card>
-                            <CardBody>
-                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </CardBody>
-                        </Card>
-                    </Tab>
-                </Tabs>
-            </div>
-        </>
-    );
+    //                         <Card>
+    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
+    //                                 <p className="text-sm font-medium">Total Revenue</p>
+    //                                 <svg
+    //                                     xmlns="http://www.w3.org/2000/svg"
+    //                                     viewBox="0 0 24 24"
+    //                                     fill="none"
+    //                                     stroke="currentColor"
+    //                                     strokeLinecap="round"
+    //                                     strokeLinejoin="round"
+    //                                     strokeWidth="2"
+    //                                     className="h-4 w-4 text-muted-foreground"
+    //                                 >
+    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    //                                 </svg>
+    //                             </CardHeader>
+    //                             <CardBody>
+    //                                 <div className="text-2xl font-bold">$45,231.89</div>
+    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+    //                             </CardBody>
+    //                         </Card>
+    //                     </div>
+    //                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+    //                         <Card className="col-span-4 p-8">
+    //                             <CardHeader className="p-0">
+    //                                 <h3 className="text-xl font-bold">Overview</h3>
+    //                             </CardHeader>
+    //                             <CardBody className="p-0">
+    //                                 <Overview data={remapChartData()} />
+    //                             </CardBody>
+    //                         </Card>
+    //                         <Card className="col-span-3 p-8">
+    //                             <CardHeader className="p-0 justify-between">
+    //                                 <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
+    //                                 <Button size="sm" variant="light">
+    //                                     View all
+    //                                 </Button>
+    //                             </CardHeader>
+    //                             <CardBody className="p-0">{logsWithMockResponse()}</CardBody>
+    //                         </Card>
+    //                     </div>
+    //                 </Tab>
+    //                 <Tab key="past-raids" title="Past raids">
+    //                     <Card>
+    //                         <CardBody>
+    //                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+    //                             irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    //                         </CardBody>
+    //                     </Card>
+    //                 </Tab>
+    //                 <Tab key="other" title="Other">
+    //                     <Card>
+    //                         <CardBody>
+    //                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    //                         </CardBody>
+    //                     </Card>
+    //                 </Tab>
+    //             </Tabs>
+    //         </div>
+    //     </>
+    // );
 }
 
 // const mockRaidAttackResponse =

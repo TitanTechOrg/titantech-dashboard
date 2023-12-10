@@ -1,0 +1,41 @@
+import { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import RaidLog from '../raid-log';
+import { useInView } from 'react-intersection-observer';
+import { Spinner } from '@nextui-org/react';
+import { RaidLogType } from '../raid-log/types';
+
+export default function LatestAttacksList({
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+}: UseInfiniteQueryResult<InfiniteData<RaidLogType, unknown>, Error>) {
+    const { ref, inView } = useInView();
+
+    useEffect(() => {
+        if (inView) {
+            fetchNextPage();
+        }
+    }, [fetchNextPage, inView]);
+
+    if (status === 'pending') return <Spinner label="Loading..." color="primary" />;
+    if (status === 'error') return 'An error has occurred: ' + error.message;
+
+    return (
+        <>
+            {data?.pages?.map(({ attack_logs }: RaidLogType, index: number) => {
+                return <RaidLog key={`raid-log-page-${index}`} data={attack_logs} />;
+            })}
+            <div>
+                <button ref={ref} onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+                    {isFetchingNextPage ? <Spinner /> : hasNextPage ? 'Load Newer' : 'Nothing more to load'}
+                </button>
+            </div>
+            <div>{isFetching && !isFetchingNextPage ? 'Background Updating...' : null}</div>
+        </>
+    );
+}

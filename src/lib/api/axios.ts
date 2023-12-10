@@ -2,13 +2,36 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const ENDPOINTS = {
     timeline_chart: 'api/v1/metrics/attack_occurrence',
-    raid_attack_log: 'api/v1/raid/attacks',
+    titans: 'api/v1/raid/titans',
+    raid_attack_log: {
+        v1: 'api/v1/raid/attacks',
+        v2: 'api/v2/raid/attacks',
+    },
     alchemy_crafts: 'api/v3/alchemy',
+    raid_list: '/api/v1/raid/list',
+    cycle_data: '/api/v1/raid/cycles',
 } as const;
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_PUBLIC_API_BASE_URL,
 });
+
+// instance.interceptors.request.use(
+//     async (config: InternalAxiosRequestConfig<AxiosHeaderValue | undefined>) => {
+//         const clan_token = localStorage.getItem('clan_token');
+//         if (clan_token) {
+//             config.headers = {
+//                 ...config.headers,
+//                 Authorization: clan_token,
+//             };
+//         }
+
+//         return config;
+//     },
+//     (error) => {
+//         return Promise.reject(error);
+//     }
+// );
 
 const setAuthorizationHeader = (token: string): AxiosRequestConfig => {
     return {
@@ -16,24 +39,13 @@ const setAuthorizationHeader = (token: string): AxiosRequestConfig => {
     };
 };
 
-const getRequest = async <T>(url: string, token?: string): Promise<T> => {
-    const options = token ? setAuthorizationHeader(token) : undefined;
-    const response: AxiosResponse<T> = await instance.get(url, options);
-    return await response.data;
+const getRequest = async <T>(url: string, withToken: boolean = true): Promise<T> => {
+    const token = localStorage.getItem('clan_token');
+    let options = undefined;
+    if (withToken && token) options = setAuthorizationHeader(token);
+    const request = instance.get(url, options);
+    const { data }: AxiosResponse<T> = await request;
+    return await data;
 };
-
-// const a = `curl 'https://titan-tech-dashboard-2q0n24y4.ew.gateway.dev/api/v1/metrics/attack_occurrence?raid_id=c441cf35-3e1c-4c65-8519-67597a58ddef' -H 'Authorization: b9f0f10d-da1f-45ab-b408-db14055422d9'`;
-
-// export const b = async ({ pageParam = 0 }, token: string) => {
-//     try {
-//         const res = await instance.get(ENDPOINTS.raid_attack_log + '?offset=' + pageParam, {
-//             headers: { Authorization: token },
-//         });
-//         amountDataLoaded = amountDataLoaded + res.data.attack_logs.length;
-//         return res.data;
-//     } catch (err) {
-//         handleError();
-//     }
-// };
 
 export { ENDPOINTS, instance, getRequest };

@@ -1,314 +1,232 @@
-import RaidLog from './raid-log';
+// import RaidLog from './raid-log';
 // import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 // import { toast } from 'react-toastify';
-import { useMemo, useState } from 'react';
-import { Button, Pagination, Spinner } from '@nextui-org/react';
-// import { Button, Card, CardBody, CardHeader, Pagination, Spinner, Tab, Tabs } from '@nextui-org/react';
-// import { Spinner } from '@nextui-org/react';
+// import { Button, Pagination, Spinner } from '@nextui-org/react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@nextui-org/react';
+import {
+    Button,
+    Card,
+    CardBody,
+    CardHeader,
+    Image,
+    // Select,
+    // SelectItem,
+    // Spinner,
+} from '@nextui-org/react';
 // import { RaidAttack } from '@/lib/api/raid-attacks/model';
 // import { Overview } from './Overview';
-import { ENDPOINTS, instance } from '@/lib/api/axios';
+// import { ENDPOINTS, getRequest, instance } from '@/lib/api/axios';
+// import { RaidLogType } from './raid-log/types';
+// import { useInView } from 'react-intersection-observer';
+// import { useEffect } from 'react';
+import LatestAttacksList from './widgets/LatestAttacksList';
+import { useLatestAttacks, useRaidCycles, useRaidTitans } from '@/lib/queries';
+import { useEffect, useMemo, useState } from 'react';
+import { RaidCycle } from './raid-log/types';
+import MoraleCard from './widgets/MoraleCard';
+import MirrorForceCard from './widgets/MirrorForceCard';
+import useTitanStore from '@/stores/titansStore';
 
-// const dataTiles = [{ title: '', icon: '' }];
-const PAGE_OFFSET: number = 25;
+const menuItems = ['Dashboard', 'Alchemy'];
+
+function getImageUrl(name: string): string {
+    return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
+}
+
+function getLogoUrl(): string {
+    return new URL(`../../assets/Logo.webp`, import.meta.url).href;
+}
+
 export default function Dashboard() {
-    const [page, setPage] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const { token } = useParams();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { setTitans } = useTitanStore();
+
+    const raidAttacks = useLatestAttacks();
+
+    console.log(raidAttacks.data);
+
+    // const attackTimeline = useAttackTimeline();
+    // console.log('attackTimeline', attackTimeline.data);
+
+    // const raidList = useRaidList();
+    // console.log('raidList', raidList.data);
+
+    const raidCycles = useRaidCycles();
+    // console.log('raidCycles', JSON.stringify(raidCycles.data));
+
+    const { data: raidTitansData } = useRaidTitans();
+    // console.log('raidTitans', raidTitans.data);
+
+    useEffect(() => {
+        if (raidTitansData) {
+            setTitans(raidTitansData.titans);
+        }
+    }, [raidTitansData, setTitans]);
+
+    // console.log(titans);
+
+    // const [isOpen, setIsOpen] = React.useState(false);
+    // const {items, hasMore, isLoading, onLoadMore} = usePokemonList({fetchDelay: 1500});
+
     // const navigate = useNavigate();
     // const notify = () => toast.error('Uh oh! Something went wrong.', { position: toast.POSITION.BOTTOM_RIGHT });
-
-    // const fetchAttacks = async () => {
-    //     try {
-    //         const response = await axios.get('https://titan-tech-api.silical.dev/api/v1/raid/attacks', {
-    //             headers: { Authorization: token },
-    //         });
-    //         return response.data.attack_logs as RaidAttack[];
-    //     } catch (err) {
-    //         handleError();
-    //         return [];
-    //     }
-    // };
-
-    // const fetchChartData = async () => {
-    //     // const response = await instance.get(ENDPOINTS.timeline_chart, {
-    //     //     headers: { Authorization: token },
-    //     // });
-    //     const response = await getRequest(ENDPOINTS.timeline_chart + '?raid_id=c441cf35-3e1c-4c65-8519-67597a58ddef', token);
-    //     console.log(response);
-    // };
 
     // const handleError = () => {
     //     notify();
     //     navigate('/');
     // };
 
-    // useEffect(() => {
-    //     const chart = async () => {
-    //         try {
-    //             await fetchChartData();
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     };
-    //     chart();
-    // }, []);
+    const getMoraleBonus = useMemo(() => {
+        if (!raidCycles.data) return 0;
 
-    const fetchRaidAttacks = async (page = 0) => {
-        const res = await instance.get(ENDPOINTS.raid_attack_log + '?offset=' + page, {
-            headers: { Authorization: token },
-        });
+        const { morale }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
 
-        const hasMore: boolean = (res.data.count as number) > ((page + PAGE_OFFSET) as number) && page >= 0;
+        return (morale * 100).toFixed(2);
+    }, [raidCycles.data?.cycles.length]);
 
-        res.data.hasMore = hasMore;
-        return res.data;
+    const getTeamTacticsUsage = useMemo(() => {
+        if (!raidCycles.data) return 0;
+
+        const { team_tactics }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
+
+        return team_tactics;
+    }, [raidCycles.data?.cycles.length]);
+
+    const getMirrorForceUsage = useMemo(() => {
+        if (!raidCycles.data) return 0;
+
+        const { mirror_force }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
+
+        return mirror_force;
+    }, [raidCycles.data?.cycles.length]);
+
+    // const getTitansData = (titanId: string): TitanSequence | undefined => {
+    //     if (!raidTitans.data) return;
+
+    //     return raidTitans.data.find(({ id }: TitanSequence) => id === titanId);
+    // };
+
+    const handleLogout = () => {
+        localStorage.clear();
     };
-
-    const { isPending, isError, error, data, isPlaceholderData } = useQuery({
-        queryKey: ['raid_attacks', page],
-        queryFn: () => fetchRaidAttacks(page),
-        placeholderData: keepPreviousData,
-    });
-
-    const maxPage = useMemo(() => Math.floor(data?.count / PAGE_OFFSET), [data?.count]);
-
-    const fetchNextPage = () => {
-        if (!isPlaceholderData && page / PAGE_OFFSET !== maxPage) {
-            setPage((old) => old + PAGE_OFFSET);
-            setCurrentPage((prev) => (prev < maxPage ? prev + 1 : prev));
-        }
-    };
-
-    const fetchPreviousPage = () => {
-        if (!isPlaceholderData && data.count > page) {
-            setPage((old) => Math.max(old - PAGE_OFFSET, 0));
-            setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-        }
-    };
-
-    const fetchPage = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
-        setPage(pageNumber === 1 ? pageNumber - 1 : pageNumber * PAGE_OFFSET);
-    };
-
-    // useEffect(() => {
-    //     if (inView) {
-    //         fetchNextPage();
-    //     }
-    // }, [inView]);
-
-    // const logs = () => (
-    //     <div>
-    //         {status === 'loading' ? (
-    //             <p>Loading...</p>
-    //         ) : status === 'error' ? (
-    //             <span>Error loading data</span>
-    //         ) : (
-    //             <>
-    //                 <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-    //                     {data?.pages?.length === 0 || data.pages[0]?.count === 0 ? 'No raid data' : 'Raid attack log'}
-    //                 </h2>
-    //                 {data?.pages?.length === 0 || data.pages[0]?.count === 0 ? null : (
-    //                     <>
-    //                         {data?.pages?.map((page) => <RaidLog data={page.attack_logs} />)}
-    //                         <div>
-    //                             <button ref={ref} onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
-    //                                 {isFetchingNextPage ? <Spinner /> : hasNextPage ? 'Load Newer' : 'Nothing more to load'}
-    //                             </button>
-    //                         </div>
-    //                         <div>{isFetching && !isFetchingNextPage ? 'Background Updating...' : null}</div>
-    //                     </>
-    //                 )}
-    //             </>
-    //         )}
-    //     </div>
-    // );
-
-    // return logs();
 
     return (
-        <div>
-            {isPending ? (
-                <div className="flex item-center justify-center gap-5">
-                    <Spinner />
-                    Loading...
+        <>
+            <Navbar isBordered isBlurred={true} onMenuOpenChange={setIsMenuOpen}>
+                <NavbarContent>
+                    <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden" />
+
+                    <NavbarBrand className="gap-2">
+                        <Image src={getLogoUrl()} className="h-9 w9" radius="sm" />
+                        <p className="font-bold text-inherit">TitanTech</p>
+                    </NavbarBrand>
+                </NavbarContent>
+
+                <NavbarContent className="hidden sm:flex gap-4" justify="center">
+                    <NavbarItem isActive>
+                        <Link href="/dashboard" aria-current="page">
+                            Dashboard
+                        </Link>
+                    </NavbarItem>
+
+                    <NavbarItem>
+                        <Link color="foreground" href="/alchemy">
+                            Alchemy
+                        </Link>
+                    </NavbarItem>
+                </NavbarContent>
+
+                <NavbarContent justify="end">
+                    <NavbarItem className="hidden">
+                        <Button color="primary" variant="flat" onPress={handleLogout}>
+                            Sign out
+                        </Button>
+                    </NavbarItem>
+                </NavbarContent>
+
+                <NavbarMenu className="z-50 mt-8 pl-12">
+                    {menuItems.map((item, index) => (
+                        <NavbarMenuItem key={`${item}-${index}`}>
+                            <Link color={index === 0 ? 'primary' : 'foreground'} className="w-full" href={`/${item}`} size="lg">
+                                {item}
+                            </Link>
+                        </NavbarMenuItem>
+                    ))}
+                </NavbarMenu>
+            </Navbar>
+            <div className="flex-col md:flex">
+                {/* <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center">
+                        <Select
+                            className="max-w-xs"
+                            isLoading={isLoading}
+                            items={items}
+                            label="Pick a Pokemon"
+                            placeholder="Select a Pokemon"
+                            scrollRef={scrollerRef}
+                            selectionMode="single"
+                            onOpenChange={setIsOpen}
+                        >
+                            {(item) => (
+                                <SelectItem key={item.name} className="capitalize">
+                                    {item.name}
+                                </SelectItem>
+                            )}
+                        </Select>
+                    </div>
+                </div> */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-2">
+                    <MoraleCard imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} usage={getTeamTacticsUsage} />
+                    <MirrorForceCard imageUrl={getImageUrl('MirrorForce')} usage={getMirrorForceUsage} />
+
+                    {/* <Card>
+                        <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">
+                            <p className="text-sm font-medium">Players at 6/6 attacks (todo)</p>
+                            <Image src={getImageUrl('TapDamage')} className="rounded-lg flex object-cover w-full h-full h-10 w-10" />
+                        </CardHeader>
+                        <CardBody>
+                            <div className="text-2xl font-bold">26</div>
+                            <p className="text-xs text-muted-foreground">+20.1% from last cycle</p>
+                        </CardBody>
+                    </Card> */}
+
+                    {/* <Card>
+                        <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">
+                            <p className="text-sm font-medium">Average player damage? (todo)</p>
+                            <Image src={getImageUrl('TapDamage')} className="rounded-lg flex object-cover w-full h-full h-10 w-10" />
+                        </CardHeader>
+                        <CardBody>
+                            <div className="text-2xl font-bold">45,231.89</div>
+                            <p className="text-xs text-muted-foreground">blablabla</p>
+                        </CardBody>
+                    </Card> */}
                 </div>
-            ) : isError ? (
-                <div>Error: {error.message}</div>
-            ) : (
-                <div>
-                    <div className="flex flex-row gap-5 items-center">
-                        <Pagination total={maxPage} color="secondary" page={currentPage} onChange={fetchPage} />
-                        <div className="flex gap-2">
-                            <Button size="sm" variant="flat" color="secondary" onPress={fetchPreviousPage} isDisabled={currentPage === 1}>
-                                Previous
+
+                <div className="grid gap-4 grid-cols-2 mt-4">
+                    {/* <Card className="col-span-4 p-4">
+                        <CardHeader className="p-0">
+                            <h3 className="text-xl font-bold">Attack Timeline Overview (Experimental)</h3>
+                        </CardHeader>
+                        <CardBody className="p-0 h-80">
+                            <Overview data={remapChartData()} />
+                        </CardBody>
+                    </Card> */}
+                    <Card className="col-span-4 p-4">
+                        <CardHeader className="p-0 justify-between">
+                            <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
+                            <Button size="sm" color="primary" variant="flat" onPress={() => raidAttacks.refetch()}>
+                                Refresh
                             </Button>
-                            <Button size="sm" variant="flat" color="secondary" onPress={fetchNextPage} isDisabled={!data?.hasMore}>
-                                Next
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex flex-row">
-                        <RaidLog data={data.attack_logs} />
-                    </div>
-                    <div className="flex flex-row gap-5 items-center">
-                        <Pagination total={maxPage} color="secondary" page={currentPage} onChange={fetchPage} />
-                        <div className="flex gap-2">
-                            <Button size="sm" variant="flat" color="secondary" onPress={fetchPreviousPage} isDisabled={currentPage === 1}>
-                                Previous
-                            </Button>
-                            <Button size="sm" variant="flat" color="secondary" onPress={fetchNextPage} isDisabled={!data?.hasMore}>
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                        </CardHeader>
+                        {/* h-96 min-h-full max-h-96 */}
+                        <CardBody className="p-0 ">
+                            <LatestAttacksList {...raidAttacks} />
+                        </CardBody>
+                    </Card>
                 </div>
-            )}
-        </div>
+            </div>
+        </>
     );
-
-    // return (
-    //     <>
-    //         <div className="hidden flex-col md:flex">
-    //             <div className="flex items-center justify-between mt-2">
-    //                 <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-    //                 <div className="flex items-center">
-    //                     <Button>Download</Button>
-    //                 </div>
-    //             </div>
-    //             <Tabs disabledKeys={['past-raids', 'other']} aria-label="Disabled Options" className="mt-4">
-    //                 <Tab key="overview" title="Overview">
-    //                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-2">
-    //                         <Card>
-    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-    //                                 <p className="text-sm font-medium">Morale Bonus</p>
-    //                                 <svg
-    //                                     xmlns="http://www.w3.org/2000/svg"
-    //                                     viewBox="0 0 24 24"
-    //                                     fill="none"
-    //                                     stroke="currentColor"
-    //                                     strokeLinecap="round"
-    //                                     strokeLinejoin="round"
-    //                                     strokeWidth="2"
-    //                                     className="h-4 w-4 text-muted-foreground"
-    //                                 >
-    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    //                                 </svg>
-    //                             </CardHeader>
-    //                             <CardBody>
-    //                                 <div className="text-2xl font-bold">36.9%</div>
-    //                                 <p className="text-xs text-muted-foreground">14 TT this cycle</p>
-    //                             </CardBody>
-    //                         </Card>
-
-    //                         <Card>
-    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-    //                                 <p className="text-sm font-medium">Players at 6/6 attacks</p>
-    //                                 <svg
-    //                                     xmlns="http://www.w3.org/2000/svg"
-    //                                     viewBox="0 0 24 24"
-    //                                     fill="none"
-    //                                     stroke="currentColor"
-    //                                     strokeLinecap="round"
-    //                                     strokeLinejoin="round"
-    //                                     strokeWidth="2"
-    //                                     className="h-4 w-4 text-muted-foreground"
-    //                                 >
-    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    //                                 </svg>
-    //                             </CardHeader>
-    //                             <CardBody>
-    //                                 <div className="text-2xl font-bold">26</div>
-    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-    //                             </CardBody>
-    //                         </Card>
-
-    //                         <Card>
-    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-    //                                 <p className="text-sm font-medium">Total Revenue</p>
-    //                                 <svg
-    //                                     xmlns="http://www.w3.org/2000/svg"
-    //                                     viewBox="0 0 24 24"
-    //                                     fill="none"
-    //                                     stroke="currentColor"
-    //                                     strokeLinecap="round"
-    //                                     strokeLinejoin="round"
-    //                                     strokeWidth="2"
-    //                                     className="h-4 w-4 text-muted-foreground"
-    //                                 >
-    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    //                                 </svg>
-    //                             </CardHeader>
-    //                             <CardBody>
-    //                                 <div className="text-2xl font-bold">$45,231.89</div>
-    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-    //                             </CardBody>
-    //                         </Card>
-
-    //                         <Card>
-    //                             <CardHeader className="flex flex-row items-center justify-between mt-0 p-6 pb-2 ">
-    //                                 <p className="text-sm font-medium">Total Revenue</p>
-    //                                 <svg
-    //                                     xmlns="http://www.w3.org/2000/svg"
-    //                                     viewBox="0 0 24 24"
-    //                                     fill="none"
-    //                                     stroke="currentColor"
-    //                                     strokeLinecap="round"
-    //                                     strokeLinejoin="round"
-    //                                     strokeWidth="2"
-    //                                     className="h-4 w-4 text-muted-foreground"
-    //                                 >
-    //                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    //                                 </svg>
-    //                             </CardHeader>
-    //                             <CardBody>
-    //                                 <div className="text-2xl font-bold">$45,231.89</div>
-    //                                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-    //                             </CardBody>
-    //                         </Card>
-    //                     </div>
-    //                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
-    //                         <Card className="col-span-4 p-8">
-    //                             <CardHeader className="p-0">
-    //                                 <h3 className="text-xl font-bold">Overview</h3>
-    //                             </CardHeader>
-    //                             <CardBody className="p-0">
-    //                                 <Overview data={remapChartData()} />
-    //                             </CardBody>
-    //                         </Card>
-    //                         <Card className="col-span-3 p-8">
-    //                             <CardHeader className="p-0 justify-between">
-    //                                 <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-    //                                 <Button size="sm" variant="light">
-    //                                     View all
-    //                                 </Button>
-    //                             </CardHeader>
-    //                             <CardBody className="p-0">{logsWithMockResponse()}</CardBody>
-    //                         </Card>
-    //                     </div>
-    //                 </Tab>
-    //                 <Tab key="past-raids" title="Past raids">
-    //                     <Card>
-    //                         <CardBody>
-    //                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-    //                             irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    //                         </CardBody>
-    //                     </Card>
-    //                 </Tab>
-    //                 <Tab key="other" title="Other">
-    //                     <Card>
-    //                         <CardBody>
-    //                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    //                         </CardBody>
-    //                     </Card>
-    //                 </Tab>
-    //             </Tabs>
-    //         </div>
-    //     </>
-    // );
 }
 
 // const mockRaidAttackResponse =

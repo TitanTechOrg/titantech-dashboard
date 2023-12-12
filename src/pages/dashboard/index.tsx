@@ -26,6 +26,7 @@ import { RaidCycle } from './raid-log/types';
 import MoraleCard from './widgets/MoraleCard';
 import MirrorForceCard from './widgets/MirrorForceCard';
 import useTitanStore from '@/stores/titansStore';
+import { useNavigate } from 'react-router-dom';
 
 const menuItems = ['Dashboard', 'Alchemy'];
 
@@ -41,27 +42,28 @@ export default function Dashboard() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { setTitans } = useTitanStore();
 
-    const raidAttacks = useLatestAttacks();
-
-    console.log(raidAttacks.data);
-
-    // const attackTimeline = useAttackTimeline();
-    // console.log('attackTimeline', attackTimeline.data);
-
-    // const raidList = useRaidList();
-    // console.log('raidList', raidList.data);
+    const navigate = useNavigate();
 
     const raidCycles = useRaidCycles();
-    // console.log('raidCycles', JSON.stringify(raidCycles.data));
-
+    const raidAttacks = useLatestAttacks();
     const { data: raidTitansData } = useRaidTitans();
-    // console.log('raidTitans', raidTitans.data);
+    // const raidList = useRaidList();
+    // const attackTimeline = useAttackTimeline();
+    // console.log('attackTimeline', attackTimeline.data);
+    // console.log('raidList', raidList.data);
 
     useEffect(() => {
         if (raidTitansData) {
             setTitans(raidTitansData.titans);
         }
     }, [raidTitansData, setTitans]);
+
+    useEffect(() => {
+        if (!localStorage.getItem('clan_token')) {
+            localStorage.clear();
+            navigate('/');
+        }
+    }, [window.history]);
 
     // console.log(titans);
 
@@ -76,35 +78,36 @@ export default function Dashboard() {
     //     navigate('/');
     // };
 
+    // console.log(raidCycles?.data);
+
+    const latestCycleData = useMemo(
+        () => (data: RaidCycle[]) => data.reduce((prev, current) => (prev && prev.cycle > current.cycle ? prev : current)),
+        [raidCycles?.data?.cycles.length]
+    );
+
     const getMoraleBonus = useMemo(() => {
-        if (!raidCycles.data) return 0;
+        if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
 
-        const { morale }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
+        const { morale, team_tactics }: RaidCycle = latestCycleData(raidCycles.data.cycles);
 
-        return (morale * 100).toFixed(2);
+        return ((morale + team_tactics) * 100).toFixed(2);
     }, [raidCycles.data?.cycles.length]);
 
-    const getTeamTacticsUsage = useMemo(() => {
-        if (!raidCycles.data) return 0;
+    // const getTeamTacticsUsage = useMemo(() => {
+    //     if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
 
-        const { team_tactics }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
+    //     const { team_tactics }: RaidCycle = latestCycleData(raidCycles.data.cycles);
+    //     console.log('team_tactics', team_tactics);
+    //     return team_tactics;
+    // }, [raidCycles.data?.cycles.length]);
 
-        return team_tactics;
+    const getMirrorForceBonus = useMemo(() => {
+        if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
+
+        const { mirror_force }: RaidCycle = latestCycleData(raidCycles.data.cycles);
+
+        return (mirror_force * 100).toFixed(0);
     }, [raidCycles.data?.cycles.length]);
-
-    const getMirrorForceUsage = useMemo(() => {
-        if (!raidCycles.data) return 0;
-
-        const { mirror_force }: RaidCycle = raidCycles.data.cycles[raidCycles.data.cycles.length - 1];
-
-        return mirror_force;
-    }, [raidCycles.data?.cycles.length]);
-
-    // const getTitansData = (titanId: string): TitanSequence | undefined => {
-    //     if (!raidTitans.data) return;
-
-    //     return raidTitans.data.find(({ id }: TitanSequence) => id === titanId);
-    // };
 
     const handleLogout = () => {
         localStorage.clear();
@@ -116,8 +119,8 @@ export default function Dashboard() {
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden" />
 
-                    <NavbarBrand className="gap-2">
-                        <Image src={getLogoUrl()} className="h-9 w9" radius="sm" />
+                    <NavbarBrand className="gap-2 min-w-fit">
+                        <Image src={getLogoUrl()} className="h-9 w-9" radius="sm" />
                         <p className="font-bold text-inherit">TitanTech</p>
                     </NavbarBrand>
                 </NavbarContent>
@@ -130,7 +133,7 @@ export default function Dashboard() {
                     </NavbarItem>
 
                     <NavbarItem>
-                        <Link color="foreground" href="/alchemy">
+                        <Link href="/alchemy" color="foreground">
                             Alchemy
                         </Link>
                     </NavbarItem>
@@ -144,7 +147,7 @@ export default function Dashboard() {
                     </NavbarItem>
                 </NavbarContent>
 
-                <NavbarMenu className="z-50 mt-8 pl-12">
+                <NavbarMenu className="z-50 pl-12">
                     {menuItems.map((item, index) => (
                         <NavbarMenuItem key={`${item}-${index}`}>
                             <Link color={index === 0 ? 'primary' : 'foreground'} className="w-full" href={`/${item}`} size="lg">
@@ -175,9 +178,9 @@ export default function Dashboard() {
                         </Select>
                     </div>
                 </div> */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-2">
-                    <MoraleCard imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} usage={getTeamTacticsUsage} />
-                    <MirrorForceCard imageUrl={getImageUrl('MirrorForce')} usage={getMirrorForceUsage} />
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-4">
+                    <MoraleCard imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
+                    <MirrorForceCard imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
 
                     {/* <Card>
                         <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">

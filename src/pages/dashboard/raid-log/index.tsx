@@ -1,33 +1,18 @@
-import { Accordion, AccordionItem, Image } from '@nextui-org/react';
+import { Accordion, AccordionItem, Image, Spacer } from '@nextui-org/react';
 import { ChevronUpIcon } from '@nextui-org/shared-icons';
 
 import '@/App.css';
-import { RaidAttack, RaidCardType, TitanCurseData, TitanSequence } from './types';
+import { RaidAttack, TitanCurseData, TitanSequence } from './types';
 import TitanPartTableInfo from './detail-view';
-import { RaidCardMap, TitanPartMap } from '@/lib/constants';
+import { TitanPartMap } from '@/lib/constants';
 import { formatter } from '@/lib/utils';
 import useTitanStore from '@/stores/titansStore';
+import RaidDeck from './RaidDeck';
+import React from 'react';
 
 type RaidLogProps = {
     data: RaidAttack[];
 };
-
-const excludeTapDamageCard = ({ name }: RaidCardType): boolean => name !== 'TapDamage';
-
-type RaidMapKey = keyof typeof RaidCardMap;
-
-const findCard = (name: string): string =>
-    Object.keys(RaidCardMap).find((v: string) => RaidCardMap[v as RaidMapKey].name === name) ?? RaidCardMap.Wildcard.name;
-
-const findCardType = (name: string) => RaidCardMap[findCard(name) as RaidMapKey].type;
-
-function getCardImageUrl(name: string): string {
-    return new URL(`../../../assets/cards/${findCard(name)}.webp`, import.meta.url).href;
-}
-
-function getCardTypeImageUrl(name: string): string {
-    return new URL(`../../../assets/cardTypes/${findCardType(name)}.webp`, import.meta.url).href;
-}
 
 function getTitanImageUrl(name: string): string {
     return new URL(`../../../assets/titans/${name}.webp`, import.meta.url).href;
@@ -37,49 +22,20 @@ function getTitanMarkImageUrl(name: string): string {
     return new URL(`../../../assets/titanPartTargets/${name}.webp`, import.meta.url).href;
 }
 
-type RaidDeckProps = { id: string; sources: RaidCardType[] };
-
-function RaidDeck({ id, sources }: RaidDeckProps) {
-    return (
-        <div className="items-center flex justify-center h-auto w-max-content gap-1">
-            {sources.filter(excludeTapDamageCard).map(({ name: cardName, value: cardLevel }: RaidCardType, index: number) => {
-                return (
-                    <div key={id + cardName + cardLevel + index + 'container'} className="relative">
-                        <span key={id + cardName + cardLevel + index + 'span'} className="absolute z-20 inset-x-0 -left-1 -top-1">
-                            <Image
-                                key={id + cardName + cardLevel + 'image'}
-                                src={getCardTypeImageUrl(cardName)}
-                                className="w-full h-full h-4 w-4 sm:h-6 sm:w-6"
-                            />
-                        </span>
-                        <Image
-                            key={id + cardName + index + 'image'}
-                            src={getCardImageUrl(cardName)}
-                            className="rounded flex object-cover w-full h-full h-8 w-8 sm:h-16 sm:w-16"
-                        />
-                        <span
-                            key={id + cardLevel + index + 'span'}
-                            className="absolute z-10 inset-x-0 bottom-0 text-white bg-black/50 text-tiny rounded-b text-right pr-1"
-                        >
-                            {cardLevel}
-                        </span>
-                    </div>
-                );
-            })}
-        </div>
-    );
-}
-
 function RaidLog({ data }: RaidLogProps) {
     const titans = useTitanStore((state) => state.titans);
 
     const getTitan = (titanId: string): TitanSequence | undefined => titans.find(({ id }: TitanSequence) => id === titanId);
 
-    const getTitanName = (titanId: string): string => {
+    const getTitanName = (titanId: string, isForImage: boolean = true): string => {
         const fallbackName: string = 'Jukk';
         const titanName: string = getTitan(titanId)?.name ?? fallbackName;
 
-        return titanName;
+        const missingTitanImages = ['Priker', 'Klonk'];
+
+        if (!isForImage) return titanName;
+
+        return missingTitanImages.includes(titanName) ? fallbackName : titanName;
     };
 
     const getTitanCursedParts = (titanId: string): TitanCurseData | undefined => {
@@ -90,6 +46,7 @@ function RaidLog({ data }: RaidLogProps) {
         const returnData: TitanCurseData = {
             curse_type: titan.curse_type,
             parts: titan.parts,
+            id: titan.id,
         };
         return returnData;
     };
@@ -103,6 +60,16 @@ function RaidLog({ data }: RaidLogProps) {
         const isTarget = partsWithoutBody.some((part) => part.name === partName && part.target);
 
         return isTarget ? 'on' : 'off';
+    };
+
+    const getTitanSequence = (titanId: string) => {
+        const titan = getTitan(titanId);
+        if (!titan || !titans) return 0;
+
+        const titanSequencePosition: number = titan.sequence_index + 1;
+        const sequenceText: string = `(${titanSequencePosition}/${titans.length})`;
+
+        return sequenceText;
     };
 
     return (
@@ -133,46 +100,58 @@ function RaidLog({ data }: RaidLogProps) {
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Arm Right']))}
                                         width={24}
                                         className="absolute -top-40 left-5"
+                                        radius="none"
                                     />
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Hand Right']))}
                                         width={24}
                                         className="absolute bottom-16 left-6"
+                                        radius="none"
                                     />
 
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Head']))}
                                         width={24}
                                         className="absolute -top-40 left-[5.75rem]"
+                                        radius="none"
                                     />
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Chest']))}
                                         width={24}
                                         className="absolute bottom-24 left-[5.75rem]"
+                                        radius="none"
                                     />
 
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Leg Right']))}
                                         width={24}
                                         className="absolute -top-10 left-16"
+                                        radius="none"
                                     />
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Leg Left']))}
                                         width={24}
                                         className="absolute -top-10 left-28"
+                                        radius="none"
                                     />
 
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Arm Left']))}
                                         width={24}
                                         className="absolute -top-40 left-40"
+                                        radius="none"
                                     />
                                     <Image
                                         src={getTitanMarkImageUrl(getTitanMarkParts(raid_titan_id, TitanPartMap['Armor Hand Left']))}
                                         width={24}
                                         className="absolute bottom-16 left-[9.25rem]"
+                                        radius="none"
                                     />
                                 </div>
+                                <Spacer />
+                                <p className="font-semibold text-center">
+                                    {getTitanName(raid_titan_id, false)} {getTitanSequence(raid_titan_id)}
+                                </p>
                             </div>
 
                             <TitanPartTableInfo parts={parts} titanData={getTitanCursedParts(raid_titan_id)} />
@@ -184,4 +163,4 @@ function RaidLog({ data }: RaidLogProps) {
     );
 }
 
-export default RaidLog;
+export default React.memo(RaidLog);

@@ -13,7 +13,7 @@ module.exports = {
     theme: {
         container: {
             center: true,
-            padding: '2rem',
+            // padding: '2rem',
             screens: {
                 sm: { max: '639px' },
                 // => @media (max-width: 639px) { ... }

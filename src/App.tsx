@@ -1,5 +1,5 @@
 import Dashboard from './pages/dashboard';
-import { createBrowserRouter, RouteObject, RouterProvider, redirect } from 'react-router-dom';
+import { RouteObject, RouterProvider, redirect, createBrowserRouter } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import NoTokenPage from './pages/landing/index.tsx';
@@ -18,9 +18,9 @@ function App() {
                 {
                     path: ':clan_token',
                     loader: async ({ params }) => {
-                        console.log("path: '/:clan_token'", params);
+                        // console.log("path: '/:clan_token'", params);
                         if (!params?.clan_token) return null;
-                        console.log(params.clan_token);
+                        // console.log(params.clan_token);
                         localStorage.setItem('clan_token', params.clan_token);
                         return redirect('/dashboard');
                     },
@@ -31,27 +31,20 @@ function App() {
         },
         {
             path: '/dashboard',
-            // loader: async ({ params }) => params?.token ?? null,
             element: <Dashboard />,
             errorElement: <NoTokenPage />,
         },
-        // {
-        //     path: '/:token',
-        //     loader: async ({ params }) => params?.token ?? null,
-        //     element: <Dashboard />,
-        //     errorElement: <NoTokenPage />,
-        // },
-
-        // {
-        //     path: '/:token/raid-attacks',
-        //     loader: async ({ params }) => params?.token ?? null,
-        //     element: <RaidLog />,
-        //     errorElement: <NoTokenPage />,
-        // },
         {
             path: '/alchemy',
             element: <Alchemy />,
             errorElement: <NoTokenPage />,
+        },
+        {
+            path: '*',
+            loader: async () => {
+                return redirect('/');
+            },
+            element: <NoTokenPage />,
         },
     ];
     const router = createBrowserRouter(routes);

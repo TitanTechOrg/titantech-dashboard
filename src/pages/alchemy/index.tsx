@@ -186,7 +186,7 @@ function Alchemy() {
                 </NavbarContent>
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link color="foreground" href="/dashboard">
+                        <Link href="/dashboard" color="foreground">
                             Dashboard
                         </Link>
                     </NavbarItem>

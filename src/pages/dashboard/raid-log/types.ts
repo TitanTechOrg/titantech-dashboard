@@ -53,7 +53,7 @@ export type TitanSequenceParts = {
     current_health: number;
 };
 
-export type TitanCurseData = Pick<TitanSequence, 'curse_type' | 'parts'>;
+export type TitanCurseData = Pick<TitanSequence, 'curse_type' | 'parts' | 'id'>;
 
 export type CycleData = {
     raid_id: string;
@@ -73,5 +73,5 @@ export type RaidCycle = {
 export type PercentageCardsType = {
     imageUrl: string;
     bonus?: string | number;
-    usage: string | number;
+    usage?: string | number;
 };

@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import React from 'react';
 import { PercentageCardsType } from '../raid-log/types';
 
-function MoraleCard({ imageUrl, bonus, usage }: PercentageCardsType) {
+function MoraleCard({ imageUrl, bonus }: PercentageCardsType) {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">
@@ -10,8 +10,11 @@ function MoraleCard({ imageUrl, bonus, usage }: PercentageCardsType) {
                 <Image src={imageUrl} className="rounded-lg flex object-cover w-full h-full h-10 w-10" />
             </CardHeader>
             <CardBody>
-                <div className="text-2xl font-bold">{bonus}%</div>
-                <p className="text-xs text-muted-foreground">{usage} TT this cycle</p>
+                <div className="text-2xl font-bold">
+                    {bonus}
+                    <span className="text-sm font-medium">&nbsp;%</span>
+                </div>
+                {/* <p className="text-xs text-muted-foreground">0 TT this cycle</p> */}
             </CardBody>
         </Card>
     );

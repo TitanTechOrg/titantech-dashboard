@@ -1,56 +1,33 @@
-// import RaidLog from './raid-log';
-// import { useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
-// import { Button, Pagination, Spinner } from '@nextui-org/react';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@nextui-org/react';
-import {
-    Button,
-    Card,
-    CardBody,
-    CardHeader,
-    Image,
-    // Select,
-    // SelectItem,
-    // Spinner,
-} from '@nextui-org/react';
-// import { RaidAttack } from '@/lib/api/raid-attacks/model';
-// import { Overview } from './Overview';
-// import { ENDPOINTS, getRequest, instance } from '@/lib/api/axios';
-// import { RaidLogType } from './raid-log/types';
-// import { useInView } from 'react-intersection-observer';
-// import { useEffect } from 'react';
+import { Button, Card, CardBody, CardHeader } from '@nextui-org/react';
+import { useMediaQueries } from '@react-hook/media-query';
 import LatestAttacksList from './widgets/LatestAttacksList';
-import { useLatestAttacks, useRaidCycles, useRaidTitans } from '@/lib/queries';
-import { useEffect, useMemo, useState } from 'react';
-import { RaidCycle } from './raid-log/types';
-import MoraleCard from './widgets/MoraleCard';
-import MirrorForceCard from './widgets/MirrorForceCard';
+import { useLatestAttacks, useRaidCycles, useRaidList, useRaidTitans } from '@/lib/queries';
+import { useEffect, useMemo } from 'react';
+import { RaidCycle, TitanSequence } from './raid-log/types';
+import CardBonusData from './widgets/CardBonusData';
 import useTitanStore from '@/stores/titansStore';
-import { useNavigate } from 'react-router-dom';
-
-const menuItems = ['Dashboard', 'Alchemy'];
+import CardRaidInfo from './widgets/CardRaidInfo';
+import TitanStateDesktop from './widgets/TitanState.desktop';
+import TitanState from './widgets/TitanState';
 
 function getImageUrl(name: string): string {
     return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
 }
 
-function getLogoUrl(): string {
-    return new URL(`../../assets/Logo.webp`, import.meta.url).href;
-}
-
 export default function Dashboard() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { setTitans } = useTitanStore();
+    const { matches } = useMediaQueries({
+        screen: 'screen',
+        width: '(min-width: 924px)',
+    });
 
-    const navigate = useNavigate();
+    const { setTitans, setCurrentTitan, titans } = useTitanStore();
 
     const raidCycles = useRaidCycles();
     const raidAttacks = useLatestAttacks();
     const { data: raidTitansData } = useRaidTitans();
-    // const raidList = useRaidList();
+    const { data: raidListData } = useRaidList();
     // const attackTimeline = useAttackTimeline();
     // console.log('attackTimeline', attackTimeline.data);
-    // console.log('raidList', raidList.data);
 
     useEffect(() => {
         if (raidTitansData) {
@@ -59,169 +36,110 @@ export default function Dashboard() {
     }, [raidTitansData, setTitans]);
 
     useEffect(() => {
-        if (!localStorage.getItem('clan_token')) {
-            localStorage.clear();
-            navigate('/');
+        // TODO: surely this can be done better...
+        if (!titans) return;
+        if (!raidAttacks.data?.pages) return;
+
+        let foundLatestTitan: TitanSequence | undefined = undefined;
+
+        // raid has yet to start
+        if (!raidAttacks.data.pages.at(0)?.attack_logs.at(0)) {
+            foundLatestTitan = titans.at(0);
         }
-    }, [window.history]);
 
-    // console.log(titans);
+        if (!foundLatestTitan) {
+            foundLatestTitan = titans.at(0);
+        }
 
-    // const [isOpen, setIsOpen] = React.useState(false);
-    // const {items, hasMore, isLoading, onLoadMore} = usePokemonList({fetchDelay: 1500});
+        if (foundLatestTitan) {
+            setCurrentTitan(foundLatestTitan);
+            return;
+        }
 
-    // const navigate = useNavigate();
-    // const notify = () => toast.error('Uh oh! Something went wrong.', { position: toast.POSITION.BOTTOM_RIGHT });
+        const latestTitanId = raidAttacks.data.pages.at(0)?.attack_logs.at(0)?.raid_titan_id;
+        if (!latestTitanId) return;
 
-    // const handleError = () => {
-    //     notify();
-    //     navigate('/');
-    // };
+        foundLatestTitan = titans.find((titan) => titan.id === latestTitanId);
+        if (!foundLatestTitan) return;
 
-    // console.log(raidCycles?.data);
-
-    const latestCycleData = useMemo(
-        () => (data: RaidCycle[]) => data.reduce((prev, current) => (prev && prev.cycle > current.cycle ? prev : current)),
-        [raidCycles?.data?.cycles.length]
-    );
+        setCurrentTitan(foundLatestTitan);
+    }, [raidAttacks.data?.pages, titans]);
 
     const getMoraleBonus = useMemo(() => {
-        if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
+        if (!raidCycles.data || !raidCycles.data.cycles.length) return ['0'];
 
-        const { morale, team_tactics }: RaidCycle = latestCycleData(raidCycles.data.cycles);
+        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
-        return ((morale + team_tactics) * 100).toFixed(2);
+        const moraleBonuses = raidCycles.data.cycles.map(({ morale, team_tactics }: RaidCycle) => {
+            return ((morale + team_tactics) * 100).toFixed(2);
+        });
+
+        return moraleBonuses;
     }, [raidCycles.data?.cycles.length]);
-
-    // const getTeamTacticsUsage = useMemo(() => {
-    //     if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
-
-    //     const { team_tactics }: RaidCycle = latestCycleData(raidCycles.data.cycles);
-    //     console.log('team_tactics', team_tactics);
-    //     return team_tactics;
-    // }, [raidCycles.data?.cycles.length]);
 
     const getMirrorForceBonus = useMemo(() => {
-        if (!raidCycles.data || !raidCycles.data.cycles.length) return 0;
+        if (!raidCycles.data || !raidCycles.data.cycles.length) return ['0'];
 
-        const { mirror_force }: RaidCycle = latestCycleData(raidCycles.data.cycles);
+        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
-        return (mirror_force * 100).toFixed(0);
+        const mirrorForceBonuses = raidCycles.data.cycles.map(({ mirror_force }: RaidCycle) => {
+            return (mirror_force * 100).toFixed(0);
+        });
+
+        return mirrorForceBonuses;
     }, [raidCycles.data?.cycles.length]);
-
-    const handleLogout = () => {
-        localStorage.clear();
-    };
 
     return (
         <>
-            <Navbar isBordered isBlurred={true} onMenuOpenChange={setIsMenuOpen}>
-                <NavbarContent>
-                    <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="sm:hidden" />
-
-                    <NavbarBrand className="gap-2 min-w-fit">
-                        <Image src={getLogoUrl()} className="h-9 w-9" radius="sm" />
-                        <p className="font-bold text-inherit">TitanTech</p>
-                    </NavbarBrand>
-                </NavbarContent>
-
-                <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                    <NavbarItem isActive>
-                        <Link href="/dashboard" aria-current="page">
-                            Dashboard
-                        </Link>
-                    </NavbarItem>
-
-                    <NavbarItem>
-                        <Link href="/alchemy" color="foreground">
-                            Alchemy
-                        </Link>
-                    </NavbarItem>
-                </NavbarContent>
-
-                <NavbarContent justify="end">
-                    <NavbarItem className="hidden">
-                        <Button color="primary" variant="flat" onPress={handleLogout}>
-                            Sign out
-                        </Button>
-                    </NavbarItem>
-                </NavbarContent>
-
-                <NavbarMenu className="z-50 pl-12">
-                    {menuItems.map((item, index) => (
-                        <NavbarMenuItem key={`${item}-${index}`}>
-                            <Link color={index === 0 ? 'primary' : 'foreground'} className="w-full" href={`/${item}`} size="lg">
-                                {item}
-                            </Link>
-                        </NavbarMenuItem>
-                    ))}
-                </NavbarMenu>
-            </Navbar>
-            <div className="flex-col md:flex">
-                {/* <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center">
-                        <Select
-                            className="max-w-xs"
-                            isLoading={isLoading}
-                            items={items}
-                            label="Pick a Pokemon"
-                            placeholder="Select a Pokemon"
-                            scrollRef={scrollerRef}
-                            selectionMode="single"
-                            onOpenChange={setIsOpen}
-                        >
-                            {(item) => (
-                                <SelectItem key={item.name} className="capitalize">
-                                    {item.name}
-                                </SelectItem>
-                            )}
-                        </Select>
+            <div className="grid grid-cols-1 py-6 gap-4 lg:gap-x-0 lg:grid-cols-2">
+                {!matches.width ? (
+                    <div className="lg:col-span-1 lg:row-start-0">
+                        <CardRaidInfo
+                            raidData={raidListData?.raids.at(0)}
+                            raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
+                        />
                     </div>
-                </div> */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-4">
-                    <MoraleCard imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
-                    <MirrorForceCard imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                ) : null}
 
-                    {/* <Card>
-                        <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">
-                            <p className="text-sm font-medium">Players at 6/6 attacks (todo)</p>
-                            <Image src={getImageUrl('TapDamage')} className="rounded-lg flex object-cover w-full h-full h-10 w-10" />
-                        </CardHeader>
-                        <CardBody>
-                            <div className="text-2xl font-bold">26</div>
-                            <p className="text-xs text-muted-foreground">+20.1% from last cycle</p>
-                        </CardBody>
-                    </Card> */}
+                {!matches.width ? (
+                    <div className="lg:col-span-1 lg:col-start-1 lg:row-start-2">
+                        <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
+                    </div>
+                ) : null}
 
-                    {/* <Card>
-                        <CardHeader className="flex flex-row items-center justify-between mt-0 p-4 pb-2 ">
-                            <p className="text-sm font-medium">Average player damage? (todo)</p>
-                            <Image src={getImageUrl('TapDamage')} className="rounded-lg flex object-cover w-full h-full h-10 w-10" />
-                        </CardHeader>
-                        <CardBody>
-                            <div className="text-2xl font-bold">45,231.89</div>
-                            <p className="text-xs text-muted-foreground">blablabla</p>
-                        </CardBody>
-                    </Card> */}
-                </div>
+                {!matches.width ? (
+                    <div className="lg:col-span-1 lg:col-start-1 lg:row-start-3">
+                        <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                    </div>
+                ) : null}
 
-                <div className="grid gap-4 grid-cols-2 mt-4">
-                    {/* <Card className="col-span-4 p-4">
-                        <CardHeader className="p-0">
-                            <h3 className="text-xl font-bold">Attack Timeline Overview (Experimental)</h3>
-                        </CardHeader>
-                        <CardBody className="p-0 h-80">
-                            <Overview data={remapChartData()} />
-                        </CardBody>
-                    </Card> */}
+                {matches.width ? (
+                    <div className="lg:col-span-2 lg:col-start-0 lg:row-start-1 lg:row-span-5">
+                        <TitanStateDesktop>
+                            <>
+                                <CardRaidInfo
+                                    raidData={raidListData?.raids.at(0)}
+                                    raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
+                                />
+                                <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
+                                <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                            </>
+                        </TitanStateDesktop>
+                    </div>
+                ) : (
+                    <div className="lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:row-span-5">
+                        <TitanState />
+                    </div>
+                )}
+
+                <div className="lg:col-span-3">
                     <Card className="col-span-4 p-4">
                         <CardHeader className="p-0 justify-between">
                             <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-                            <Button size="sm" color="primary" variant="flat" onPress={() => raidAttacks.refetch()}>
+                            <Button size="sm" color="primary" onPress={() => raidAttacks.refetch()}>
                                 Refresh
                             </Button>
                         </CardHeader>
-                        {/* h-96 min-h-full max-h-96 */}
                         <CardBody className="p-0 ">
                             <LatestAttacksList {...raidAttacks} />
                         </CardBody>

@@ -18,7 +18,6 @@ import {
 import { CopyIcon, DiscordLogoIcon } from '@radix-ui/react-icons';
 
 import Logo from '@/assets/Logo.webp';
-import { ChevronUpIcon } from '@nextui-org/shared-icons';
 
 function NoTokenPage() {
     return (
@@ -49,12 +48,7 @@ function NoTokenPage() {
                 <Spacer y={8} />
                 <Divider />
                 <Accordion>
-                    <AccordionItem
-                        aria-label="Tap here for more info"
-                        title="Read here for more info"
-                        className="text-left [&_span.rotate-0]:data-[open=true]:rotate-180"
-                        indicator={<ChevronUpIcon />}
-                    >
+                    <AccordionItem aria-label="Tap here for more info" title="Read here for more info">
                         <Card shadow="none">
                             <CardBody>
                                 <p className="font-medium italic">
@@ -70,7 +64,7 @@ function NoTokenPage() {
                         <Card shadow="none">
                             <CardBody>
                                 <p>
-                                    2. Type <Code>/config register</Code>.
+                                    2. Type <Code>{'/connect <TOKEN>'}</Code>.
                                 </p>
                             </CardBody>
                         </Card>

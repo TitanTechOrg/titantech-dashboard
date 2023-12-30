@@ -53,7 +53,7 @@ export type TitanSequenceParts = {
     current_health: number;
 };
 
-export type TitanCurseData = Pick<TitanSequence, 'curse_type' | 'parts' | 'id'>;
+export type TitanCurseData = Pick<TitanSequence, 'curse_type' | 'parts' | 'id' | 'name'>;
 
 export type CycleData = {
     raid_id: string;
@@ -72,6 +72,22 @@ export type RaidCycle = {
 
 export type PercentageCardsType = {
     imageUrl: string;
-    bonus?: string | number;
-    usage?: string | number;
+    bonus: string[];
+    title: string;
+};
+
+export type RaidData = {
+    buff_amount: number;
+    buff_type: string;
+    external_reference: string;
+    level: string;
+    raid_id: string;
+    raid_season_sequence: number;
+    started_at: string;
+    tier: string;
+};
+
+export type RaidListResponse = {
+    count: number;
+    raids: RaidData[];
 };

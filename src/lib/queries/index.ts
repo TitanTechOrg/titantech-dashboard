@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ENDPOINTS, getRequest } from '@/lib/api/axios';
-import { CycleData, RaidLogType, TitanSequenceResponse } from '@/pages/dashboard/raid-log/types';
+import { CycleData, RaidListResponse, RaidLogType, TitanSequenceResponse } from '@/pages/dashboard/raid-log/types';
 
 const OFFSET_AMOUNT: number = 25;
 
@@ -22,7 +22,7 @@ function useLatestAttacks() {
 function useRaidList() {
     return useQuery({
         queryKey: ['raid_list'],
-        queryFn: async () => await getRequest<any>(ENDPOINTS.raid_list),
+        queryFn: async () => await getRequest<RaidListResponse>(ENDPOINTS.raid_list),
     });
 }
 

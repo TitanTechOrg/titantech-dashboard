@@ -23,8 +23,6 @@ export const TitanPartMap = {
     'Skeleton Arm Right': 'SkeletonArmUpperRight',
     'Skeleton Arm Left': 'SkeletonArmUpperLeft',
     'Skeleton Head': 'SkeletonHead',
-
-    Unknown: 'Unknown',
 } as const;
 
 export const RaidCardMap = {

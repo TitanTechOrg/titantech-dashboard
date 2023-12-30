@@ -11,3 +11,7 @@ export function formatter() {
         maximumFractionDigits: 2,
     });
 }
+
+export function percentage(partialValue: number, totalValue: number) {
+    return parseFloat(((totalValue / partialValue) * 100).toFixed(2));
+}

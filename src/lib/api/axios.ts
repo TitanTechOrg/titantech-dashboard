@@ -45,7 +45,8 @@ const getRequest = async <T>(url: string, withToken: boolean = true): Promise<T>
     if (withToken && token) options = setAuthorizationHeader(token);
     const request = instance.get(url, options);
     const { data }: AxiosResponse<T> = await request;
-    return await data;
+
+    return data;
 };
 
 export { ENDPOINTS, instance, getRequest };

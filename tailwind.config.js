@@ -1,5 +1,5 @@
 const { nextui } = require('@nextui-org/react');
-// const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: ['class'],
@@ -31,6 +31,9 @@ module.exports = {
                 // => @media (min-width: 1536px) { ... }
                 // ...defaultTheme.screens,
             },
+        },
+        fontFamily: {
+            sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
         },
         extend: {
             keyframes: {

@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
-    "@nextui-org/react": "^2.1.13",
+    "@nextui-org/react": "^2.2.9",
     "@nextui-org/use-infinite-scroll": "^2.1.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.3",
@@ -63,7 +63,6 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.0.2",
     "@tanstack/eslint-plugin-query": "^4.32.5",
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.15",

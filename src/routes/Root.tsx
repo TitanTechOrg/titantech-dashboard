@@ -19,7 +19,7 @@ export default function Root() {
 
     return (
         <>
-            <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} isBordered={true} className="h-full">
+            <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} isBordered={true} className="fixed">
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
 
@@ -69,7 +69,7 @@ export default function Root() {
                 </NavbarMenu>
             </Navbar>
 
-            <div className="p-4">
+            <div className="p-4 mt-16">
                 <Outlet />
             </div>
         </>

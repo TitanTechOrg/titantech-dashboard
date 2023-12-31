@@ -1,3 +1,4 @@
+import { Button } from '@nextui-org/react';
 import React, { Component, ErrorInfo } from 'react';
 
 interface Props {
@@ -21,7 +22,12 @@ class ErrorBoundary extends Component<Props, State> {
 
     render() {
         if (this.state.hasError) {
-            return <h1>Something went wrong.</h1>;
+            return (
+                <div>
+                    <h1>Something went wrong.</h1>
+                    <Button onClick={() => (window.location.href = '/')}>Click here to reload the app</Button>
+                </div>
+            );
         }
 
         return this.props.children;

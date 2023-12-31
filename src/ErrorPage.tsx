@@ -1,6 +1,7 @@
+import { Button } from '@nextui-org/react';
 import { useRouteError } from 'react-router-dom';
 
-function ErrorPage() {
+export default function ErrorPage() {
     const error = useRouteError();
 
     const getErrorMessage = (error: unknown): string => {
@@ -28,8 +29,8 @@ function ErrorPage() {
             <p>
                 <i>{getErrorMessage(error)}</i>
             </p>
+
+            <Button onClick={() => (window.location.href = '/')}>Click here to reload the app</Button>
         </div>
     );
 }
-
-export default ErrorPage;

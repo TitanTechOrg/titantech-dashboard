@@ -21,7 +21,7 @@ import Logo from '@/assets/Logo.webp';
 
 function NoTokenPage() {
     return (
-        <Card className="max-w-[400px] mx-auto">
+        <Card className="max-w-[400px] w-full mx-auto">
             <CardHeader className="flex gap-3">
                 <Image alt="TitanTech logo" height={40} radius="sm" src={Logo} width={40} />
                 <div className="flex flex-col justify-center items-start">

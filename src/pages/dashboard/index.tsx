@@ -53,16 +53,16 @@ export default function Dashboard() {
 
         if (foundLatestTitan) {
             setCurrentTitan(foundLatestTitan);
-            return;
         }
 
         const latestTitanId = raidAttacks.data.pages.at(0)?.attack_logs.at(0)?.raid_titan_id;
         if (!latestTitanId) return;
 
         foundLatestTitan = titans.find((titan) => titan.id === latestTitanId);
-        if (!foundLatestTitan) return;
 
-        setCurrentTitan(foundLatestTitan);
+        if (foundLatestTitan) {
+            setCurrentTitan(foundLatestTitan);
+        }
     }, [raidAttacks.data?.pages, titans]);
 
     const getMoraleBonus = useMemo(() => {
@@ -91,7 +91,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <div className="grid grid-cols-1 py-6 gap-4 lg:gap-x-0 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 lg:gap-x-0 lg:grid-cols-2">
                 {!matches.width ? (
                     <div className="lg:col-span-1 lg:row-start-0">
                         <CardRaidInfo

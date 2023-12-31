@@ -38,24 +38,24 @@ export default function Dashboard() {
     useEffect(() => {
         // TODO: surely this can be done better...
         if (!titans) return;
-        if (!raidAttacks.data?.pages) return;
+        if (!raidAttacks.data?.pages || !raidAttacks.data?.pages?.length) return;
 
         let foundLatestTitan: TitanSequence | undefined = undefined;
 
         // raid has yet to start
-        if (!raidAttacks.data.pages.at(0)?.attack_logs.at(0)) {
-            foundLatestTitan = titans.at(0);
+        if (!raidAttacks.data.pages[0]?.attack_logs[0]) {
+            foundLatestTitan = titans[0];
         }
 
         if (!foundLatestTitan) {
-            foundLatestTitan = titans.at(0);
+            foundLatestTitan = titans[0];
         }
 
         if (foundLatestTitan) {
             setCurrentTitan(foundLatestTitan);
         }
 
-        const latestTitanId = raidAttacks.data.pages.at(0)?.attack_logs.at(0)?.raid_titan_id;
+        const latestTitanId = raidAttacks.data.pages[0]?.attack_logs[0]?.raid_titan_id;
         if (!latestTitanId) return;
 
         foundLatestTitan = titans.find((titan) => titan.id === latestTitanId);
@@ -95,8 +95,8 @@ export default function Dashboard() {
                 {!matches.width ? (
                     <div className="lg:col-span-1 lg:row-start-0">
                         <CardRaidInfo
-                            raidData={raidListData?.raids?.at(0)}
-                            raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
+                            raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
+                            raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
                         />
                     </div>
                 ) : null}
@@ -118,8 +118,10 @@ export default function Dashboard() {
                         <TitanStateDesktop>
                             <>
                                 <CardRaidInfo
-                                    raidData={raidListData?.raids?.at(0)}
-                                    raidCycle={raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
+                                    raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
+                                    raidCycle={
+                                        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]
+                                    }
                                 />
                                 <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
                                 <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />

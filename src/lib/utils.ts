@@ -15,3 +15,5 @@ export function formatter() {
 export function percentage(partialValue: number, totalValue: number) {
     return parseFloat(((totalValue / partialValue) * 100).toFixed(2));
 }
+
+export const capitaliseFirstLetter = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);

@@ -39,12 +39,11 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
     if (!raidData) return null;
 
     const { buff_type, level, raid_id, started_at: raid_started_at, tier } = raidData;
-
-    const raidStarted: string = raidCycle ? '' : raid_id;
+    const raidStarted: string[] = raidCycle ? [] : [raid_id];
 
     return (
         <Card className="dark:bg-default">
-            <Accordion defaultExpandedKeys={[raidStarted]}>
+            <Accordion defaultExpandedKeys={raidStarted}>
                 <AccordionItem
                     key={raid_id}
                     aria-label="Accordion for displaying Raid Info. Tap to open/close."
@@ -80,7 +79,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                             </div>
 
                             <div className="text-sm font-medium flex justify-between">
-                                <span>{'Raid start at '}</span>
+                                <span>Raid start</span>
                                 <Tooltip showArrow={true} content={new Date(raid_started_at).toUTCString()}>
                                     <span className="text-sm font-medium">{convertUTCDateToLocalDate(raid_started_at)}</span>
                                 </Tooltip>
@@ -88,7 +87,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
 
                             {raidCycle && (
                                 <div className="text-sm font-medium flex justify-between">
-                                    <span>{'Next cycle at '}</span>
+                                    <span>Next cycle</span>
                                     <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>
                                         <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidCycle.next_reset_at)}</span>
                                     </Tooltip>

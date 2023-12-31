@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@nextui-org/react';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { capitaliseFirstLetter } from '@/lib/utils';
 
 function getImageLogoUrl(name: string): string {
     return new URL(`../assets/${name}.webp`, import.meta.url).href;
@@ -17,8 +18,8 @@ export default function Root() {
     const isAuthenticated = localStorage.getItem('clan_token') && localStorage.getItem('clan_token')?.length === 36;
 
     return (
-        <div className="w-full grid items-center">
-            <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} isBlurred={true} isBordered={true} className="mb-8">
+        <>
+            <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} isBordered={true} className="h-full">
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
 
@@ -52,7 +53,7 @@ export default function Root() {
                     </NavbarItem>
                 </NavbarContent>
 
-                <NavbarMenu className="z-50 mt-6">
+                <NavbarMenu>
                     {menuItems
                         .filter((route) => {
                             if (!isAuthenticated && route === 'dashboard') return '';
@@ -68,9 +69,9 @@ export default function Root() {
                 </NavbarMenu>
             </Navbar>
 
-            <Outlet />
-        </div>
+            <div className="p-4">
+                <Outlet />
+            </div>
+        </>
     );
 }
-
-const capitaliseFirstLetter = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);

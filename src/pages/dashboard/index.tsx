@@ -66,9 +66,9 @@ export default function Dashboard() {
     }, [raidAttacks.data?.pages, titans]);
 
     const getMoraleBonus = useMemo(() => {
-        if (!raidCycles.data || !raidCycles.data.cycles.length) return ['0'];
+        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
 
-        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
         const moraleBonuses = raidCycles.data.cycles.map(({ morale, team_tactics }: RaidCycle) => {
             return ((morale + team_tactics) * 100).toFixed(2);
@@ -78,7 +78,7 @@ export default function Dashboard() {
     }, [raidCycles.data?.cycles.length]);
 
     const getMirrorForceBonus = useMemo(() => {
-        if (!raidCycles.data || !raidCycles.data.cycles.length) return ['0'];
+        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
 
         raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
@@ -95,7 +95,7 @@ export default function Dashboard() {
                 {!matches.width ? (
                     <div className="lg:col-span-1 lg:row-start-0">
                         <CardRaidInfo
-                            raidData={raidListData?.raids.at(0)}
+                            raidData={raidListData?.raids?.at(0)}
                             raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
                         />
                     </div>
@@ -118,8 +118,8 @@ export default function Dashboard() {
                         <TitanStateDesktop>
                             <>
                                 <CardRaidInfo
-                                    raidData={raidListData?.raids.at(0)}
-                                    raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
+                                    raidData={raidListData?.raids?.at(0)}
+                                    raidCycle={raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1)).at(-1)}
                                 />
                                 <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
                                 <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
@@ -136,7 +136,7 @@ export default function Dashboard() {
                     <Card className="col-span-4 p-4">
                         <CardHeader className="p-0 justify-between">
                             <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-                            <Button size="sm" color="primary" onPress={() => raidAttacks.refetch()}>
+                            <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
                                 Refresh
                             </Button>
                         </CardHeader>

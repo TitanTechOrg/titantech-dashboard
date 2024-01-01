@@ -92,26 +92,26 @@ export default function Dashboard() {
     return (
         <>
             <div className="grid grid-cols-1 gap-4 lg:gap-x-0 lg:grid-cols-2">
-                {!matches.width ? (
+                {!matches.width && (
                     <div className="lg:col-span-1 lg:row-start-0">
                         <CardRaidInfo
                             raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
                             raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
                         />
                     </div>
-                ) : null}
+                )}
 
-                {!matches.width ? (
+                {!matches.width && (
                     <div className="lg:col-span-1 lg:col-start-1 lg:row-start-2">
                         <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
                     </div>
-                ) : null}
+                )}
 
-                {!matches.width ? (
+                {!matches.width && (
                     <div className="lg:col-span-1 lg:col-start-1 lg:row-start-3">
                         <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
                     </div>
-                ) : null}
+                )}
 
                 {matches.width ? (
                     <div className="lg:col-span-2 lg:col-start-0 lg:row-start-1 lg:row-span-5">
@@ -134,19 +134,21 @@ export default function Dashboard() {
                     </div>
                 )}
 
-                <div className="lg:col-span-3">
-                    <Card className="col-span-4 p-4">
-                        <CardHeader className="p-0 justify-between">
-                            <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-                            <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
-                                Refresh
-                            </Button>
-                        </CardHeader>
-                        <CardBody className="p-0 ">
-                            <LatestAttacksList {...raidAttacks} />
-                        </CardBody>
-                    </Card>
-                </div>
+                {raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 && (
+                    <div className="lg:col-span-3">
+                        <Card className="col-span-4 p-4">
+                            <CardHeader className="p-0 justify-between">
+                                <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
+                                <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
+                                    Refresh
+                                </Button>
+                            </CardHeader>
+                            <CardBody className="p-0 ">
+                                <LatestAttacksList {...raidAttacks} />
+                            </CardBody>
+                        </Card>
+                    </div>
+                )}
             </div>
         </>
     );

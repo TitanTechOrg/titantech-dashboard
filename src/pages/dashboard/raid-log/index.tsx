@@ -14,6 +14,7 @@ function RaidLog({ data }: RaidLogProps) {
     const titan = useTitanStore((state) => state.currentTitan);
 
     if (!titan) return null;
+    if (data.length === 0) return null;
 
     return (
         <Accordion selectionMode="multiple">

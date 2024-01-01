@@ -24,6 +24,8 @@ export default function LatestAttacksList({
 
     if (status === 'pending') return <Spinner label="Loading..." color="primary" />;
     if (status === 'error') return 'An error has occurred: ' + error.message;
+    if (data?.pages.length === 0) return null;
+    if (data?.pages[0].count === 0) return <div>No attacks yet</div>;
 
     return (
         <>

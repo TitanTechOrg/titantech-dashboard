@@ -1,5 +1,6 @@
 import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image, Spacer, Tooltip } from '@nextui-org/react';
 import { RaidCycle, RaidData } from '../raid-log/types';
+import Show from '@/components/Show';
 
 type CardRaidInfoProps = {
     raidData?: RaidData;
@@ -42,7 +43,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
     const raidStarted: string[] = raidCycle ? [] : [raid_id];
 
     return (
-        <Card className="dark:bg-default">
+        <Card className="dark:bg-default min-w-72 w-full">
             <Accordion defaultExpandedKeys={raidStarted}>
                 <AccordionItem
                     key={raid_id}
@@ -59,7 +60,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                                 </h3>
                             </div>
 
-                            {raidCycle && (
+                            {raidCycle != null && (
                                 <div className="text-xl font-bold">
                                     {raidCycle.cycle}
                                     <span className="text-sm font-semibold">
@@ -73,7 +74,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                 >
                     <CardBody className="pt-0">
                         <div className="flex flex-col gap-2">
-                            <div className="text-sm font-medium flex justify-between">
+                            <div className="text-sm font-medium flex justify-between space-x-4">
                                 <span>Raid Bonus</span>
                                 <span>{RaidBuffMapping[buff_type as RaidBuffMappingType]} </span>
                             </div>
@@ -85,7 +86,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                                 </Tooltip>
                             </div>
 
-                            {raidCycle && (
+                            {raidCycle != null && (
                                 <div className="text-sm font-medium flex justify-between">
                                     <span>Next cycle</span>
                                     <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>

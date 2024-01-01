@@ -29,12 +29,12 @@ export default function TitanStateDesktop({ children }: TitanStateDesktopProps) 
     };
 
     return (
-        <Card>
+        <Card className="pb-4">
             <CardHeader className="flex flex-row items-center justify-between mt-0 p-4">
                 <h2 className="text-md font-semibold">Raid info</h2>
             </CardHeader>
 
-            <CardBody className="flex flex-row lg:gap-36 md:gap-12 justify-evenly">
+            <CardBody className="flex flex-row justify-around">
                 <div className="flex flex-col gap-2 justify-between sm:justify-normal flex-wrap">
                     {titans.map((titan) => {
                         return (
@@ -51,7 +51,7 @@ export default function TitanStateDesktop({ children }: TitanStateDesktopProps) 
                     })}
                 </div>
 
-                {selectedTitan && (
+                {selectedTitan != null && (
                     <RaidTitanData
                         titan={selectedTitan}
                         showConditionalSection={false}

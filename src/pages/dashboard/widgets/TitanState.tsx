@@ -24,7 +24,7 @@ export default function TitanState() {
     };
 
     return (
-        <Card>
+        <Card className="pb-4">
             <CardHeader className="flex flex-row items-center justify-between mt-0 p-4">
                 <h2 className="text-md font-semibold">Titan State</h2>
             </CardHeader>
@@ -47,7 +47,7 @@ export default function TitanState() {
                     })}
                 </div>
 
-                {selectedTitan && (
+                {selectedTitan != null && (
                     <RaidTitanData
                         titan={selectedTitan}
                         showConditionalSection={true}

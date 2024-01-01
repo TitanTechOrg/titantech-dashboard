@@ -22,15 +22,23 @@ export default function ErrorPage() {
         return message;
     };
 
+    const handleAppReload = () => {
+        window.location.href = '/';
+    };
+
     return (
-        <div id="error-page">
+        <div id="error-page" className="container flex flex-col space-y-2 items-center justify-center h-screen">
             <h1>Oops!</h1>
             <p>Sorry, an unexpected error has occurred.</p>
             <p>
                 <i>{getErrorMessage(error)}</i>
             </p>
 
-            <Button onClick={() => (window.location.href = '/')}>Click here to reload the app</Button>
+            <div className="py-4">
+                <Button color="primary" onClick={handleAppReload}>
+                    Click here to reload the app
+                </Button>
+            </div>
         </div>
     );
 }

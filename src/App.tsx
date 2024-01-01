@@ -31,9 +31,7 @@ function NoMatch() {
 }
 
 const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
-    if (localStorage.getItem('clan_token')) {
-        return redirect('/dashboard');
-    } else if (params?.clan_token && params?.clan_token.length === 36) {
+    if (params?.clan_token && params?.clan_token.length === 36) {
         localStorage.setItem('clan_token', params.clan_token);
         return redirect('/dashboard');
     } else {

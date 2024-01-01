@@ -1,9 +1,9 @@
 import { Avatar, Button, Card, CardBody, CardHeader } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { TitanPart, TitanSequence, TitanSequenceParts } from '../raid-log/types';
-import useTitanStore from '@/stores/titansStore';
 import RaidTitanData from '@/components/RaidTitanData';
 import ConditionalCardsStatus from './ConditionalCardsStatus';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 const titanAvatarSuffix = '_avatar';
 
@@ -16,7 +16,7 @@ type TitanStateDesktopProps = {
 };
 
 export default function TitanStateDesktop({ children }: TitanStateDesktopProps) {
-    const { titans, currentTitan } = useTitanStore();
+    const { titans, currentTitan } = useBoundStore();
 
     const [selectedTitan, setSelectedTitan] = useState<TitanSequence>();
 

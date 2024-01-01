@@ -1,8 +1,8 @@
 import { Avatar, Card, CardBody, CardHeader } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { TitanPart, TitanSequence, TitanSequenceParts } from '../raid-log/types';
-import useTitanStore from '@/stores/titansStore';
 import RaidTitanData from '@/components/RaidTitanData';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 function getImageUrl(name: string): string {
     return new URL(`../../../assets/titans/avatars/${name}.webp`, import.meta.url).href;
@@ -11,7 +11,7 @@ function getImageUrl(name: string): string {
 const titanAvatarSuffix = '_avatar';
 
 export default function TitanState() {
-    const { titans, currentTitan } = useTitanStore();
+    const { titans, currentTitan } = useBoundStore();
 
     const [selectedTitan, setSelectedTitan] = useState<TitanSequence>();
 

@@ -4,14 +4,14 @@ import { formatter } from '@/lib/utils';
 import RaidDeck from './RaidDeck';
 import React from 'react';
 import RaidTitanData from '@/components/RaidTitanData';
-import useTitanStore from '@/stores/titansStore';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 type RaidLogProps = {
     data: RaidAttack[];
 };
 
 function RaidLog({ data }: RaidLogProps) {
-    const titan = useTitanStore((state) => state.currentTitan);
+    const titan = useBoundStore((state) => state.currentTitan);
 
     if (!titan) return null;
     if (data.length === 0) return null;

@@ -5,10 +5,10 @@ import { useLatestAttacks, useRaidCycles, useRaidList, useRaidTitans } from '@/l
 import { useEffect, useMemo } from 'react';
 import { RaidCycle, TitanSequence } from './raid-log/types';
 import CardBonusData from './widgets/CardBonusData';
-import useTitanStore from '@/stores/titansStore';
 import CardRaidInfo from './widgets/CardRaidInfo';
 import TitanStateDesktop from './widgets/TitanState.desktop';
 import TitanState from './widgets/TitanState';
+import { useBoundStore } from '@/stores/useBoundStore';
 
 function getImageUrl(name: string): string {
     return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
@@ -20,7 +20,7 @@ export default function Dashboard() {
         width: '(min-width: 924px)',
     });
 
-    const { setTitans, setCurrentTitan, titans } = useTitanStore();
+    const { setTitans, setCurrentTitan, titans } = useBoundStore();
 
     const raidCycles = useRaidCycles();
     const raidAttacks = useLatestAttacks();

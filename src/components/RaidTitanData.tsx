@@ -27,9 +27,11 @@ const getTitanHealthPercentage = (titan: TitanSequence, partType: 'Body' | 'Armo
 
     const remainingTitanBodyHealth = titan.health - totalHealth + totalRemainingHealth;
 
-    const result = partType === 'Armor' ? percentage(totalHealth, totalRemainingHealth) : percentage(titan.health, remainingTitanBodyHealth);
+    let result = partType === 'Armor' ? percentage(totalHealth, totalRemainingHealth) : percentage(titan.health, remainingTitanBodyHealth);
 
-    return Math.abs(result);
+    if (result < 0) result = 0;
+
+    return result;
 };
 
 const getTitanHealth = (titan: TitanSequence, partType: 'Body' | 'Armor'): number => {
@@ -142,7 +144,7 @@ export default function RaidTitanData({ titan, parts, showConditionalSection = f
     const hasActiveConditionals: boolean = [isVictoryMarch(), isInsanityVoid(), isSkeletalSmash(), isDecayingStrike()].some(Boolean);
 
     return (
-        <div className="flex flex-col gap-8 flex-wrap">
+        <div className="flex flex-col gap-4 flex-wrap">
             <h2 className="font-medium text-center">{titan.name}</h2>
 
             <TitanPartTableData parts={parts} titanData={getTitanCursedParts()} />

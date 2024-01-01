@@ -1,5 +1,6 @@
 import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image, Spacer, Tooltip } from '@nextui-org/react';
 import { RaidCycle, RaidData } from '../raid-log/types';
+import { getRaidLabel } from '@/lib/utils';
 
 type CardRaidInfoProps = {
     raidData?: RaidData;
@@ -54,9 +55,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                                     <Image src={getImageUrl(raidIconFileName)} className="rounded-lg flex object-cover w-full h-full h-8 w-8" />
                                 </div>
 
-                                <h3 className="text-md font-medium">
-                                    {tier === '9999' ? 'Master Tier ⦁ ' : tier} {level}
-                                </h3>
+                                <h3 className="text-md font-medium">{getRaidLabel(tier, level)}</h3>
                             </div>
 
                             {raidCycle != null && (

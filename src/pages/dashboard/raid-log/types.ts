@@ -84,6 +84,7 @@ export type RaidData = {
     raid_id: string;
     raid_season_sequence: number;
     started_at: string;
+    ended_at?: string;
     tier: string;
 };
 

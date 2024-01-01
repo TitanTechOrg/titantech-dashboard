@@ -1,6 +1,5 @@
 import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image, Spacer, Tooltip } from '@nextui-org/react';
 import { RaidCycle, RaidData } from '../raid-log/types';
-import Show from '@/components/Show';
 
 type CardRaidInfoProps = {
     raidData?: RaidData;
@@ -39,7 +38,7 @@ function getImageUrl(name: string): string {
 export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
     if (!raidData) return null;
 
-    const { buff_type, level, raid_id, started_at: raid_started_at, tier } = raidData;
+    const { buff_type, level, raid_id, started_at: raid_started_at, ended_at, tier } = raidData;
     const raidStarted: string[] = raidCycle ? [] : [raid_id];
 
     return (
@@ -86,13 +85,22 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                                 </Tooltip>
                             </div>
 
-                            {raidCycle != null && (
+                            {ended_at != null ? (
                                 <div className="text-sm font-medium flex justify-between">
-                                    <span>Next cycle</span>
-                                    <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>
-                                        <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidCycle.next_reset_at)}</span>
+                                    <span>Raid end</span>
+                                    <Tooltip showArrow={true} content={new Date(ended_at).toUTCString()}>
+                                        <span className="text-sm font-medium">{convertUTCDateToLocalDate(ended_at)}</span>
                                     </Tooltip>
                                 </div>
+                            ) : (
+                                raidCycle != null && (
+                                    <div className="text-sm font-medium flex justify-between">
+                                        <span>Next cycle</span>
+                                        <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>
+                                            <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidCycle.next_reset_at)}</span>
+                                        </Tooltip>
+                                    </div>
+                                )
                             )}
                         </div>
 

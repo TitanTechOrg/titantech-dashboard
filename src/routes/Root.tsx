@@ -15,11 +15,35 @@ export default function Root() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
 
-    const isAuthenticated = localStorage.getItem('clan_token') && localStorage.getItem('clan_token')?.length === 36;
+    const isAuthenticated = !!localStorage.getItem('clan_token') && localStorage.getItem('clan_token')?.length === 36;
 
     return (
         <>
-            <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} isBordered={true} className="fixed">
+            <Navbar
+                onMenuOpenChange={setIsMenuOpen}
+                isMenuOpen={isMenuOpen}
+                className="fixed"
+                classNames={{
+                    item: [
+                        'flex',
+                        'relative',
+                        'h-full',
+                        'items-center',
+                        "data-[active=true]:after:content-['']",
+                        'data-[active=true]:after:absolute',
+                        'data-[active=true]:after:bottom-0',
+                        'data-[active=true]:after:left-0',
+                        'data-[active=true]:after:right-0',
+                        'data-[active=true]:after:h-[2px]',
+                        'data-[active=true]:after:rounded-[2px]',
+                        'data-[active=true]:after:bg-primary',
+                    ],
+                    wrapper: ['max-w-screen-2xl'],
+                }}
+                isBordered={true}
+                isBlurred={false}
+                shouldHideOnScroll={true}
+            >
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
 
@@ -53,7 +77,7 @@ export default function Root() {
                     </NavbarItem>
                 </NavbarContent>
 
-                <NavbarMenu>
+                <NavbarMenu className="min-h-lvh pb-32">
                     {menuItems
                         .filter((route) => {
                             if (!isAuthenticated && route === 'dashboard') return '';

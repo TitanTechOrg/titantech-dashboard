@@ -47,6 +47,9 @@ export default function TitansSequence() {
     };
 
     const [selectedOption, setSelectedOption] = useState(new Set([currentTitan?.id!]));
+
+    const isDefeatedTitan = (otherTitanSequenceIndex: number) => !!(currentTitan && currentTitan?.sequence_index > otherTitanSequenceIndex);
+
     return (
         <Card className="dark:bg-neutral-800 p-2 h-full">
             <CardHeader>
@@ -67,28 +70,37 @@ export default function TitansSequence() {
                 <div className="flex flex-col gap-2 justify-center items-center">
                     <Skeleton isLoaded={!!selectedTitan}>
                         {selectedTitan && (
-                            <ButtonGroup variant="flat">
-                                <Button key={selectedTitan.id} className="p-0 m-0 flex flex-row w-36 min-h-fit" radius="sm">
-                                    <div className="flex flex-row justify-between items-center w-full gap-2">
-                                        <Image
-                                            shadow="sm"
-                                            radius="sm"
-                                            width="100%"
-                                            alt={selectedTitan.name}
-                                            className="object-cover h-10 w-10"
-                                            src={getImageUrl(selectedTitan.name + titanAvatarSuffix)}
-                                        />
-                                        <span>
-                                            {selectedTitan.name} &nbsp;
-                                            {selectedTitan.sequence_index! + 1} / {titans.length}
-                                        </span>
-                                    </div>
-                                </Button>
+                            <ButtonGroup variant="solid">
                                 <Dropdown placement="top">
                                     <DropdownTrigger>
-                                        <Button isIconOnly>
-                                            <ChevronDownIcon />
-                                        </Button>
+                                        <Button
+                                            key={selectedTitan.id}
+                                            className="p-0 m-0 flex flex-row w-44 min-h-fit"
+                                            radius="sm"
+                                            color="primary"
+                                            startContent={
+                                                <div className="flex flex-row justify-start items-center w-full gap-2 relative">
+                                                    {isDefeatedTitan(selectedTitan.sequence_index) && (
+                                                        <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
+                                                    )}
+                                                    <Image
+                                                        shadow="sm"
+                                                        radius="sm"
+                                                        width="100%"
+                                                        alt={selectedTitan.name}
+                                                        className={`object-cover h-10 w-10 z-0 ${
+                                                            isDefeatedTitan(selectedTitan.sequence_index) ? 'grayscale' : 'grayscale-0'
+                                                        }`}
+                                                        src={getImageUrl(selectedTitan.name + titanAvatarSuffix)}
+                                                    />
+                                                    <span>
+                                                        {selectedTitan.name} &nbsp;
+                                                        {selectedTitan.sequence_index! + 1} / {titans.length}
+                                                    </span>
+                                                </div>
+                                            }
+                                            endContent={<ChevronDownIcon className="mr-2" />}
+                                        ></Button>
                                     </DropdownTrigger>
                                     <DropdownMenu
                                         disallowEmptySelection
@@ -101,33 +113,30 @@ export default function TitansSequence() {
                                         variant="solid"
                                         color="default"
                                     >
-                                        {titans?.map((titan) => {
-                                            const isDefeatedTitan = !!(currentTitan && currentTitan.sequence_index > titan.sequence_index);
-                                            return (
-                                                <DropdownItem
-                                                    key={titan.id}
-                                                    title={titan.name}
-                                                    description={`${titan.sequence_index! + 1} / ${titans?.length}`}
-                                                    startContent={
-                                                        <div className="relative min-w-fit h-auto">
-                                                            {isDefeatedTitan && (
-                                                                <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
-                                                            )}
-                                                            <Image
-                                                                shadow="sm"
-                                                                radius="sm"
-                                                                width="100%"
-                                                                alt={titan.name}
-                                                                className={`object-cover h-10 w-10 z-0 ${
-                                                                    isDefeatedTitan ? 'grayscale' : 'grayscale-0'
-                                                                }`}
-                                                                src={getImageUrl(titan.name + titanAvatarSuffix)}
-                                                            />
-                                                        </div>
-                                                    }
-                                                />
-                                            );
-                                        })}
+                                        {titans?.map((titan) => (
+                                            <DropdownItem
+                                                key={titan.id}
+                                                title={titan.name}
+                                                description={`${titan.sequence_index! + 1} / ${titans.length}`}
+                                                startContent={
+                                                    <div className="relative min-w-fit h-auto">
+                                                        {isDefeatedTitan(titan.sequence_index) && (
+                                                            <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
+                                                        )}
+                                                        <Image
+                                                            shadow="sm"
+                                                            radius="sm"
+                                                            width="100%"
+                                                            alt={titan.name}
+                                                            className={`object-cover h-10 w-10 z-0 ${
+                                                                isDefeatedTitan(titan.sequence_index) ? 'grayscale' : 'grayscale-0'
+                                                            }`}
+                                                            src={getImageUrl(titan.name + titanAvatarSuffix)}
+                                                        />
+                                                    </div>
+                                                }
+                                            />
+                                        ))}
                                     </DropdownMenu>
                                 </Dropdown>
                             </ButtonGroup>

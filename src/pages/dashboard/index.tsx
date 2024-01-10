@@ -116,7 +116,7 @@ export default function Dashboard() {
 
             {raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 && (
                 <div className="md:px-4">
-                    <Card className="dark:bg-neutral-800 p-4">
+                    <Card className="dark:bg-neutral-800 p-2">
                         <CardHeader className="justify-between">
                             <div className="flex flex-row items-center justify-start gap-4">
                                 <div className="min-w-fit">
@@ -128,7 +128,7 @@ export default function Dashboard() {
                                 Refresh
                             </Button>
                         </CardHeader>
-                        <CardBody className="">
+                        <CardBody>
                             <Divider />
                             <LatestAttacksList {...raidAttacks} />
                         </CardBody>

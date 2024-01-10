@@ -101,7 +101,7 @@ function TableRowArmour({ text, cursedColor, isOffstratPart, sequenceParts }: Ta
     }
 
     return (
-        <Tooltip showArrow={true} content={`${healthPercentage}%`}>
+        <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
             <div
                 className={`${tailwindClasses} w-full col-span-1 row-span-1 border-solid border-3 rounded-md font-semibold subpixel-antialiased min-w-[80px]`}
             >
@@ -130,10 +130,8 @@ function TableRowBody({ text, isOffstratPart, sequenceParts }: TableRowProps) {
     }
 
     return (
-        <Tooltip showArrow={true} content={`${healthPercentage}%`}>
-            <div
-                className={`${tailwindClasses} w-full col-span-1 row-span-1 border border-3 rounded-md font-semibold subpixel-antialiased min-w-[80px]`}
-            >
+        <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
+            <div className={`${tailwindClasses} w-full col-span-1 row-span-1 border-3 rounded-md font-semibold subpixel-antialiased min-w-[80px]`}>
                 {text}
                 <Progress
                     aria-label="Titan body part health..."

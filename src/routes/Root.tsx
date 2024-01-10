@@ -42,7 +42,6 @@ export default function Root() {
                 }}
                 isBordered={true}
                 isBlurred={false}
-                shouldHideOnScroll={true}
             >
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
@@ -57,7 +56,7 @@ export default function Root() {
                     </NavbarBrand>
                 </NavbarContent>
 
-                <NavbarContent className="md:flex lg:flex hidden md:flex gap-4" justify="center">
+                <NavbarContent className="md:flex lg:flex hidden gap-4" justify="center">
                     <NavbarItem isActive={location.pathname === '/dashboard'} className={!isAuthenticated ? 'hidden' : ''}>
                         <NavLink to="/dashboard" className={location.pathname === '/dashboard' ? 'text-primary' : 'text-foreground'}>
                             Dashboard

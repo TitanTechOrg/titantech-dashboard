@@ -25,7 +25,7 @@ type RaidMapKey = keyof typeof RaidCardMap;
 function RaidDeck({ id, sources }: RaidDeckProps) {
     return (
         <div className="items-center flex justify-center h-auto w-max-content gap-1">
-            {sources.filter(excludeTapDamageCard).map(({ name: cardName, value: cardLevel }: RaidCardType, index: number) => {
+            {sources?.filter(excludeTapDamageCard)?.map(({ name: cardName, value: cardLevel }: RaidCardType, index: number) => {
                 return (
                     <div key={id + cardName + cardLevel + index + 'container'} className="relative">
                         <span key={id + cardName + cardLevel + index + 'span'} className="absolute z-20 inset-x-0 -left-1 -top-1">

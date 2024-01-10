@@ -21,7 +21,7 @@ const getTitanCursedParts = (titan: TitanSequence): TitanCurseData => {
 export default function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataProps) {
     return (
         <div className="flex flex-col gap-4 flex-wrap">
-            <Skeleton className="rounded-lg" isLoaded={!!parts}>
+            <Skeleton className="rounded-lg" isLoaded={!!parts && !!titan}>
                 {parts && titan && <TitanPartTableData parts={parts} titanData={getTitanCursedParts(titan)} showHealthbars={showHealthbars} />}
             </Skeleton>
         </div>

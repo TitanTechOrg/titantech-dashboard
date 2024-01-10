@@ -25,7 +25,7 @@ function CardPreviousValue({ index, listLength, value }: MoralePreviousValueProp
 function CardValues({ bonus }: MoraleValuesProps) {
     return (
         <div className="flex flex-row flex-wrap gap-x-2">
-            {bonus.map((value: string, index: number) => (
+            {bonus?.map((value: string, index: number) => (
                 <CardPreviousValue key={`${index}_morale-bonus_${value}`} index={index} value={value} listLength={bonus.length} />
             ))}
         </div>

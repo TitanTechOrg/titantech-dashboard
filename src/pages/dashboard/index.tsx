@@ -68,7 +68,7 @@ export default function Dashboard() {
 
         raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
-        const moraleBonuses = raidCycles.data.cycles.map(({ morale, team_tactics }: RaidCycle) => {
+        const moraleBonuses = raidCycles.data.cycles?.map(({ morale, team_tactics }: RaidCycle) => {
             return ((morale + team_tactics) * 100).toFixed(2);
         });
 
@@ -80,7 +80,7 @@ export default function Dashboard() {
 
         raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
-        const mirrorForceBonuses = raidCycles.data.cycles.map(({ mirror_force }: RaidCycle) => {
+        const mirrorForceBonuses = raidCycles.data.cycles?.map(({ mirror_force }: RaidCycle) => {
             return (mirror_force * 100).toFixed(0);
         });
 

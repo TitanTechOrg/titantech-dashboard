@@ -134,7 +134,9 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!titan} className="rounded-lg">
-                            <Image src={getTitanImageUrl(titan?.name + titanAvatarSuffix)} className="rounded-lg flex object-cover h-8 w-8" />
+                            {titan && (
+                                <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-lg flex object-cover h-8 w-8" />
+                            )}{' '}
                         </Skeleton>
                     </div>
 
@@ -144,7 +146,7 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                 </div>
 
                 <Skeleton isLoaded={!!titan} className="rounded-lg">
-                    <div className="text-xl font-bold">{titan?.name}</div>
+                    {titan && <div className="text-xl font-bold">{titan.name}</div>}
                 </Skeleton>
             </CardHeader>
 
@@ -155,21 +157,25 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                         <span>Titan Debuff</span>
                     </Skeleton>
                     <Skeleton isLoaded={!!titan} className="rounded-lg">
-                        <span>
-                            {TitanDebuff[titan?.area_type as TitanDebuffType]}
-                            &nbsp;
-                            {titan?.area_amount.toString().startsWith('-') ? '' : '+'}
-                            {(titan?.area_amount)!.toLocaleString('en', { style: 'percent' })}
-                        </span>
+                        {titan && (
+                            <span>
+                                {TitanDebuff[titan.area_type as TitanDebuffType]}
+                                &nbsp;
+                                {titan.area_amount.toString().startsWith('-') ? '' : '+'}
+                                {titan.area_amount.toLocaleString('en', { style: 'percent' })}
+                            </span>
+                        )}
                     </Skeleton>
                 </div>
                 <Skeleton isLoaded={!!titan} className="rounded-lg">
-                    <TitanHealthBars
-                        titanArmourHealthPercentage={getTitanHealthPercentage(titan, 'Armor')}
-                        titanBodyHealthPercentage={getTitanHealthPercentage(titan, 'Body')}
-                        titanArmourHealthValue={getTitanHealth(titan, 'Armor')}
-                        titanBodyHealthValue={getTitanHealth(titan, 'Body')}
-                    />
+                    {titan && (
+                        <TitanHealthBars
+                            titanArmourHealthPercentage={getTitanHealthPercentage(titan, 'Armor')}
+                            titanBodyHealthPercentage={getTitanHealthPercentage(titan, 'Body')}
+                            titanArmourHealthValue={getTitanHealth(titan, 'Armor')}
+                            titanBodyHealthValue={getTitanHealth(titan, 'Body')}
+                        />
+                    )}
                 </Skeleton>
 
                 <div className="flex flex-col gap-2">

@@ -18,7 +18,7 @@ function RaidLog({ data }: RaidLogProps) {
 
     return (
         <Accordion selectionMode="multiple">
-            {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
+            {data?.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
                 return (
                     <AccordionItem
                         key={titan_attack_id}

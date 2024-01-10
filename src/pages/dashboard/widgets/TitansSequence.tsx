@@ -66,80 +66,86 @@ export default function TitansSequence() {
                 <Divider />
                 <div className="flex flex-col gap-2 justify-center items-center">
                     <Skeleton isLoaded={!!selectedTitan}>
-                        <ButtonGroup variant="flat">
-                            <Button key={selectedTitan?.id} className="p-0 m-0 flex flex-row w-36 min-h-fit" radius="sm">
-                                <div className="flex flex-row justify-between items-center w-full gap-2">
-                                    <Image
-                                        shadow="sm"
-                                        radius="sm"
-                                        width="100%"
-                                        alt={selectedTitan?.name}
-                                        className="object-cover h-10 w-10"
-                                        src={getImageUrl(selectedTitan?.name + titanAvatarSuffix)}
-                                    />
-                                    <span>
-                                        {selectedTitan?.name} &nbsp;
-                                        {selectedTitan?.sequence_index! + 1} / {titans?.length}
-                                    </span>
-                                </div>
-                            </Button>
-                            <Dropdown placement="top">
-                                <DropdownTrigger>
-                                    <Button isIconOnly>
-                                        <ChevronDownIcon />
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu
-                                    disallowEmptySelection
-                                    aria-label="Titan Sequence options"
-                                    selectedKeys={selectedOption}
-                                    selectionMode="single"
-                                    onSelectionChange={(keys: Selection) => selectTitan(Array.from(keys)[0].toString())}
-                                    className="max-w-[300px]"
-                                    hideSelectedIcon={true}
-                                    variant="solid"
-                                    color="default"
-                                >
-                                    {titans.map((titan) => {
-                                        const isDefeatedTitan = !!(currentTitan && currentTitan.sequence_index > titan.sequence_index);
-                                        return (
-                                            <DropdownItem
-                                                key={titan.id}
-                                                title={titan.name}
-                                                description={`${titan.sequence_index! + 1} / ${titans?.length}`}
-                                                startContent={
-                                                    <div className="relative min-w-fit h-auto">
-                                                        {isDefeatedTitan && (
-                                                            <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
-                                                        )}
-                                                        <Image
-                                                            shadow="sm"
-                                                            radius="sm"
-                                                            width="100%"
-                                                            alt={titan.name}
-                                                            className={`object-cover h-10 w-10 z-0 ${isDefeatedTitan ? 'grayscale' : 'grayscale-0'}`}
-                                                            src={getImageUrl(titan.name + titanAvatarSuffix)}
-                                                        />
-                                                    </div>
-                                                }
-                                            />
-                                        );
-                                    })}
-                                </DropdownMenu>
-                            </Dropdown>
-                        </ButtonGroup>
+                        {selectedTitan && (
+                            <ButtonGroup variant="flat">
+                                <Button key={selectedTitan.id} className="p-0 m-0 flex flex-row w-36 min-h-fit" radius="sm">
+                                    <div className="flex flex-row justify-between items-center w-full gap-2">
+                                        <Image
+                                            shadow="sm"
+                                            radius="sm"
+                                            width="100%"
+                                            alt={selectedTitan.name}
+                                            className="object-cover h-10 w-10"
+                                            src={getImageUrl(selectedTitan.name + titanAvatarSuffix)}
+                                        />
+                                        <span>
+                                            {selectedTitan.name} &nbsp;
+                                            {selectedTitan.sequence_index! + 1} / {titans.length}
+                                        </span>
+                                    </div>
+                                </Button>
+                                <Dropdown placement="top">
+                                    <DropdownTrigger>
+                                        <Button isIconOnly>
+                                            <ChevronDownIcon />
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu
+                                        disallowEmptySelection
+                                        aria-label="Titan Sequence options"
+                                        selectedKeys={selectedOption}
+                                        selectionMode="single"
+                                        onSelectionChange={(keys: Selection) => selectTitan(Array.from(keys)[0].toString())}
+                                        className="max-w-[300px]"
+                                        hideSelectedIcon={true}
+                                        variant="solid"
+                                        color="default"
+                                    >
+                                        {titans?.map((titan) => {
+                                            const isDefeatedTitan = !!(currentTitan && currentTitan.sequence_index > titan.sequence_index);
+                                            return (
+                                                <DropdownItem
+                                                    key={titan.id}
+                                                    title={titan.name}
+                                                    description={`${titan.sequence_index! + 1} / ${titans?.length}`}
+                                                    startContent={
+                                                        <div className="relative min-w-fit h-auto">
+                                                            {isDefeatedTitan && (
+                                                                <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
+                                                            )}
+                                                            <Image
+                                                                shadow="sm"
+                                                                radius="sm"
+                                                                width="100%"
+                                                                alt={titan.name}
+                                                                className={`object-cover h-10 w-10 z-0 ${
+                                                                    isDefeatedTitan ? 'grayscale' : 'grayscale-0'
+                                                                }`}
+                                                                src={getImageUrl(titan.name + titanAvatarSuffix)}
+                                                            />
+                                                        </div>
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </ButtonGroup>
+                        )}
                     </Skeleton>
                 </div>
 
                 <div className="flex flex-row items-center justify-center">
-                    <RaidTitanData
-                        titan={selectedTitan}
-                        parts={selectedTitan?.parts.map(({ name, current_health: value }: TitanSequenceParts) => {
-                            const titanPart: TitanPart = { name, value };
-                            return titanPart;
-                        })}
-                        showHealthbars={true}
-                    />
+                    {selectedTitan && (
+                        <RaidTitanData
+                            titan={selectedTitan}
+                            parts={selectedTitan?.parts?.map(({ name, current_health: value }: TitanSequenceParts) => {
+                                const titanPart: TitanPart = { name, value };
+                                return titanPart;
+                            })}
+                            showHealthbars={true}
+                        />
+                    )}
                 </div>
             </CardBody>
         </Card>

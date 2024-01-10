@@ -153,7 +153,7 @@ function Alchemy() {
         <div className="flex justify-center items-center flex-col gap-4">
             {craftingData == null ? (
                 <form onSubmit={onSubmit} className="flex max-w-xs flex-wrap md:flex-wrap gap-4">
-                    {ingregients.map((ingredient: string) => {
+                    {ingregients?.map((ingredient: string) => {
                         return (
                             <Input
                                 key={ingredient}

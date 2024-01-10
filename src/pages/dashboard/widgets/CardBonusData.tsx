@@ -36,7 +36,7 @@ function CardBonusData({ imageUrl, bonus, title }: PercentageCardsType) {
     const latestBonus: string = bonus[bonus.length - 1];
 
     return (
-        <Card className="dark:bg-default">
+        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full">
             <Accordion>
                 <AccordionItem
                     key={title}
@@ -45,7 +45,7 @@ function CardBonusData({ imageUrl, bonus, title }: PercentageCardsType) {
                         <CardHeader className="flex flex-row items-center justify-between gap-4">
                             <div className="flex flex-row items-center justify-start gap-4">
                                 <div className="min-w-fit">
-                                    <Image src={imageUrl} className="rounded-lg flex object-cover w-full h-full h-8 w-8" />
+                                    <Image src={imageUrl} className="rounded-lg flex object-cover h-8 w-8" />
                                 </div>
                                 <h3 className="text-md font-medium">{title}</h3>
                             </div>

@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image, Spacer, Tooltip } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Image, Skeleton, Tooltip } from '@nextui-org/react';
 import { RaidCycle, RaidData } from '../raid-log/types';
 import { getRaidLabel } from '@/lib/utils';
 
@@ -37,78 +37,91 @@ function getImageUrl(name: string): string {
 }
 
 export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
-    if (!raidData) return null;
+    // if (!raidData) return null;
 
-    const { buff_type, level, raid_id, started_at: raid_started_at, ended_at, tier } = raidData;
-    const raidStarted: string[] = raidCycle ? [] : [raid_id];
+    // const { buff_type, level, started_at: raid_started_at, ended_at, tier } = raidData;
 
     return (
-        <Card className="dark:bg-default min-w-72 w-full">
-            <Accordion defaultExpandedKeys={raidStarted}>
-                <AccordionItem
-                    key={raid_id}
-                    aria-label="Accordion for displaying Raid Info. Tap to open/close."
-                    title={
-                        <CardHeader className="flex flex-row items-center justify-between gap-4 mt-0">
-                            <div className="flex flex-row items-center justify-start gap-4">
-                                <div className="min-w-fit">
-                                    <Image src={getImageUrl(raidIconFileName)} className="rounded-lg flex object-cover w-full h-full h-8 w-8" />
-                                </div>
+        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full p-2">
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+                <div className="flex flex-row items-center justify-start gap-4">
+                    <div className="min-w-fit">
+                        <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                            <Image src={getImageUrl(raidIconFileName)} className="rounded-lg flex object-cover h-8 w-8" />
+                        </Skeleton>
+                    </div>
+                    <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                        {raidData && <h3 className="text-md font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
+                    </Skeleton>
+                </div>
 
-                                <h3 className="text-md font-medium">{getRaidLabel(tier, level)}</h3>
-                            </div>
-
-                            {raidCycle != null && (
-                                <div className="text-xl font-bold">
-                                    {raidCycle.cycle}
-                                    <span className="text-sm font-semibold">
-                                        {getOrdinalSuffix(raidCycle.cycle)}
-                                        {' round'}
-                                    </span>
-                                </div>
-                            )}
-                        </CardHeader>
-                    }
-                >
-                    <CardBody className="pt-0">
-                        <div className="flex flex-col gap-2">
-                            <div className="text-sm font-medium flex justify-between space-x-4">
-                                <span>Raid Bonus</span>
-                                <span>{RaidBuffMapping[buff_type as RaidBuffMappingType]} </span>
-                            </div>
-
-                            <div className="text-sm font-medium flex justify-between">
-                                <span>Raid start</span>
-                                <Tooltip showArrow={true} content={new Date(raid_started_at).toUTCString()}>
-                                    <span className="text-sm font-medium">{convertUTCDateToLocalDate(raid_started_at)}</span>
-                                </Tooltip>
-                            </div>
-
-                            {ended_at != null ? (
-                                <div className="text-sm font-medium flex justify-between">
-                                    <span>Raid end</span>
-                                    <Tooltip showArrow={true} content={new Date(ended_at).toUTCString()}>
-                                        <span className="text-sm font-medium">{convertUTCDateToLocalDate(ended_at)}</span>
-                                    </Tooltip>
-                                </div>
-                            ) : (
-                                raidCycle != null && (
-                                    <div className="text-sm font-medium flex justify-between">
-                                        <span>Next cycle</span>
-                                        <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>
-                                            <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidCycle.next_reset_at)}</span>
-                                        </Tooltip>
-                                    </div>
-                                )
-                            )}
+                <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                    {raidCycle != null && (
+                        <div className="text-xl font-bold">
+                            {raidCycle.cycle}
+                            <span className="text-sm font-semibold">
+                                {getOrdinalSuffix(raidCycle.cycle)}
+                                {' round'}
+                            </span>
                         </div>
+                    )}
+                </Skeleton>
+            </CardHeader>
+            <CardBody className="flex flex-col gap-4">
+                <Divider />
 
-                        <Spacer y={4} />
+                <div className="flex flex-col gap-2">
+                    <div className="text-sm font-medium flex justify-between space-x-4">
+                        <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                            <span>Raid Bonus</span>
+                        </Skeleton>
+                        <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                            {raidData && <span>{RaidBuffMapping[raidData.buff_type as RaidBuffMappingType]} </span>}
+                        </Skeleton>
+                    </div>
 
+                    <div className="text-sm font-medium flex justify-between">
+                        <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                            <span>Raid start</span>
+                        </Skeleton>
+                        <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                            {raidData && (
+                                <Tooltip showArrow={true} content={new Date(raidData.started_at).toUTCString()}>
+                                    <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidData.started_at)}</span>
+                                </Tooltip>
+                            )}
+                        </Skeleton>
+                    </div>
+
+                    {raidData?.ended_at != null ? (
+                        <div className="text-sm font-medium flex justify-between">
+                            <span>Raid end</span>
+                            <Tooltip showArrow={true} content={new Date(raidData.ended_at).toUTCString()}>
+                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidData.ended_at)}</span>
+                            </Tooltip>
+                        </div>
+                    ) : (
+                        <div className="text-sm font-medium flex justify-between">
+                            <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                                <span>Next cycle</span>
+                            </Skeleton>
+                            <Skeleton isLoaded={!!raidData} className="rounded-lg">
+                                {raidCycle && (
+                                    <Tooltip showArrow={true} content={new Date(raidCycle.next_reset_at).toUTCString()}>
+                                        <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidCycle.next_reset_at)}</span>
+                                    </Tooltip>
+                                )}
+                            </Skeleton>
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex items-center justify-end">
+                    <Skeleton isLoaded={!!raidData} className="rounded-lg">
                         <span className="text-sm font-light text-right italic">All times are local</span>
-                    </CardBody>
-                </AccordionItem>
-            </Accordion>
+                    </Skeleton>
+                </div>
+            </CardBody>
         </Card>
     );
 }

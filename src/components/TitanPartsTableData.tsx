@@ -6,6 +6,7 @@ import { Progress, Tooltip } from '@nextui-org/react';
 type TitanPartTableDataProps = {
     parts: TitanPart[];
     titanData: TitanCurseData;
+    showHealthbars?: boolean;
 };
 
 type RaidTitanPart = keyof typeof TitanPartMap;
@@ -15,6 +16,7 @@ type TableRowProps = {
     cursedColor?: string | undefined;
     isOffstratPart?: boolean;
     sequenceParts?: TitanSequenceParts;
+    showHealthbars?: boolean;
 };
 
 const getPartDamageText = (part: TitanPart | undefined): string => {
@@ -90,7 +92,7 @@ const getExtraClasses = (
     return tailwindClasses;
 };
 
-function TableRowArmour({ text, cursedColor, isOffstratPart, sequenceParts }: TableRowProps) {
+function TableRowArmour({ text, cursedColor, isOffstratPart, sequenceParts, showHealthbars }: TableRowProps) {
     const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;
     const tailwindClasses = getExtraClasses('Armor', cursedColor, isOffstratPart, isNegativeNumber);
 
@@ -106,20 +108,22 @@ function TableRowArmour({ text, cursedColor, isOffstratPart, sequenceParts }: Ta
                 className={`${tailwindClasses} w-full col-span-1 row-span-1 border-solid border-3 rounded-md font-semibold subpixel-antialiased min-w-[80px]`}
             >
                 {text}
-                <Progress
-                    aria-label="Titan armor part health..."
-                    value={healthPercentage}
-                    className="max-w-md px-1 pb-1"
-                    size="sm"
-                    color={isOffstratPart ? 'default' : 'primary'}
-                    isDisabled={isOffstratPart}
-                />
+                {showHealthbars && (
+                    <Progress
+                        aria-label="Titan armor part health..."
+                        value={healthPercentage}
+                        className="max-w-md px-1 pb-1"
+                        size="sm"
+                        color={isOffstratPart ? 'default' : 'primary'}
+                        isDisabled={isOffstratPart}
+                    />
+                )}
             </div>
         </Tooltip>
     );
 }
 
-function TableRowBody({ text, isOffstratPart, sequenceParts }: TableRowProps) {
+function TableRowBody({ text, isOffstratPart, sequenceParts, showHealthbars }: TableRowProps) {
     const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;
     const tailwindClasses = getExtraClasses('Body', undefined, isOffstratPart, isNegativeNumber);
 
@@ -133,14 +137,16 @@ function TableRowBody({ text, isOffstratPart, sequenceParts }: TableRowProps) {
         <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
             <div className={`${tailwindClasses} w-full col-span-1 row-span-1 border-3 rounded-md font-semibold subpixel-antialiased min-w-[80px]`}>
                 {text}
-                <Progress
-                    aria-label="Titan body part health..."
-                    value={healthPercentage}
-                    className="max-w-md px-1 pb-1"
-                    size="sm"
-                    color={isOffstratPart ? 'default' : 'primary'}
-                    isDisabled={isOffstratPart}
-                />
+                {showHealthbars && (
+                    <Progress
+                        aria-label="Titan body part health..."
+                        value={healthPercentage}
+                        className="max-w-md px-1 pb-1"
+                        size="sm"
+                        color={isOffstratPart ? 'default' : 'primary'}
+                        isDisabled={isOffstratPart}
+                    />
+                )}
             </div>
         </Tooltip>
     );
@@ -159,7 +165,7 @@ const TitanOverlayImages = {
 
 type TitanOverlayImagesType = keyof typeof TitanOverlayImages;
 
-function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.Element {
+function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
     const { curse_type, parts: cursedParts, name } = titanData;
 
     return (
@@ -175,11 +181,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Arm Right', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Arm Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Arm Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Arm Right', parts))}
                         isOffstratPart={!!!findSequencePart('Body Arm Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Arm Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
                 <div className="flex flex-col gap-y-1">
@@ -188,11 +196,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Head', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Head', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Head', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Head', parts))}
                         isOffstratPart={!!!findSequencePart('Body Head', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Head', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
 
@@ -202,12 +212,14 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Arm Left', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Arm Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Arm Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
 
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Arm Left', parts))}
                         isOffstratPart={!!!findSequencePart('Body Arm Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Arm Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
             </div>
@@ -219,11 +231,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Hand Right', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Hand Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Hand Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Hand Right', parts))}
                         isOffstratPart={!!!findSequencePart('Body Hand Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Hand Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
 
@@ -233,11 +247,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Chest', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Chest', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Chest', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Chest', parts))}
                         isOffstratPart={!!!findSequencePart('Body Chest', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Chest', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
 
@@ -247,11 +263,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Hand Left', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Hand Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Hand Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Hand Left', parts))}
                         isOffstratPart={!!!findSequencePart('Body Hand Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Hand Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
             </div>
@@ -263,11 +281,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Leg Right', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Leg Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Leg Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Leg Right', parts))}
                         isOffstratPart={!!!findSequencePart('Body Leg Right', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Leg Right', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
 
@@ -277,11 +297,13 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
                         cursedColor={getCurseTypeColor(findCursedPart('Armor Leg Left', cursedParts), curse_type)}
                         isOffstratPart={!!!findSequencePart('Armor Leg Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Armor Leg Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                     <TableRowBody
                         text={getPartDamageText(findPart('Body Leg Left', parts))}
                         isOffstratPart={!!!findSequencePart('Body Leg Left', cursedParts)?.target}
                         sequenceParts={findSequencePart('Body Leg Left', cursedParts)}
+                        showHealthbars={showHealthbars}
                     />
                 </div>
             </div>
@@ -289,5 +311,4 @@ function TitanPartTableData({ parts, titanData }: TitanPartTableDataProps): JSX.
     );
 }
 
-// export default React.memo(TitanPartTableData);
 export default TitanPartTableData;

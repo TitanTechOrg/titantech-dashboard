@@ -112,6 +112,19 @@ function TitanHealthBars({
     );
 }
 
+const TitanDebuff = {
+    AllArmorHpMult: 'All Armor',
+    AllArmsHPMult: 'Arm Health',
+    AllHeadHPMult: 'Head Health',
+    AllLegsHPMult: 'Leg Health',
+    AllLimbsHPMult: 'Limb Health',
+    AllTorsoHPMult: 'Torso Health',
+    ArmorArmsHPMult: 'Arm Armor',
+    ArmorLegsHPMult: 'Leg Armor',
+} as const;
+
+type TitanDebuffType = keyof typeof TitanDebuff;
+
 export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
     const { isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
 
@@ -143,7 +156,10 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                     </Skeleton>
                     <Skeleton isLoaded={!!titan} className="rounded-lg">
                         <span>
-                            {titan?.area_type} {titan?.area_amount}
+                            {TitanDebuff[titan?.area_type as TitanDebuffType]}
+                            &nbsp;
+                            {titan?.area_amount.toString().startsWith('-') ? '' : '+'}
+                            {(titan?.area_amount)!.toLocaleString('en', { style: 'percent' })}
                         </span>
                     </Skeleton>
                 </div>
@@ -159,7 +175,7 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row">
                         <Skeleton isLoaded={!!titan} className="rounded-lg">
-                            <h3 className="text-md font-medium">
+                            <h3 className="text-medium font-semibold ">
                                 {hasActiveConditionals() ? 'Active conditional cards' : 'No active conditional cards'}
                             </h3>
                         </Skeleton>

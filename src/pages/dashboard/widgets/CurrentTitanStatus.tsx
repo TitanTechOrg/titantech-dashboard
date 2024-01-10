@@ -60,8 +60,16 @@ function TitanHealthBars({
     titanArmourHealthValue,
     titanBodyHealthValue,
 }: TitanHealthBarsProps) {
-    // const isNegativeArmour = titanArmourHealthValue < 0;
-    // const isNegativeBody = titanBodyHealthValue < 0;
+    const isNegativeArmour = titanArmourHealthValue < 0;
+    const isNegativeBody = titanBodyHealthValue < 0;
+
+    if (isNegativeArmour) {
+        titanArmourHealthValue = 0;
+    }
+
+    if (isNegativeBody) {
+        titanBodyHealthValue = 0;
+    }
 
     const armourTooltipContent = `${formatter().format(titanArmourHealthValue)}`;
     const bodyTooltipContent = `${formatter().format(titanBodyHealthValue)}`;

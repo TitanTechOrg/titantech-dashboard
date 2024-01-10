@@ -29,16 +29,12 @@ function RaidDeck({ id, sources }: RaidDeckProps) {
                 return (
                     <div key={id + cardName + cardLevel + index + 'container'} className="relative">
                         <span key={id + cardName + cardLevel + index + 'span'} className="absolute z-20 inset-x-0 -left-1 -top-1">
-                            <Image
-                                key={id + cardName + cardLevel + 'image'}
-                                src={getCardTypeImageUrl(cardName)}
-                                className="w-full h-full h-4 w-4 sm:h-6 sm:w-6"
-                            />
+                            <Image key={id + cardName + cardLevel + 'image'} src={getCardTypeImageUrl(cardName)} className="h-4 w-4 sm:h-6 sm:w-6" />
                         </span>
                         <Image
                             key={id + cardName + index + 'image'}
                             src={getCardImageUrl(cardName)}
-                            className="rounded flex object-cover w-full h-full h-8 w-8 sm:h-16 sm:w-16"
+                            className="rounded flex object-cover h-8 w-8 sm:h-16 sm:w-16"
                         />
                         <span
                             key={id + cardLevel + index + 'span'}

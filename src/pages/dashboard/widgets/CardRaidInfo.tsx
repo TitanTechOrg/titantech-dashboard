@@ -30,7 +30,7 @@ const RaidBuffMapping = {
 
 type RaidBuffMappingType = keyof typeof RaidBuffMapping;
 
-const raidIconFileName = 'RaidIcon';
+const raidIconFileName = 'Raid';
 
 function getImageUrl(name: string): string {
     return new URL(`../../../assets/${name}.webp`, import.meta.url).href;
@@ -51,7 +51,7 @@ export default function CardRaidInfo({ raidCycle, raidData }: CardRaidInfoProps)
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!raidData} className="rounded-lg">
-                        {raidData && <h3 className="text-md font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
+                        {raidData && <h3 className="text-lg font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
                     </Skeleton>
                 </div>
 

@@ -1,31 +1,25 @@
 import { Button, Card, CardBody, CardHeader } from '@nextui-org/react';
-import { useMediaQueries } from '@react-hook/media-query';
 import LatestAttacksList from './widgets/LatestAttacksList';
 import { useLatestAttacks, useRaidCycles, useRaidList, useRaidTitans } from '@/lib/queries';
 import { useEffect, useMemo } from 'react';
 import { RaidCycle, TitanSequence } from './raid-log/types';
 import CardBonusData from './widgets/CardBonusData';
 import CardRaidInfo from './widgets/CardRaidInfo';
-import TitanStateDesktop from './widgets/TitanState.desktop';
-import TitanState from './widgets/TitanState';
+import TitansSequence from './widgets/TitansSequence';
 import { useBoundStore } from '@/stores/useBoundStore';
+import CurrentTitanStatus from './widgets/CurrentTitanStatus';
 
 function getImageUrl(name: string): string {
     return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
 }
 
 export default function Dashboard() {
-    const { matches } = useMediaQueries({
-        screen: 'screen',
-        width: '(min-width: 924px)',
-    });
-
-    const { setTitans, setCurrentTitan, titans } = useBoundStore();
+    const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
 
     const raidCycles = useRaidCycles();
     const raidAttacks = useLatestAttacks();
     const { data: raidTitansData } = useRaidTitans();
-    const { data: raidListData } = useRaidList();
+    const { data: raidListData, isLoading: raidListIsLoading } = useRaidList();
     // const attackTimeline = useAttackTimeline();
     // console.log('attackTimeline', attackTimeline.data);
 
@@ -91,65 +85,50 @@ export default function Dashboard() {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 lg:gap-x-0 lg:grid-cols-2">
-                {!matches.width && (
-                    <div className="lg:col-span-1 lg:row-start-0">
-                        <CardRaidInfo
-                            raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
-                            raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
-                        />
-                    </div>
-                )}
+            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-6 md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500">
+                <div className="row-start-1 md:row-span-2 md:col-start-1 md:row-start-1">
+                    <CardRaidInfo
+                        raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
+                        raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
+                    />
+                </div>
 
-                {!matches.width && (
-                    <div className="lg:col-span-1 lg:col-start-1 lg:row-start-2">
-                        <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
-                    </div>
-                )}
+                <div className="row-start-2 md:row-span-3 md:col-start-1 md:row-start-3">
+                    <CurrentTitanStatus titan={currentTitan} />
+                </div>
 
-                {!matches.width && (
-                    <div className="lg:col-span-1 lg:col-start-1 lg:row-start-3">
-                        <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
-                    </div>
-                )}
+                {/* <div className="md:row-span-1 md:col-start-1 md:row-start-6">
+                    <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                </div> */}
 
-                {matches.width ? (
-                    <div className="lg:col-span-2 lg:col-start-0 lg:row-start-1 lg:row-span-5">
-                        <TitanStateDesktop>
-                            <>
-                                <CardRaidInfo
-                                    raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
-                                    raidCycle={
-                                        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]
-                                    }
-                                />
-                                <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
-                                <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
-                            </>
-                        </TitanStateDesktop>
-                    </div>
-                ) : (
-                    <div className="lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:row-span-5">
-                        <TitanState />
-                    </div>
-                )}
+                <div className="row-start-4 md:row-span-1 md:col-start-1 md:row-start-6">
+                    <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
+                </div>
 
-                {raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 && (
-                    <div className="lg:col-span-3">
-                        <Card className="col-span-4 p-4">
-                            <CardHeader className="p-0 justify-between">
-                                <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
-                                <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
-                                    Refresh
-                                </Button>
-                            </CardHeader>
-                            <CardBody className="p-0 ">
-                                <LatestAttacksList {...raidAttacks} />
-                            </CardBody>
-                        </Card>
-                    </div>
-                )}
+                <div className="row-start-5 md:row-span-1 md:col-start-2 md:row-start-6">
+                    <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                </div>
+
+                <div className="row-start-3 lg:col-span-2 md:row-span-5 md:col-start-2">
+                    <TitansSequence />
+                </div>
             </div>
+
+            {raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 && (
+                <div className="md:px-4">
+                    <Card className="dark:bg-neutral-800 p-4">
+                        <CardHeader className="justify-between">
+                            <h3 className="text-xl font-bold">Latest Raid Attacks</h3>
+                            <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
+                                Refresh
+                            </Button>
+                        </CardHeader>
+                        <CardBody className="">
+                            <LatestAttacksList {...raidAttacks} />
+                        </CardBody>
+                    </Card>
+                </div>
+            )}
         </>
     );
 }

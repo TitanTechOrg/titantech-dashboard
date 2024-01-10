@@ -13,7 +13,7 @@ type MoralePreviousValueProps = {
 
 function CardPreviousValue({ index, listLength, value }: MoralePreviousValueProps) {
     const showArrow: boolean = index !== listLength - 1;
-    const arrow: string = '➜';
+    const arrow: string = '→';
     return (
         <span key={`${index}_morale-bonus_${value}`} className="text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
             {value}

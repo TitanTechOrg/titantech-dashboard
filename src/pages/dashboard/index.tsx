@@ -8,6 +8,7 @@ import CardRaidInfo from './widgets/CardRaidInfo';
 import TitansSequence from './widgets/TitansSequence';
 import { useBoundStore } from '@/stores/useBoundStore';
 import CurrentTitanStatus from './widgets/CurrentTitanStatus';
+import { formatter } from '@/lib/utils';
 
 function getImageUrl(name: string): string {
     return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
@@ -86,6 +87,19 @@ export default function Dashboard() {
 
         return mirrorForceBonuses;
     }, [raidCycles.data?.cycles.length]);
+
+    const getAverageClanDamage = useMemo(() => {
+        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
+
+        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+
+        const averageDamage = raidCycles.data.cycles?.map(({ average_damage }: RaidCycle) => {
+            return formatter().format(average_damage);
+        });
+
+        return averageDamage;
+    }, [raidCycles.data?.cycles.length]);
+
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
@@ -97,8 +111,17 @@ export default function Dashboard() {
                     />
                 </div>
 
-                <div className="row-start-2 lg:row-span-4 lg:col-start-2 lg:row-start-1 md:row-span-3 md:col-start-1 md:row-start-3">
+                <div className="row-start-2 lg:row-span-3 lg:col-start-2 lg:row-start-1 md:row-span-2 md:col-start-1 md:row-start-3">
                     <CurrentTitanStatus titan={currentTitan} />
+                </div>
+
+                <div className="row-start-6 lg:min-h-36 lg:row-start-4 lg:col-start-2 md:row-span-1 md:col-start-1 md:row-start-5">
+                    <CardBonusData
+                        title="Average Damage"
+                        imageUrl={getCardLogoImageUrl('Decks')}
+                        bonus={getAverageClanDamage}
+                        showPercentage={false}
+                    />
                 </div>
 
                 <div className="row-start-4 lg:min-h-36 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-4">

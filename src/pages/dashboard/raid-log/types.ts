@@ -68,12 +68,14 @@ export type RaidCycle = {
     morale: number;
     next_reset_at: string;
     started_at: string;
+    average_damage: number;
 };
 
 export type PercentageCardsType = {
     imageUrl: string;
     bonus: string[];
     title: string;
+    showPercentage?: boolean;
 };
 
 export type RaidData = {

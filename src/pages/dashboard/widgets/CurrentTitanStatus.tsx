@@ -136,7 +136,7 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                         <Skeleton isLoaded={!!titan} className="rounded-lg">
                             {titan && (
                                 <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-lg flex object-cover h-8 w-8" />
-                            )}{' '}
+                            )}
                         </Skeleton>
                     </div>
 

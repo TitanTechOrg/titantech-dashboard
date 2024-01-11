@@ -1,6 +1,7 @@
 import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import React from 'react';
 import { PercentageCardsType } from '../raid-log/types';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
 // import MyChart from './Chart';
 
 type MoraleValuesProps = Pick<PercentageCardsType, 'bonus'>;
@@ -13,11 +14,10 @@ type MoralePreviousValueProps = {
 
 function CardPreviousValue({ index, listLength, value }: MoralePreviousValueProps) {
     const showArrow: boolean = index !== listLength - 1;
-    const arrow: string = '→';
     return (
-        <span key={`${index}_morale-bonus_${value}`} className="text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
+        <span className="flex flex-row justify-center items-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
             {value}
-            {showArrow ? ` ${arrow} ` : null}
+            {showArrow ? <ArrowRightIcon /> : null}
         </span>
     );
 }
@@ -32,7 +32,7 @@ function CardValues({ bonus }: MoraleValuesProps) {
     );
 }
 
-function CardBonusData({ imageUrl, bonus, title }: PercentageCardsType) {
+function CardBonusData({ imageUrl, bonus, title, showPercentage = true }: PercentageCardsType) {
     const latestBonus: string = bonus[bonus.length - 1];
 
     return (
@@ -51,7 +51,7 @@ function CardBonusData({ imageUrl, bonus, title }: PercentageCardsType) {
                             </div>
                             <div className="text-xl font-bold">
                                 {latestBonus}
-                                <span className="text-xs font-semibold">&nbsp;%</span>
+                                {showPercentage && <span className="text-xs font-semibold">&nbsp;%</span>}
                             </div>
                         </CardHeader>
                     }

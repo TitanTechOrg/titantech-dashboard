@@ -45,7 +45,7 @@ const getCurseTypeColor = (part: TitanSequenceParts | undefined, curseType: Curs
     return CurseTypeColorMap[curseType] as CurseColors;
 };
 
-const overkillTextColor = ' text-red-500 dark:text-red-600/90';
+const overkillTextColor = ' text-red-500 dark:text-red-600';
 
 function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
     const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;

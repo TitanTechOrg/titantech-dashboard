@@ -55,11 +55,11 @@ export default function TitansSequence() {
             <CardHeader>
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
-                        <Skeleton isLoaded={!!selectedTitan} className="rounded-lg">
+                        <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                             <Image src={getCardLogoImageUrl(raidIconFileName)} className="rounded-lg flex object-cover h-8 w-8" />
                         </Skeleton>
                     </div>
-                    <Skeleton isLoaded={!!selectedTitan} className="rounded-lg">
+                    <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                         <h3 className="text-lg font-medium">Titan Sequence</h3>
                     </Skeleton>
                 </div>
@@ -68,7 +68,7 @@ export default function TitansSequence() {
             <CardBody className="flex flex-col gap-4">
                 <Divider />
                 <div className="flex flex-col gap-2 justify-center items-center">
-                    <Skeleton isLoaded={!!selectedTitan}>
+                    <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                         {selectedTitan && (
                             <ButtonGroup variant="solid">
                                 <Dropdown placement="top">
@@ -145,16 +145,18 @@ export default function TitansSequence() {
                 </div>
 
                 <div className="flex flex-row items-center justify-center">
-                    {selectedTitan && (
-                        <RaidTitanData
-                            titan={selectedTitan}
-                            parts={selectedTitan?.parts?.map(({ name, current_health: value }: TitanSequenceParts) => {
-                                const titanPart: TitanPart = { name, value };
-                                return titanPart;
-                            })}
-                            showHealthbars={true}
-                        />
-                    )}
+                    <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
+                        {selectedTitan && (
+                            <RaidTitanData
+                                titan={selectedTitan}
+                                parts={selectedTitan?.parts?.map(({ name, current_health: value }: TitanSequenceParts) => {
+                                    const titanPart: TitanPart = { name, value };
+                                    return titanPart;
+                                })}
+                                showHealthbars={true}
+                            />
+                        )}
+                    </Skeleton>
                 </div>
             </CardBody>
         </Card>

@@ -133,19 +133,19 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
             <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
-                        <Skeleton isLoaded={!!titan} className="rounded-lg">
+                        <Skeleton isLoaded={!!titan} className="rounded-md">
                             {titan && (
                                 <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-lg flex object-cover h-8 w-8" />
                             )}
                         </Skeleton>
                     </div>
 
-                    <Skeleton isLoaded={!!titan} className="rounded-lg">
+                    <Skeleton isLoaded={!!titan} className="rounded-md">
                         <h3 className="text-lg font-medium">Current titan</h3>
                     </Skeleton>
                 </div>
 
-                <Skeleton isLoaded={!!titan} className="rounded-lg">
+                <Skeleton isLoaded={!!titan} className="rounded-md">
                     {titan && <div className="text-xl font-bold">{titan.name}</div>}
                 </Skeleton>
             </CardHeader>
@@ -153,10 +153,10 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
             <CardBody className="flex flex-col gap-4">
                 <Divider />
                 <div className="text-sm font-medium flex justify-between space-x-4">
-                    <Skeleton isLoaded={!!titan} className="rounded-lg">
+                    <Skeleton isLoaded={!!titan} className="rounded-md">
                         <span>Titan Debuff</span>
                     </Skeleton>
-                    <Skeleton isLoaded={!!titan} className="rounded-lg">
+                    <Skeleton isLoaded={!!titan} className="rounded-md">
                         {titan && (
                             <span>
                                 {TitanDebuff[titan.area_type as TitanDebuffType]}
@@ -167,7 +167,7 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                         )}
                     </Skeleton>
                 </div>
-                <Skeleton isLoaded={!!titan} className="rounded-lg">
+                <Skeleton isLoaded={!!titan} className="rounded-md">
                     {titan && (
                         <TitanHealthBars
                             titanArmourHealthPercentage={getTitanHealthPercentage(titan, 'Armor')}
@@ -180,7 +180,7 @@ export default function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
 
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row">
-                        <Skeleton isLoaded={!!titan} className="rounded-lg">
+                        <Skeleton isLoaded={!!titan} className="rounded-md">
                             <h3 className="text-medium font-semibold ">
                                 {hasActiveConditionals() ? 'Active conditional cards' : 'No active conditional cards'}
                             </h3>

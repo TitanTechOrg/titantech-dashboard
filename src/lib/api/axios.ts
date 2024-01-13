@@ -1,6 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import storage from '@/utils/storage';
+import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-const ENDPOINTS = {
+export const ENDPOINTS = {
     timeline_chart: 'api/v1/metrics/attack_occurrence',
     titans: 'api/v1/raid/titans',
     raid_attack_log: {
@@ -12,41 +13,39 @@ const ENDPOINTS = {
     cycle_data: '/api/v1/raid/cycles',
 } as const;
 
-const instance = axios.create({
+const authRequestInterceptor = (config: InternalAxiosRequestConfig) => {
+    config.headers.Accept = 'application/json';
+
+    if (config.params && 'noAuth' in config.params) {
+        delete config.params['noAuth'];
+        return config;
+    }
+
+    const token = storage.token.get();
+
+    if (token) {
+        config.headers.authorization = `${token}`;
+    }
+
+    return config;
+};
+
+export const axios = Axios.create({
     baseURL: import.meta.env.VITE_PUBLIC_API_BASE_URL,
 });
 
-// instance.interceptors.request.use(
-//     async (config: InternalAxiosRequestConfig<AxiosHeaderValue | undefined>) => {
-//         const clan_token = localStorage.getItem('clan_token');
-//         if (clan_token) {
-//             config.headers = {
-//                 ...config.headers,
-//                 Authorization: clan_token,
-//             };
-//         }
+axios.interceptors.request.use(authRequestInterceptor);
 
-//         return config;
-//     },
-//     (error) => {
-//         return Promise.reject(error);
-//     }
-// );
+axios.interceptors.response.use(
+    (response) => {
+        return response.data;
+    },
+    (error) => {
+        const message = error.response?.data?.message || error.message;
 
-const setAuthorizationHeader = (token: string): AxiosRequestConfig => {
-    return {
-        headers: { Authorization: token },
-    };
-};
+        console.log('something went wronggg! ');
+        console.log(message);
 
-const getRequest = async <T>(url: string, withToken: boolean = true): Promise<T> => {
-    const token = localStorage.getItem('clan_token');
-    let options = undefined;
-    if (withToken && token) options = setAuthorizationHeader(token);
-    const request = instance.get(url, options);
-    const { data }: AxiosResponse<T> = await request;
-
-    return data;
-};
-
-export { ENDPOINTS, instance, getRequest };
+        return Promise.reject(error);
+    }
+);

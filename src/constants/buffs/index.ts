@@ -1,0 +1,15 @@
+export const RaidBuffMapping = {
+    ArmorDamage: 'Armor Damage +25%',
+    HeadDamage: 'Head Damage +30%',
+    BurstDamage: 'Burst Damage +30%',
+    AfflictedDamage: 'Affliction Damage +30%',
+    AllRaidDamage: 'All Raid Damage +15%',
+    BurstChance: 'Burst Chance +30%',
+    AfflictedDuration: 'Affliction Duration +40%',
+    ChestDamage: 'Torso Damage +30%',
+    LimbDamage: 'Limb Damage +30%',
+    AfflictedChance: 'Affliction Chance +30%',
+    RaidAttackDuration: 'Attack Duration +3s',
+    BodyDamage: 'Body Damage +20%',
+    SupportEffect: 'All Support Effects +15%',
+} as const;

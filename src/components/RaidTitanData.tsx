@@ -1,6 +1,7 @@
-import { TitanCurseData, TitanPart, TitanSequence } from '@/pages/dashboard/raid-log/types';
-import TitanPartTableData from './TitanPartsTableData';
+import { TitanCurseData, TitanSequence } from '@/features/titans';
 import { Skeleton } from '@nextui-org/react';
+import { TitanPart } from '@/features/attacks';
+import { TitanPartTableData } from '.';
 
 type RaidTitanDataProps = {
     titan?: TitanSequence;
@@ -18,7 +19,7 @@ const getTitanCursedParts = (titan: TitanSequence): TitanCurseData => {
     return returnData;
 };
 
-export default function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataProps) {
+export function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataProps) {
     return (
         <div className="flex flex-col gap-4 flex-wrap">
             <Skeleton className="rounded-md" isLoaded={!!parts && !!titan}>

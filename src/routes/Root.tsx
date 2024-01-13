@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@nextui-org/react';
-import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { capitaliseFirstLetter } from '@/lib/utils';
+import { capitaliseFirstLetter } from '@/utils/string-formatter';
+import { ThemeSwitcher } from '@/features/theme';
 
 function getImageLogoUrl(name: string): string {
     return new URL(`../assets/${name}.webp`, import.meta.url).href;
 }
 
-const menuItems = ['dashboard', 'alchemy'];
+const menuItems = ['dashboard', 'overview', 'alchemy'];
+const protectedRoutes = ['dashboard', 'overview'];
 const logoFileName = 'Logo';
 
 export default function Root() {
@@ -63,6 +64,12 @@ export default function Root() {
                         </NavLink>
                     </NavbarItem>
 
+                    <NavbarItem isActive={location.pathname === '/overview'} className={!isAuthenticated ? 'hidden' : ''}>
+                        <NavLink to="/overview" className={location.pathname === '/overview' ? 'text-primary' : 'text-foreground'}>
+                            Overview
+                        </NavLink>
+                    </NavbarItem>
+
                     <NavbarItem isActive={location.pathname === '/alchemy'}>
                         <NavLink to="/alchemy" className={location.pathname === '/alchemy' ? 'text-primary' : 'text-foreground'}>
                             Alchemy
@@ -79,7 +86,7 @@ export default function Root() {
                 <NavbarMenu className="min-h-lvh pb-32">
                     {menuItems
                         .filter((route) => {
-                            if (!isAuthenticated && route === 'dashboard') return '';
+                            if (!isAuthenticated && protectedRoutes.includes(route)) return '';
                             return route;
                         })
                         .map((item, index) => (

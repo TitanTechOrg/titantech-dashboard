@@ -1,7 +1,8 @@
-import { formatter, percentage } from '@/lib/utils';
-import { CurseTypes, TitanCurseData, TitanPart, TitanSequenceParts } from '../pages/dashboard/raid-log/types';
-import { TitanPartMap } from '@/lib/constants';
+import { formatter, percentage } from '@/utils/number-formatter';
+import { TitanPartMap } from '@/constants/titans';
 import { Progress, Tooltip } from '@nextui-org/react';
+import { TitanPart } from '@/features/attacks/types';
+import { CurseTypes, TitanCurseData, TitanSequenceParts } from '@/features/titans';
 
 type CurseColors = 'warning' | 'secondary' | 'default' | 'primary' | 'success' | 'danger' | undefined;
 
@@ -147,7 +148,7 @@ const TitanOverlayImages = {
 
 type TitanOverlayImagesType = keyof typeof TitanOverlayImages;
 
-function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
+export function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
     const { curse_type, parts: cursedParts, name } = titanData;
 
     return (
@@ -412,5 +413,3 @@ function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPartTable
         </div>
     );
 }
-
-export default TitanPartTableData;

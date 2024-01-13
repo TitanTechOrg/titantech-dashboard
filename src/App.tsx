@@ -1,38 +1,26 @@
-import { lazy, Suspense } from 'react';
-
-import { createBrowserRouter, createRoutesFromElements, redirect, Route, RouterProvider, useLocation } from 'react-router-dom';
-
-import ErrorBoundary from './pages/error-boundary/ErrorBoundary.tsx';
+import { Suspense } from 'react';
+import { createBrowserRouter, createRoutesFromElements, redirect, Route, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.tsx';
-import ErrorPage from './ErrorPage.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextUIProvider, Spinner } from '@nextui-org/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
+import { lazyImport } from '@/utils/lazy-import';
+import storage from '@/utils/storage.ts';
+import { ErrorBoundary, ErrorPage, FourOhFour } from '@/features/misc';
 
 type DashbloardLoaderParams = {
     params: any;
 };
 
-const NoTokenPage = lazy(() => import('./pages/landing/index.tsx'));
-const Alchemy = lazy(() => import('./pages/alchemy/index.tsx'));
-const Dashboard = lazy(() => import('./pages/dashboard'));
-
-function NoMatch() {
-    let location = useLocation();
-
-    return (
-        <div>
-            <h3>
-                Oops, couldn't find page <code>{location.pathname}</code>.
-            </h3>
-        </div>
-    );
-}
+const { GetStarted } = lazyImport(() => import('@/features/misc'), 'GetStarted');
+const { AlchemyCalculator } = lazyImport(() => import('@/features/alchemy'), 'AlchemyCalculator');
+const { Dashboard } = lazyImport(() => import('@/features/misc'), 'Dashboard');
+const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
 
 const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
     if (params?.clan_token && params?.clan_token.length === 36) {
-        localStorage.setItem('clan_token', params.clan_token);
+        storage.token.set(params.clan_token);
         return redirect('/dashboard');
     } else {
         return redirect('../../');
@@ -40,10 +28,10 @@ const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
 };
 
 const dashboardLoader = async ({ params }: DashbloardLoaderParams) => {
-    if (localStorage.getItem('clan_token')) {
+    if (storage.token.get()) {
         return null;
     } else if (params?.clan_token && params?.clan_token.length === 36) {
-        localStorage.setItem('clan_token', params.clan_token);
+        storage.token.set(params.clan_token);
         return null;
     } else {
         return redirect('../../');
@@ -54,20 +42,17 @@ const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
             <Route errorElement={<ErrorPage />}>
-                <Route index element={<NoTokenPage />} />
+                <Route index element={<GetStarted />} />
 
                 <Route path=":clan_token" element={<Dashboard />} loader={dashboardSlugLoader} />
 
-                {/* <Route path="dashboard">
-                    <Route index element={<Dashboard />} />
-                    <Route path=":clan_token" element={<Dashboard />} loader={dashboardSlugLoader} />
-                </Route> */}
-
                 <Route path="dashboard" element={<Dashboard />} loader={dashboardLoader} />
 
-                <Route path="alchemy" element={<Alchemy />} />
+                <Route path="overview" element={<Overview />} />
 
-                <Route path="*" element={<NoMatch />} />
+                <Route path="alchemy" element={<AlchemyCalculator />} />
+
+                <Route path="*" element={<FourOhFour />} />
             </Route>
         </Route>
     )

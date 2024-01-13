@@ -3,6 +3,7 @@ import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { capitaliseFirstLetter } from '@/utils/string-formatter';
 import { ThemeSwitcher } from '@/features/theme';
+import storage from '@/utils/storage';
 
 function getImageLogoUrl(name: string): string {
     return new URL(`../assets/${name}.webp`, import.meta.url).href;
@@ -16,7 +17,7 @@ export default function Root() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
 
-    const isAuthenticated = !!localStorage.getItem('clan_token') && localStorage.getItem('clan_token')?.length === 36;
+    const isAuthenticated = !!storage.token.get() && storage.token.get()?.length === 36;
 
     return (
         <>

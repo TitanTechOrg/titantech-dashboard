@@ -23,7 +23,7 @@ const getTitanCursedParts = (titan: TitanSequence): TitanCurseData => {
 
 const findSkeletalSmashTarget = (data: TitanSequenceParts[]) => {
     const foundTarget = data?.find((part) => {
-        if (part.skeleton_smash_target) return part.name;
+        if (!!part.skeleton_smash_target) return part.name;
     });
 
     if (!foundTarget) return null;
@@ -50,7 +50,7 @@ export function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataPro
             {ssTarget && showHealthbars ? (
                 <div className="flex flex-row justify-center items-center gap-4 mt-4">
                     <div className="min-w-fit">
-                        <Image src={SkeletalSmash} className="rounded-sm flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
+                        <Image src={SkeletalSmash} className="rounded flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
                     </div>
                     <span className='"text-sm font-medium'>{ssTarget}</span>
                 </div>

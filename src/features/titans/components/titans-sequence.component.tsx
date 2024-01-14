@@ -19,17 +19,28 @@ import { useBoundStore } from '@/stores/bound.store';
 import { ChevronDownIcon, CheckIcon } from '@radix-ui/react-icons';
 import { TitanSequence, TitanSequenceParts } from '@/features/titans';
 import { TitanPart } from '@/features/attacks';
+import CardLogo from '@/assets/RaidIcon.webp';
+import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
+import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
+import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
+import MohacaAvatar from '@/assets/titans/avatars/Mohaca_avatar.webp';
+import PrikerAvatar from '@/assets/titans/avatars/Priker_avatar.webp';
+import SterlAvatar from '@/assets/titans/avatars/Sterl_avatar.webp';
+import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
+import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
 
-function getImageUrl(name: string): string {
-    return new URL(`../../../assets/titans/avatars/${name}.webp`, import.meta.url).href;
-}
+const TitanImageMapping = {
+    Jukk: JukkAvatar,
+    Klonk: KlonkAvatar,
+    Lojak: LojakAvatar,
+    Mohaca: MohacaAvatar,
+    Priker: PrikerAvatar,
+    Sterl: SterlAvatar,
+    Takedar: TakedarAvatar,
+    Terro: TerroAvatar,
+};
 
-function getCardLogoImageUrl(name: string): string {
-    return new URL(`../../../assets/${name}.webp`, import.meta.url).href;
-}
-
-const titanAvatarSuffix = '_avatar';
-const raidIconFileName = 'RaidIcon';
+type TitanImageMappingType = keyof typeof TitanImageMapping;
 
 export function TitansSequence() {
     const { titans, currentTitan } = useBoundStore();
@@ -57,7 +68,7 @@ export function TitansSequence() {
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                            <Image src={getCardLogoImageUrl(raidIconFileName)} className="rounded-sm flex object-cover h-8 w-8" />
+                            <Image src={CardLogo} className="rounded flex object-cover h-8 w-8" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
@@ -92,7 +103,7 @@ export function TitansSequence() {
                                                         className={`object-cover h-10 w-10 z-0 ${
                                                             isDefeatedTitan(selectedTitan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                         }`}
-                                                        src={getImageUrl(selectedTitan.name + titanAvatarSuffix)}
+                                                        src={TitanImageMapping[selectedTitan.name as TitanImageMappingType]}
                                                     />
                                                     <span>
                                                         {selectedTitan.name} &nbsp;
@@ -132,7 +143,7 @@ export function TitansSequence() {
                                                             className={`object-cover h-10 w-10 z-0 ${
                                                                 isDefeatedTitan(titan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                             }`}
-                                                            src={getImageUrl(titan.name + titanAvatarSuffix)}
+                                                            src={TitanImageMapping[titan.name as TitanImageMappingType]}
                                                         />
                                                     </div>
                                                 }

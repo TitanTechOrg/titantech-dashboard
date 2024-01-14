@@ -2,17 +2,12 @@ import { Card, CardBody, CardHeader, Divider, Image, Skeleton, Tooltip } from '@
 import { RaidBuffMapping } from '@/constants/buffs';
 import { convertUTCDateToLocalDate, getOrdinalSuffix, getRaidLabel } from '@/utils/string-formatter';
 import { RaidBuffMappingType, RaidCycle, RaidData } from '..';
+import CardLogo from '@/assets/Raid.webp';
 
 type CardRaidInfoProps = {
     raidData?: RaidData;
     raidCycle?: RaidCycle;
 };
-
-const raidIconFileName = 'Raid';
-
-function getImageUrl(name: string): string {
-    return new URL(`../../../assets/${name}.webp`, import.meta.url).href;
-}
 
 export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
     return (
@@ -21,7 +16,7 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
-                            <Image src={getImageUrl(raidIconFileName)} className="rounded-sm flex object-cover h-8 w-8" />
+                            <Image src={CardLogo} className="rounded object-cover h-8 w-8" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!raidData} className="rounded-md">

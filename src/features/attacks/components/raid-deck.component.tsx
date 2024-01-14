@@ -33,7 +33,7 @@ export function RaidDeck({ id, sources }: RaidDeckProps) {
                         <Image
                             key={id + cardName + index + 'image'}
                             src={getCardImageUrl(cardName)}
-                            className="rounded flex object-cover h-8 w-8 sm:h-16 sm:w-16"
+                            className="rounded object-cover h-8 w-8 sm:h-16 sm:w-16"
                         />
                         <span
                             key={id + cardLevel + index + 'span'}

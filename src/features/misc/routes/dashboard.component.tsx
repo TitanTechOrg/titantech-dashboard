@@ -5,14 +5,10 @@ import { formatter } from '@/utils/number-formatter';
 import { LatestAttacksList, useLatestAttacks } from '@/features/attacks';
 import { CardBonusData, RaidCycle, RaidInfo, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { CurrentTitanStatus, TitanSequence, TitansSequence, useRaidTitans } from '@/features/titans';
-
-function getImageUrl(name: string): string {
-    return new URL(`../../../assets/cards/${name}.webp`, import.meta.url).href;
-}
-
-function getCardLogoImageUrl(name: string): string {
-    return new URL(`../../../assets/${name}.webp`, import.meta.url).href;
-}
+import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
+import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
+import AverageDamageCardLogo from '@/assets/Decks.webp';
+import AttacksCardLogo from '@/assets/Attack.webp';
 
 export function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
@@ -99,7 +95,7 @@ export function Dashboard() {
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-rows-4 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-5  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400">
+            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-rows-4 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-5">
                 <div className="row-start-1 md:row-span-2 md:col-start-1 md:row-start-1">
                     <RaidInfo
                         raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
@@ -112,20 +108,15 @@ export function Dashboard() {
                 </div>
 
                 <div className="row-start-6 lg:min-h-36 lg:row-start-4 lg:col-start-2 md:row-span-1 md:col-start-1 md:row-start-5">
-                    <CardBonusData
-                        title="Average Damage"
-                        imageUrl={getCardLogoImageUrl('Decks')}
-                        bonus={getAverageClanDamage}
-                        showPercentage={false}
-                    />
+                    <CardBonusData title="Average Damage" imageUrl={AverageDamageCardLogo} bonus={getAverageClanDamage} showPercentage={false} />
                 </div>
 
                 <div className="row-start-4 lg:min-h-36 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-4">
-                    <CardBonusData title="Morale" imageUrl={getImageUrl('TeamTactics')} bonus={getMoraleBonus} />
+                    <CardBonusData title="Morale" imageUrl={TeamTacticsCardLogo} bonus={getMoraleBonus} />
                 </div>
 
                 <div className="row-start-5 lg:min-h-36 lg:row-start-4 lg:col-start-1  md:row-span-1 md:col-start-2 md:row-start-5">
-                    <CardBonusData title="Mirror Force" imageUrl={getImageUrl('MirrorForce')} bonus={getMirrorForceBonus} />
+                    <CardBonusData title="Mirror Force" imageUrl={MirrorForceCardLogo} bonus={getMirrorForceBonus} />
                 </div>
 
                 <div className="row-start-3 lg:row-span-4 lg:col-start-3 lg:col-span-1 md:row-span-3 md:col-start-2">
@@ -139,7 +130,7 @@ export function Dashboard() {
                         <CardHeader className="justify-between">
                             <div className="flex flex-row items-center justify-start gap-4">
                                 <div className="min-w-fit">
-                                    <Image src={getCardLogoImageUrl('Attack')} className="rounded-lg flex object-cover h-8 w-8" />
+                                    <Image src={AttacksCardLogo} className="rounded flex object-cover h-8 w-8" />
                                 </div>
                                 <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
                             </div>

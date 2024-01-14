@@ -20,7 +20,7 @@ export function GetStarted() {
     return (
         <Card className="max-w-[400px] w-full mx-auto">
             <CardHeader className="flex gap-3">
-                <Image alt="TitanTech logo" height={40} radius="sm" src={Logo} width={40} />
+                <Image alt="TitanTech logo" className="rounded h-10 w-10" src={Logo} />
                 <div className="flex flex-col justify-center items-start">
                     <p className="text-md">TitanTech</p>
                     <p className="text-small text-default-500">Some description</p>

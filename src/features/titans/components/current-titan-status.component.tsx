@@ -2,20 +2,35 @@ import { formatter, percentage } from '@/utils/number-formatter';
 import { Card, CardBody, CardHeader, Divider, Image, Progress, Skeleton } from '@nextui-org/react';
 import { useBoundStore } from '@/stores/bound.store';
 import { TitanSequence } from '..';
+import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
+import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
+import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
+import MohacaAvatar from '@/assets/titans/avatars/Mohaca_avatar.webp';
+import PrikerAvatar from '@/assets/titans/avatars/Priker_avatar.webp';
+import SterlAvatar from '@/assets/titans/avatars/Sterl_avatar.webp';
+import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
+import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
+import VictoryMarchCard from '@/assets/cards/VictoryMarch.webp';
+import SkeletalSmashCard from '@/assets/cards/SkeletalSmash.webp';
+import InsanityVoidCard from '@/assets/cards/InsanityVoid.webp';
+import DecayingStrikeCard from '@/assets/cards/DecayingStrike.webp';
+
+const TitanImageMapping = {
+    Jukk: JukkAvatar,
+    Klonk: KlonkAvatar,
+    Lojak: LojakAvatar,
+    Mohaca: MohacaAvatar,
+    Priker: PrikerAvatar,
+    Sterl: SterlAvatar,
+    Takedar: TakedarAvatar,
+    Terro: TerroAvatar,
+};
+
+type TitanImageMappingType = keyof typeof TitanImageMapping;
 
 type CurrentTitanStatusProps = {
     titan?: TitanSequence;
 };
-
-function getImageUrl(name: string): string {
-    return new URL(`../../../assets/cards/${name}.webp`, import.meta.url).href;
-}
-
-function getTitanImageUrl(name: string): string {
-    return new URL(`../../../assets/titans/avatars/${name}.webp`, import.meta.url).href;
-}
-
-const titanAvatarSuffix = '_avatar';
 
 type TitanHealthBarsProps = {
     titanArmourHealthPercentage: number;
@@ -135,7 +150,11 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!titan} className="rounded-md">
                             {titan && (
-                                <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-sm flex object-cover h-8 w-8" />
+                                <Image
+                                    src={TitanImageMapping[titan.name as TitanImageMappingType]}
+                                    className="rounded flex object-cover h-8 w-8"
+                                    alt="Titan image"
+                                />
                             )}
                         </Skeleton>
                     </div>
@@ -188,10 +207,10 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                     </div>
                     {hasActiveConditionals() ? (
                         <div className="flex flex-row gap-4">
-                            {isVictoryMarch() ? <Image src={getImageUrl('VictoryMarch')} width={36} radius="md" /> : null}
-                            {isInsanityVoid() ? <Image src={getImageUrl('InsanityVoid')} width={36} radius="md" /> : null}
-                            {isSkeletalSmash() ? <Image src={getImageUrl('SkeletalSmash')} width={36} radius="md" /> : null}
-                            {isDecayingStrike() ? <Image src={getImageUrl('DecayingStrike')} width={36} radius="md" /> : null}
+                            {isVictoryMarch() ? <Image src={VictoryMarchCard} className="rounded h-9 w-9" /> : null}
+                            {isInsanityVoid() ? <Image src={InsanityVoidCard} className="rounded h-9 w-9" /> : null}
+                            {isSkeletalSmash() ? <Image src={SkeletalSmashCard} className="rounded h-9 w-9" /> : null}
+                            {isDecayingStrike() ? <Image src={DecayingStrikeCard} className="rounded h-9 w-9" /> : null}
                         </div>
                     ) : null}
                 </div>

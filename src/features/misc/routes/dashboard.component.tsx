@@ -7,11 +7,11 @@ import { CardBonusData, RaidCycle, RaidInfo, useRaidCycles, useRaidList } from '
 import { CurrentTitanStatus, TitanSequence, TitansSequence, useRaidTitans } from '@/features/titans';
 
 function getImageUrl(name: string): string {
-    return new URL(`../../assets/cards/${name}.webp`, import.meta.url).href;
+    return new URL(`../../../assets/cards/${name}.webp`, import.meta.url).href;
 }
 
 function getCardLogoImageUrl(name: string): string {
-    return new URL(`../../assets/${name}.webp`, import.meta.url).href;
+    return new URL(`../../../assets/${name}.webp`, import.meta.url).href;
 }
 
 export function Dashboard() {

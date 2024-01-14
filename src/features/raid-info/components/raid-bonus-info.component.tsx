@@ -44,7 +44,7 @@ export function CardBonusData({ imageUrl, bonus, title, showPercentage = true }:
                         <CardHeader className="flex flex-row items-center justify-between gap-4">
                             <div className="flex flex-row items-center justify-start gap-4">
                                 <div className="min-w-fit">
-                                    <Image src={imageUrl} className="rounded-lg flex object-cover h-8 w-8" />
+                                    <Image src={imageUrl} className="rounded-sm flex object-cover h-8 w-8" />
                                 </div>
                                 <h3 className="text-md font-medium">{title}</h3>
                             </div>

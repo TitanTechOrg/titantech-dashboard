@@ -135,7 +135,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!titan} className="rounded-md">
                             {titan && (
-                                <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-lg flex object-cover h-8 w-8" />
+                                <Image src={getTitanImageUrl(titan.name + titanAvatarSuffix)} className="rounded-sm flex object-cover h-8 w-8" />
                             )}
                         </Skeleton>
                     </div>

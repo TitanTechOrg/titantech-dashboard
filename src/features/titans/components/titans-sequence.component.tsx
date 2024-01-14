@@ -57,7 +57,7 @@ export function TitansSequence() {
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                            <Image src={getCardLogoImageUrl(raidIconFileName)} className="rounded-lg flex object-cover h-8 w-8" />
+                            <Image src={getCardLogoImageUrl(raidIconFileName)} className="rounded-sm flex object-cover h-8 w-8" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">

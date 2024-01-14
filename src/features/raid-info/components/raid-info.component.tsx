@@ -21,7 +21,7 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
-                            <Image src={getImageUrl(raidIconFileName)} className="rounded-lg flex object-cover h-8 w-8" />
+                            <Image src={getImageUrl(raidIconFileName)} className="rounded-sm flex object-cover h-8 w-8" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!raidData} className="rounded-md">

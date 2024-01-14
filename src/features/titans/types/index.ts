@@ -22,6 +22,7 @@ export type TitanSequenceParts = {
     cursed: boolean;
     health: number;
     current_health: number;
+    skeleton_smash_target?: boolean;
 };
 
 export type TitanCurseData = Pick<TitanSequence, 'curse_type' | 'parts' | 'id' | 'name'>;

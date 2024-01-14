@@ -12,7 +12,7 @@ type TitanPartTableDataProps = {
     showHealthbars?: boolean;
 };
 
-type RaidTitanPart = keyof typeof TitanPartMap;
+export type RaidTitanPart = keyof typeof TitanPartMap;
 
 type TableRowProps = {
     text: string;

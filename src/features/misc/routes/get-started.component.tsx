@@ -37,7 +37,12 @@ export function GetStarted() {
                         </Button>
                     </Link>
                     <Tooltip content="Copy invite link">
-                        <Button isIconOnly color="primary" aria-label="Copy invite link" onClick={() => navigator.clipboard.writeText(TitanTechLink)}>
+                        <Button
+                            isIconOnly
+                            color="primary"
+                            aria-label="Copy invite link"
+                            onClick={() => navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK)}
+                        >
                             <CopyIcon />
                         </Button>
                     </Tooltip>

@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { RaidTitanData } from '@/components';
 import { useBoundStore } from '@/stores/bound.store';
 import { ChevronDownIcon, CheckIcon } from '@radix-ui/react-icons';
-import { TitanSequence } from '@/features/titans';
+import { TitanSequence, TitanSequenceParts } from '@/features/titans';
 import { TitanPart } from '@/features/attacks';
 
 function getImageUrl(name: string): string {

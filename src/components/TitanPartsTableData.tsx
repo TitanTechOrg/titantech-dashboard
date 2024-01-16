@@ -47,7 +47,7 @@ const getCurseTypeColor = (part: TitanSequenceParts | undefined, curseType: Curs
     return CurseTypeColorMap[curseType] as CurseColors;
 };
 
-const overkillTextColor = ' text-red-500 dark:text-red-600';
+const overkillTextColor = ' text-red-500/80 dark:text-red-500/80';
 
 function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
     const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;
@@ -58,10 +58,10 @@ function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, show
         healthPercentage = percentage(sequenceParts.health, sequenceParts.current_health);
     }
 
-    let textColour = isNegativeNumber ? overkillTextColor : 'text-inherit';
+    let textColour = isNegativeNumber ? overkillTextColor : 'text-black/80 dark:text-white/80';
 
     if (isOffstratPart) {
-        textColour = 'text-default-600/30';
+        textColour = 'text-default-600/80';
     }
 
     let bgColour = `bg-neutral-500/40 dark:bg-gray-200/50`;
@@ -69,10 +69,10 @@ function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, show
     if (cursedColor) {
         switch (cursedColor) {
             case 'danger':
-                bgColour = 'bg-red-500/50';
+                bgColour = 'bg-red-400/40 dark:bg-red-500/30';
                 break;
             case 'secondary':
-                bgColour = 'bg-purple-500/30';
+                bgColour = 'bg-purple-500/30 dark:bg-purple-600/30';
                 break;
             case 'warning':
                 bgColour = 'bg-yellow-300/50';
@@ -110,10 +110,10 @@ function TableRowBody({ text, sequenceParts, isOffstratPart, showHealthbars }: T
         healthPercentage = percentage(sequenceParts.health, sequenceParts.current_health);
     }
 
-    let textColour = isNegativeNumber ? overkillTextColor : 'text-inherit';
+    let textColour = isNegativeNumber ? overkillTextColor : 'text-black/80 dark:text-white/80';
 
     if (isOffstratPart) {
-        textColour = 'text-default-600/30';
+        textColour = 'text-default-600/80';
     }
 
     return (
@@ -166,7 +166,7 @@ export function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPa
         <div
             className={`${
                 TitanOverlayImages[name as TitanOverlayImagesType]
-            } ${tinyScreenScale} sm:scale-100 text-center w-fit min-w-fit relative before:bg-contain before:bg-center before:bg-no-repeat before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-[15%] before:z-0`}
+            } ${tinyScreenScale} sm:scale-100 text-center w-fit min-w-fit relative before:bg-contain before:bg-center before:bg-no-repeat before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-[40%] before:z-0`}
         >
             <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 grid-cols-3`}>
                 <div
@@ -175,13 +175,13 @@ export function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPa
                     }`}
                 >
                     <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
+                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-45deg] z-10 rounded ${
                             !!findSequencePart('Armor Arm Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
                         }`}
                     ></div>
 
                     <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
+                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[45deg] z-10 rounded ${
                             !!findSequencePart('Armor Arm Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
                         }`}
                     ></div>

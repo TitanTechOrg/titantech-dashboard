@@ -36,7 +36,7 @@ export function RaidLog({ data }: RaidLogProps) {
                         }
                         subtitle={
                             <div className="flex flex-row justify-between items-center gap-4">
-                                <span className="text-sm font-normal text-black">{player_name}</span>
+                                <span className="text-sm font-normal text-black dark:text-white">{player_name}</span>
                                 <span className="font-light text-xs">
                                     {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
                                 </span>
@@ -60,7 +60,6 @@ export function RaidLog({ data }: RaidLogProps) {
                             </p>
                         }
                     >
-                        <div>b ? {matches.width ? 'Yes' : 'No'}</div>
                         <RaidTitanData titan={titan} parts={parts} />
                     </AccordionItem>
                 );

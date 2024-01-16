@@ -4,12 +4,18 @@ import { useBoundStore } from '@/stores/bound.store';
 import { RaidAttack } from '../types';
 import { RaidDeck } from './raid-deck.component';
 import { formatter } from '@/utils/number-formatter';
+import { useMediaQueries } from '@react-hook/media-query';
 
 type RaidLogProps = {
     data: RaidAttack[];
 };
 
 export function RaidLog({ data }: RaidLogProps) {
+    const { matches } = useMediaQueries({
+        screen: 'screen',
+        width: '(max-width: 640px)',
+    });
+
     const titan = useBoundStore((state) => state.currentTitan);
 
     if (!titan) return null;
@@ -18,7 +24,28 @@ export function RaidLog({ data }: RaidLogProps) {
     return (
         <Accordion selectionMode="multiple">
             {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
-                return (
+                return matches.width ? (
+                    <AccordionItem
+                        key={titan_attack_id}
+                        aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
+                        title={
+                            <div className="flex flex-row justify-between items-center gap-4">
+                                <RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />
+                                <p className="font-bold text-lg">{formatter().format(damage)}</p>
+                            </div>
+                        }
+                        subtitle={
+                            <div className="flex flex-row justify-between items-center gap-4">
+                                <span className="text-sm font-normal text-black">{player_name}</span>
+                                <span className="font-light text-xs">
+                                    {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
+                                </span>
+                            </div>
+                        }
+                    >
+                        <RaidTitanData titan={titan} parts={parts} />
+                    </AccordionItem>
+                ) : (
                     <AccordionItem
                         key={titan_attack_id}
                         aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
@@ -33,6 +60,7 @@ export function RaidLog({ data }: RaidLogProps) {
                             </p>
                         }
                     >
+                        <div>b ? {matches.width ? 'Yes' : 'No'}</div>
                         <RaidTitanData titan={titan} parts={parts} />
                     </AccordionItem>
                 );

@@ -27,13 +27,13 @@ export function RaidDeck({ id, sources }: RaidDeckProps) {
             {sources?.filter(excludeTapDamageCard)?.map(({ name: cardName, value: cardLevel }: RaidCard, index: number) => {
                 return (
                     <div key={id + cardName + cardLevel + index + 'container'} className="relative">
-                        <span key={id + cardName + cardLevel + index + 'span'} className="absolute z-20 inset-x-0 -left-1 -top-1">
+                        <span key={id + cardName + cardLevel + index + 'span'} className="absolute z-10 inset-x-0 -left-1 -top-1">
                             <Image key={id + cardName + cardLevel + 'image'} src={getCardTypeImageUrl(cardName)} className="h-4 w-4 sm:h-6 sm:w-6" />
                         </span>
                         <Image
                             key={id + cardName + index + 'image'}
                             src={getCardImageUrl(cardName)}
-                            className="rounded object-cover h-8 w-8 sm:h-16 sm:w-16"
+                            className="rounded object-cover h-8 w-8 sm:h-16 sm:w-16 z-0"
                         />
                         <span
                             key={id + cardLevel + index + 'span'}

@@ -82,7 +82,7 @@ export function TitansSequence() {
                 <div className="flex flex-col gap-2 justify-center items-center">
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                         {selectedTitan && (
-                            <ButtonGroup variant="solid">
+                            <ButtonGroup variant="solid" className="flex flex-row justify-center items-center">
                                 <Dropdown placement="top">
                                     <DropdownTrigger>
                                         <Button

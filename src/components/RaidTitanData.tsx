@@ -37,6 +37,7 @@ const findSkeletalSmashTarget = (data: TitanSequenceParts[]) => {
 
     if (ssTargetPart) {
         ssTargetPart = ssTargetPart.replace(/Armor|Body/g, '').trim();
+        ssTargetPart = ssTargetPart.replace(/Arm/g, 'Shoulder').trim();
     }
 
     return ssTargetPart;
@@ -45,10 +46,10 @@ const findSkeletalSmashTarget = (data: TitanSequenceParts[]) => {
 export function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataProps) {
     const ssTarget = parts && titan ? findSkeletalSmashTarget(getTitanCursedParts(titan).parts) : null;
     return (
-        <div className="flex flex-col gap-4 flex-wrap">
+        <div className="flex flex-col flex-wrap">
             {parts && titan && <TitanPartTableData parts={parts} titanData={getTitanCursedParts(titan)} showHealthbars={showHealthbars} />}
             {ssTarget && showHealthbars ? (
-                <div className="flex flex-row justify-center items-center gap-4 mt-4">
+                <div className="flex flex-row justify-center items-center gap-4 pt-4">
                     <div className="min-w-fit">
                         <Image src={SkeletalSmash} className="rounded flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
                     </div>

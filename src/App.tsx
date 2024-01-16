@@ -27,22 +27,27 @@ const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
     }
 };
 
-const dashboardLoader = async ({ params }: DashbloardLoaderParams) => {
+const dashboardLoader = async () => {
     if (storage.token.get()) {
-        return null;
-    } else if (params?.clan_token && params?.clan_token.length === 36) {
-        storage.token.set(params.clan_token);
         return null;
     } else {
         return redirect('../../');
     }
 };
 
+const landingLoader = async () => {
+    if (storage.token.get()) {
+        return redirect('dashboard');
+    }
+
+    return null;
+};
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
             <Route errorElement={<ErrorPage />}>
-                <Route index element={<GetStarted />} />
+                <Route index element={<GetStarted />} loader={landingLoader} />
 
                 <Route path=":clan_token" element={<Dashboard />} loader={dashboardSlugLoader} />
 

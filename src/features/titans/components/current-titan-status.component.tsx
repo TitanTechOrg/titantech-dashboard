@@ -98,7 +98,7 @@ function TitanHealthBars({
                 aria-label="Titan total armour..."
                 valueLabel={
                     <div className="flex flex-row justify-center items-baseline gap-2">
-                        <span className="text-md font-semibold">{armourTooltipContent}</span>
+                        <span className="text-lg font-semibold">{armourTooltipContent}</span>
                         <span className="text-sm font-light text-right italic">({titanArmourHealthPercentage}%)</span>
                     </div>
                 }
@@ -114,7 +114,7 @@ function TitanHealthBars({
                 aria-label="Titan total health..."
                 valueLabel={
                     <div className="flex flex-row justify-center items-baseline gap-2">
-                        <span className="text-md font-semibold">{bodyTooltipContent}</span>
+                        <span className="text-lg font-semibold">{bodyTooltipContent}</span>
                         <span className="text-sm font-light text-right italic">({titanBodyHealthPercentage}%)</span>
                     </div>
                 }

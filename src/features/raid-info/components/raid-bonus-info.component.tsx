@@ -46,7 +46,7 @@ export function CardBonusData({ imageUrl, bonus, title, showPercentage = true }:
                                 <div className="min-w-fit">
                                     <Image src={imageUrl} className="rounded object-cover h-8 w-8" />
                                 </div>
-                                <h3 className="text-md font-medium">{title}</h3>
+                                <h3 className="text-lg font-medium">{title}</h3>
                             </div>
                             <div className="text-xl font-bold">
                                 {latestBonus}

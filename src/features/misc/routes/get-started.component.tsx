@@ -22,7 +22,7 @@ export function GetStarted() {
             <CardHeader className="flex gap-3">
                 <Image alt="TitanTech logo" className="rounded h-10 w-10" src={Logo} />
                 <div className="flex flex-col justify-center items-start">
-                    <p className="text-md">TitanTech</p>
+                    <p className="text-lg">TitanTech</p>
                     <p className="text-small text-default-500">Some description</p>
                 </div>
             </CardHeader>

@@ -1,9 +1,17 @@
 import { Button, Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 import { useBoundStore } from '@/stores/bound.store';
-import { formatter } from '@/utils/number-formatter';
 import { LatestAttacksList, useLatestAttacks } from '@/features/attacks';
-import { CardBonusData, RaidCycle, RaidInfo, useRaidCycles, useRaidList } from '@/features/raid-info';
+import {
+    CardBonusData,
+    DamageCardChartData,
+    PercentageCardsType,
+    RaidCycle,
+    RaidDamageInfo,
+    RaidInfo,
+    useRaidCycles,
+    useRaidList,
+} from '@/features/raid-info';
 import { CurrentTitanStatus, TitanSequence, TitansSequence, useRaidTitans } from '@/features/titans';
 import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
 import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
@@ -14,9 +22,12 @@ export function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
 
     const raidCycles = useRaidCycles();
-    const raidAttacks = useLatestAttacks();
+
     const { data: raidTitansData } = useRaidTitans();
     const { data: raidListData } = useRaidList();
+
+    const raidAttacks = useLatestAttacks(raidListData?.raids[0].raid_id);
+
     // const attackTimeline = useAttackTimeline();
     // console.log('attackTimeline', attackTimeline.data);
 
@@ -29,12 +40,12 @@ export function Dashboard() {
     useEffect(() => {
         // TODO: surely this can be done better...
         if (!titans) return;
-        if (!raidAttacks.data?.pages || !raidAttacks.data?.pages?.length) return;
+        if (!raidAttacks?.data?.pages || !raidAttacks?.data?.pages?.length) return;
 
         let foundLatestTitan: TitanSequence | undefined = undefined;
 
         // raid has yet to start
-        if (!raidAttacks.data.pages[0]?.attack_logs[0]) {
+        if (!raidAttacks?.data.pages[0]?.attack_logs[0]) {
             foundLatestTitan = titans[0];
         }
 
@@ -46,7 +57,7 @@ export function Dashboard() {
             setCurrentTitan(foundLatestTitan);
         }
 
-        const latestTitanId = raidAttacks.data.pages[0]?.attack_logs[0]?.raid_titan_id;
+        const latestTitanId = raidAttacks?.data?.pages[0]?.attack_logs[0]?.raid_titan_id;
         if (!latestTitanId) return;
 
         foundLatestTitan = titans.find((titan) => titan.id === latestTitanId);
@@ -54,72 +65,138 @@ export function Dashboard() {
         if (foundLatestTitan) {
             setCurrentTitan(foundLatestTitan);
         }
-    }, [raidAttacks.data?.pages, titans]);
+    }, [raidAttacks?.data?.pages, titans]);
 
-    const getMoraleBonus = useMemo(() => {
-        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
+    const getBonuses = useMemo(() => {
+        const data: PercentageCardsType[] = [];
 
-        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+        let moraleData: PercentageCardsType = {
+            bonus: [],
+            imageUrl: TeamTacticsCardLogo,
+            title: 'Morale',
+        };
 
-        const moraleBonuses = raidCycles.data.cycles?.map(({ morale, team_tactics }: RaidCycle) => {
-            return ((morale + team_tactics) * 100).toFixed(2);
-        });
+        let mirrorForceData: PercentageCardsType = {
+            bonus: [],
+            imageUrl: MirrorForceCardLogo,
+            title: 'Mirror Force',
+        };
 
-        return moraleBonuses;
-    }, [raidCycles.data?.cycles.length]);
+        data.push(moraleData);
+        data.push(mirrorForceData);
 
-    const getMirrorForceBonus = useMemo(() => {
-        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
-
-        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
-
-        const mirrorForceBonuses = raidCycles.data.cycles?.map(({ mirror_force }: RaidCycle) => {
-            return (mirror_force * 100).toFixed(0);
-        });
-
-        return mirrorForceBonuses;
-    }, [raidCycles.data?.cycles.length]);
-
-    const getAverageClanDamage = useMemo(() => {
-        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return ['0'];
+        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
 
         raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
-        const averageDamage = raidCycles.data.cycles?.map(({ average_damage }: RaidCycle) => {
-            return formatter().format(average_damage);
-        });
+        const cycles = raidCycles.data.cycles;
 
-        return averageDamage;
+        const moraleBonuses = (raidCycles: RaidCycle[]) =>
+            raidCycles.map(({ morale, team_tactics }: RaidCycle) => {
+                return ((morale + team_tactics) * 100).toFixed(2);
+            });
+
+        const mirrorForceBonuses = (raidCycles: RaidCycle[]) =>
+            raidCycles.map(({ mirror_force }: RaidCycle) => {
+                return (mirror_force * 100).toFixed(0);
+            });
+
+        data[0].bonus = moraleBonuses(cycles);
+        data[1].bonus = mirrorForceBonuses(cycles);
+
+        return data;
+    }, [raidCycles.data?.cycles.length]);
+
+    const mapDamageStatsData = useMemo(() => {
+        let data: DamageCardChartData[] = [];
+
+        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
+
+        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+
+        const cycles = raidCycles.data.cycles;
+
+        const getAverageClanDamage = (raidCycles: RaidCycle[]) => {
+            const averageDamage = raidCycles.map(({ average_damage }: RaidCycle) => {
+                return Math.round(average_damage);
+            });
+
+            return averageDamage;
+        };
+
+        const getOverallClanDamage = (raidCycles: RaidCycle[]) => {
+            // should exclude the current round
+            // const rounds = raidCycles.slice(0, raidCycles.length - 1);
+            const rounds = raidCycles;
+
+            const sum = (arr: RaidCycle[]) => {
+                return arr.reduce((prev, curr) => prev + curr.average_damage, 0);
+            };
+
+            const avg = (arr: RaidCycle[], index: number) => {
+                const tempArr = arr.slice(0, index + 1);
+                return sum(tempArr) / tempArr.length;
+            };
+
+            const result = rounds.map((_, index) => Math.round(avg(rounds, index)));
+
+            return result;
+        };
+
+        const mapDamageData = (dataA: number[], dataB: number[]) => {
+            const tempDataA = dataA.map((val, index) => {
+                const data = {
+                    name: index + 1,
+                    average: val,
+                };
+                return data;
+            });
+            const tempDataB = dataB.map((val, index) => {
+                const data = {
+                    name: index + 1,
+                    overall: val,
+                };
+                return data;
+            });
+
+            const map = new Map();
+            tempDataA.forEach((item) => map.set(item.name, item));
+            tempDataB.forEach((item) => map.set(item.name, { ...map.get(item.name), ...item }));
+
+            const mergedArr = Array.from(map.values());
+
+            return mergedArr;
+        };
+
+        data = mapDamageData(getAverageClanDamage(cycles), getOverallClanDamage(cycles));
+
+        return data;
     }, [raidCycles.data?.cycles.length]);
 
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-rows-4 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-5">
-                <div className="row-start-1 md:row-span-2 md:col-start-1 md:row-start-1">
+            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-rows-3 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-4">
+                <div className="row-start-1 lg:row-span-1 md:row-span-1 md:col-start-1 md:row-start-1">
                     <RaidInfo
                         raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
                         raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
                     />
                 </div>
 
-                <div className="row-start-2 lg:row-span-3 lg:col-start-2 lg:row-start-1 md:row-span-2 md:col-start-1 md:row-start-3">
+                <div className="row-start-2 lg:row-span-2 lg:col-start-2 lg:row-start-1 md:row-span-2 md:col-start-1 md:row-start-2">
                     <CurrentTitanStatus titan={currentTitan} />
                 </div>
 
-                <div className="row-start-6 lg:min-h-36 lg:row-start-4 lg:col-start-2 md:row-span-1 md:col-start-1 md:row-start-5">
-                    <CardBonusData title="Average Damage" imageUrl={AverageDamageCardLogo} bonus={getAverageClanDamage} showPercentage={false} />
+                <div className="row-start-5 lg:min-h-36 lg:row-span-1 lg:col-span-3 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-span-2 md:col-start-1 md:row-start-4">
+                    <RaidDamageInfo title="Damage stats" imageUrl={AverageDamageCardLogo} data={mapDamageStatsData} />
                 </div>
 
-                <div className="row-start-4 lg:min-h-36 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-4">
-                    <CardBonusData title="Morale" imageUrl={TeamTacticsCardLogo} bonus={getMoraleBonus} />
+                <div className="row-start-4 lg:min-h-36 lg:row-span-1 lg:row-start-2 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-3">
+                    <CardBonusData data={getBonuses} />
                 </div>
 
-                <div className="row-start-5 lg:min-h-36 lg:row-start-4 lg:col-start-1  md:row-span-1 md:col-start-2 md:row-start-5">
-                    <CardBonusData title="Mirror Force" imageUrl={MirrorForceCardLogo} bonus={getMirrorForceBonus} />
-                </div>
-
-                <div className="row-start-3 lg:row-span-4 lg:col-start-3 lg:col-span-1 md:row-span-3 md:col-start-2">
+                <div className="row-start-3 lg:row-span-2 lg:col-start-3 lg:col-span-1 md:row-span-2 md:col-start-2 md:row-start-1">
                     <TitansSequence />
                 </div>
             </div>

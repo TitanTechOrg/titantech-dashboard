@@ -38,5 +38,16 @@ export type PercentageCardsType = {
     imageUrl: string;
     bonus: string[];
     title: string;
-    showPercentage?: boolean;
+};
+
+export type DamageCardChartData = {
+    name: string;
+    average: number;
+    overall: number;
+};
+
+export type DamageCardData = {
+    imageUrl: string;
+    title: string;
+    data: DamageCardChartData[];
 };

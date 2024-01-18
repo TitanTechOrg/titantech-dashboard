@@ -1,5 +1,6 @@
 export * from './components/raid-info.component';
 export * from './components/raid-bonus-info.component';
+export * from './components/raid-damage-info.component';
 
 export * from './types/index';
 

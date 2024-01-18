@@ -7,6 +7,7 @@ export const ENDPOINTS = {
     raid_attack_log: {
         v1: 'api/v1/raid/attacks',
         v2: 'api/v2/raid/attacks',
+        v3: 'api/v3/raid/attacks',
     },
     alchemy_crafts: 'api/v3/alchemy',
     raid_list: '/api/v1/raid/list',

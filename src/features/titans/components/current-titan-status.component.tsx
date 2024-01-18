@@ -200,9 +200,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row">
                         <Skeleton isLoaded={!!titan} className="rounded-md">
-                            <h3 className="text-medium font-semibold ">
-                                {hasActiveConditionals() ? 'Active conditional cards' : 'No active conditional cards'}
-                            </h3>
+                            <h3 className="text-medium font-medium ">{hasActiveConditionals() ? 'Active conditional cards' : null}</h3>
                         </Skeleton>
                     </div>
                     {hasActiveConditionals() ? (

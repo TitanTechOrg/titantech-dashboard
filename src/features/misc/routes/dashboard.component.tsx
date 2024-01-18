@@ -189,11 +189,19 @@ export function Dashboard() {
                     <CurrentTitanStatus titan={currentTitan} />
                 </div>
 
-                <div className="row-start-5 lg:min-h-36 lg:row-span-1 lg:col-span-3 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-span-2 md:col-start-1 md:row-start-4">
+                <div
+                    className={`${
+                        mapDamageStatsData.length ? '' : 'hidden'
+                    } row-start-5 lg:min-h-36 lg:row-span-1 lg:col-span-3 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-span-2 md:col-start-1 md:row-start-4`}
+                >
                     <RaidDamageInfo title="Damage stats" imageUrl={AverageDamageCardLogo} data={mapDamageStatsData} />
                 </div>
 
-                <div className="row-start-4 lg:min-h-36 lg:row-span-1 lg:row-start-2 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-3">
+                <div
+                    className={`${
+                        getBonuses.length && getBonuses[0].bonus.length ? '' : 'hidden'
+                    } row-start-4 lg:min-h-36 lg:row-span-1 lg:row-start-2 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-3`}
+                >
                     <CardBonusData data={getBonuses} />
                 </div>
 
@@ -202,27 +210,25 @@ export function Dashboard() {
                 </div>
             </div>
 
-            {raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 && (
-                <div className="md:px-4">
-                    <Card className="dark:bg-neutral-800 p-2">
-                        <CardHeader className="justify-between">
-                            <div className="flex flex-row items-center justify-start gap-4">
-                                <div className="min-w-fit">
-                                    <Image src={AttacksCardLogo} className="rounded flex object-cover h-8 w-8" />
-                                </div>
-                                <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
+            <div className={`${raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 ? '' : 'hidden'} md:px-4`}>
+                <Card className="dark:bg-neutral-800 p-2">
+                    <CardHeader className="justify-between">
+                        <div className="flex flex-row items-center justify-start gap-4">
+                            <div className="min-w-fit">
+                                <Image src={AttacksCardLogo} className="rounded flex object-cover h-8 w-8" />
                             </div>
-                            <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
-                                Refresh
-                            </Button>
-                        </CardHeader>
-                        <CardBody>
-                            <Divider />
-                            <LatestAttacksList {...raidAttacks} />
-                        </CardBody>
-                    </Card>
-                </div>
-            )}
+                            <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
+                        </div>
+                        <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
+                            Refresh
+                        </Button>
+                    </CardHeader>
+                    <CardBody>
+                        <Divider />
+                        <LatestAttacksList {...raidAttacks} />
+                    </CardBody>
+                </Card>
+            </div>
         </>
     );
 }

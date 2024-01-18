@@ -43,7 +43,7 @@ export function RaidLog({ data }: RaidLogProps) {
                             </div>
                         }
                     >
-                        <RaidTitanData titan={titan} parts={parts} />
+                        <RaidTitanData titan={titan} damagedParts={parts} />
                     </AccordionItem>
                 ) : (
                     <AccordionItem
@@ -60,7 +60,7 @@ export function RaidLog({ data }: RaidLogProps) {
                             </p>
                         }
                     >
-                        <RaidTitanData titan={titan} parts={parts} />
+                        <RaidTitanData titan={titan} damagedParts={parts} />
                     </AccordionItem>
                 );
             })}

@@ -158,16 +158,7 @@ export function TitansSequence() {
 
                 <div className="flex flex-row items-center justify-center">
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                        {selectedTitan && (
-                            <RaidTitanData
-                                titan={selectedTitan}
-                                parts={selectedTitan?.parts?.map(({ name, current_health: value }: TitanSequenceParts) => {
-                                    const titanPart: TitanPart = { name, value };
-                                    return titanPart;
-                                })}
-                                showHealthbars={true}
-                            />
-                        )}
+                        {selectedTitan && <RaidTitanData titan={selectedTitan} showHealthbars={true} />}
                     </Skeleton>
                 </div>
             </CardBody>

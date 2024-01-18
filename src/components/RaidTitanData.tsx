@@ -7,7 +7,7 @@ import { TitanPartMap } from '@/constants/titans';
 
 type RaidTitanDataProps = {
     titan?: TitanSequence;
-    parts?: TitanPart[];
+    damagedParts?: TitanPart[];
     showHealthbars?: boolean;
 };
 
@@ -43,13 +43,13 @@ const findSkeletalSmashTarget = (data: TitanSequenceParts[]) => {
     return ssTargetPart;
 };
 
-export function RaidTitanData({ titan, parts, showHealthbars }: RaidTitanDataProps) {
-    const ssTarget = parts && titan ? findSkeletalSmashTarget(getTitanCursedParts(titan).parts) : null;
+export function RaidTitanData({ titan, damagedParts, showHealthbars }: RaidTitanDataProps) {
+    const ssTarget = titan ? findSkeletalSmashTarget(getTitanCursedParts(titan).parts) : null;
     return (
         <div className="flex flex-col flex-wrap">
-            {parts && titan && <TitanPartTableData parts={parts} titanData={getTitanCursedParts(titan)} showHealthbars={showHealthbars} />}
+            {titan && <TitanPartTableData damagedParts={damagedParts ?? []} titanData={getTitanCursedParts(titan)} showHealthbars={showHealthbars} />}
             {ssTarget && showHealthbars ? (
-                <div className="flex flex-row justify-center items-center gap-4 pt-4">
+                <div className="flex flex-row justify-center items-center gap-2 mt-4 p-2 bg-default rounded-lg max-w-fit mx-auto">
                     <div className="min-w-fit">
                         <Image src={SkeletalSmash} className="rounded flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
                     </div>

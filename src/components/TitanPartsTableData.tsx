@@ -8,7 +8,7 @@ import { useMediaQueries } from '@react-hook/media-query';
 type CurseColors = 'warning' | 'secondary' | 'default' | 'primary' | 'success' | 'danger' | undefined;
 
 type TitanPartTableDataProps = {
-    parts: TitanPart[];
+    damagedParts: TitanPart[];
     titanData: TitanCurseData;
     showHealthbars?: boolean;
 };
@@ -16,21 +16,14 @@ type TitanPartTableDataProps = {
 export type RaidTitanPart = keyof typeof TitanPartMap;
 
 type TableRowProps = {
-    text: string;
+    value: number;
     cursedColor?: CurseColors;
     sequenceParts?: TitanSequenceParts;
     isOffstratPart?: boolean;
     showHealthbars?: boolean;
 };
 
-const getPartDamageText = (part: TitanPart | undefined): string => {
-    return part ? formatter().format(part.value) : '--';
-};
-
 const findPart = (partName: RaidTitanPart, data: TitanPart[]): TitanPart | undefined => data.find((part) => part.name === TitanPartMap[partName]);
-
-const findCursedPart = (partName: RaidTitanPart, data: TitanSequenceParts[] | undefined): TitanSequenceParts | undefined =>
-    data?.find((part) => part.name === TitanPartMap[partName] && part.cursed);
 
 const findSequencePart = (partName: RaidTitanPart, data: TitanSequenceParts[] | undefined): TitanSequenceParts | undefined =>
     data?.find((part) => part.name === TitanPartMap[partName]);
@@ -49,8 +42,13 @@ const getCurseTypeColor = (part: TitanSequenceParts | undefined, curseType: Curs
 
 const overkillTextColor = ' text-red-500/80 dark:text-red-500/80';
 
-function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
-    const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;
+function TableRowArmour({ value, cursedColor, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
+    const isNegativeNumber = value < 0;
+    const isOverThreshold = (val: number, threshold: number) => {
+        return Math.abs(val) > threshold;
+    };
+
+    const threshold: number = 1_000_000;
 
     let healthPercentage: number = 0;
 
@@ -64,30 +62,38 @@ function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, show
         textColour = 'text-default-600/80';
     }
 
-    let bgColour = `bg-neutral-500/40 dark:bg-gray-200/50`;
+    let bgColour = 'bg-gray-300/30';
 
     if (cursedColor) {
         switch (cursedColor) {
             case 'danger':
-                bgColour = 'bg-red-400/40 dark:bg-red-500/30';
+                bgColour = 'bg-red-500/30';
                 break;
             case 'secondary':
-                bgColour = 'bg-purple-500/30 dark:bg-purple-600/30';
+                bgColour = 'bg-purple-500/30';
                 break;
             case 'warning':
-                bgColour = 'bg-yellow-300/50';
+                bgColour = 'bg-yellow-300/40';
                 break;
             default:
-                bgColour = 'bg-neutral-500/50';
+                bgColour = 'bg-gray-300/30';
                 break;
         }
     }
 
+    const displayText = isNegativeNumber ? (isOverThreshold(value, threshold) ? getPartDamageText(value) : '--') : getPartDamageText(value);
+
+    if (displayText === '--') {
+        textColour = 'text-default-600/80';
+    }
+
     return (
         <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
-            <div className={`${bgColour} ${textColour} w-full col-span-1 row-span-1 rounded-t font-semibold subpixel-antialiased min-w-[80px]`}>
-                {text}
-                {showHealthbars && (
+            <div
+                className={`${bgColour} ${textColour} w-full min-h-8 col-span-1 row-span-1 rounded-t font-semibold subpixel-antialiased min-w-[80px]`}
+            >
+                {displayText}
+                {showHealthbars && displayText && (
                     <Progress
                         aria-label="Titan armor part health..."
                         value={healthPercentage}
@@ -101,8 +107,13 @@ function TableRowArmour({ text, cursedColor, sequenceParts, isOffstratPart, show
     );
 }
 
-function TableRowBody({ text, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
-    const isNegativeNumber = Math.sign(parseInt(text, 10)) < 1;
+function TableRowBody({ value, sequenceParts, isOffstratPart, showHealthbars }: TableRowProps) {
+    const isNegativeNumber = value < 0;
+    const isOverThreshold = (val: number, threshold: number) => {
+        return Math.abs(val) > threshold;
+    };
+
+    const threshold = 250_000;
 
     let healthPercentage: number = 0;
 
@@ -116,13 +127,19 @@ function TableRowBody({ text, sequenceParts, isOffstratPart, showHealthbars }: T
         textColour = 'text-default-600/80';
     }
 
+    const displayText = isNegativeNumber ? (isOverThreshold(value, threshold) ? getPartDamageText(value) : '--') : getPartDamageText(value);
+
+    if (displayText === '--') {
+        textColour = 'text-default-600/80';
+    }
+
     return (
         <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
             <div
-                className={`${textColour} bg-primary/40 dark:bg-blue-600/40 w-full col-span-1 row-span-1 rounded-b font-semibold subpixel-antialiased min-w-[80px]`}
+                className={`${textColour} bg-primary/40 dark:bg-blue-600/40 w-full min-h-8 col-span-1 row-span-1 rounded-b font-semibold subpixel-antialiased min-w-[80px]`}
             >
-                {text}
-                {showHealthbars && (
+                {displayText}
+                {showHealthbars && displayText && (
                     <Progress
                         aria-label="Titan body part health..."
                         value={healthPercentage}
@@ -149,7 +166,72 @@ const TitanOverlayImages = {
 
 type TitanOverlayImagesType = keyof typeof TitanOverlayImages;
 
-export function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
+type TitanPartCellDataType = {
+    partNames: RaidTitanPart[];
+    showHealthbars: boolean | undefined;
+    parts: TitanSequenceParts[];
+    damagedPartsValue: (number | undefined)[];
+    curse_type: CurseTypes;
+};
+
+const getPartDamageText = (val: number | undefined): string => {
+    return val ? formatter().format(val) : '--';
+};
+
+function TitanPartCellData({ partNames, showHealthbars, parts, damagedPartsValue, curse_type }: TitanPartCellDataType) {
+    const [armour, body] = partNames;
+    const [armourDamageValue, bodyDamageValue] = damagedPartsValue;
+
+    const armourPart = findSequencePart(armour, parts);
+    const bodyPart = findSequencePart(body, parts);
+
+    const isTargetPart = !!armourPart?.target || !!bodyPart?.target;
+
+    let armourValue = 0;
+    let bodyValue = 0;
+
+    if (showHealthbars) {
+        armourValue = armourPart?.current_health ?? 0;
+        bodyValue = bodyPart?.current_health ?? 0;
+    } else {
+        armourValue = armourDamageValue ?? 0;
+        bodyValue = bodyDamageValue ?? 0;
+    }
+
+    const isSkeletalSmashTarget = !!armourPart?.skeleton_smash_target || !!bodyPart?.skeleton_smash_target;
+    const borders = isSkeletalSmashTarget
+        ? 'border-gray-500 border-dashed'
+        : isTargetPart
+        ? 'border-green-500 border-solid'
+        : 'border-red-400 border-solid';
+
+    return (
+        <div className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${borders}`}>
+            <div
+                className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-45deg] z-10 rounded ${
+                    isTargetPart ? 'hidden' : 'border-red-500/50'
+                }`}
+            />
+
+            <div
+                className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[45deg] z-10 rounded ${
+                    isTargetPart ? 'hidden' : 'border-red-500/50'
+                }`}
+            />
+
+            <TableRowArmour
+                value={armourValue}
+                sequenceParts={armourPart}
+                isOffstratPart={!!armourPart?.target == false}
+                showHealthbars={showHealthbars}
+                cursedColor={armourPart?.cursed ? getCurseTypeColor(armourPart, curse_type) : undefined}
+            />
+            <TableRowBody value={bodyValue} sequenceParts={bodyPart} isOffstratPart={!!bodyPart?.target == false} showHealthbars={showHealthbars} />
+        </div>
+    );
+}
+
+export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
     const { curse_type, parts: cursedParts, name } = titanData;
     const { matches } = useMediaQueries({
         screen: 'screen',
@@ -157,269 +239,78 @@ export function TitanPartTableData({ parts, titanData, showHealthbars }: TitanPa
     });
 
     const isTinyScreen = matches.width;
-    let tinyScreenScale = isTinyScreen && !showHealthbars ? 'scale-75' : 'scale-90';
-
-    let colGap = 'gap-x-3';
-    if (isTinyScreen && !showHealthbars) colGap = 'gap-x-8';
+    const tinyScreenScale = isTinyScreen && !showHealthbars ? 'scale-75' : 'scale-90';
+    const colGap = isTinyScreen && !showHealthbars ? 'gap-x-8' : 'gap-x-3';
 
     return (
         <div
             className={`${
                 TitanOverlayImages[name as TitanOverlayImagesType]
-            } ${tinyScreenScale} sm:scale-100 text-center w-fit min-w-fit relative before:bg-contain before:bg-center before:bg-no-repeat before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-[40%] before:z-0`}
+            } ${tinyScreenScale} sm:scale-100 md:scale:100 lg:scale-90 xl:scale-100 text-center w-fit min-w-fit relative before:bg-contain before:bg-center before:bg-no-repeat before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-[40%] before:z-0`}
         >
             <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 grid-cols-3`}>
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Arm Right', cursedParts)?.target ? 'border-green-500' : 'border-red-400'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-45deg] z-10 rounded ${
-                            !!findSequencePart('Armor Arm Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[45deg] z-10 rounded ${
-                            !!findSequencePart('Armor Arm Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Arm Right', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Arm Right', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Arm Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Arm Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Arm Right', parts))}
-                        sequenceParts={findSequencePart('Body Arm Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Arm Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Head', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Head', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Head', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Head', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Head', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Head', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Head', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Head', parts))}
-                        sequenceParts={findSequencePart('Body Head', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Head', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
-
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Arm Left', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Arm Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Arm Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Arm Left', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Arm Left', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Arm Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Arm Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Arm Left', parts))}
-                        sequenceParts={findSequencePart('Body Arm Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Arm Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
+                <TitanPartCellData
+                    partNames={['Armor Arm Right', 'Body Arm Right']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Arm Right', damagedParts)?.value, findPart('Body Arm Right', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
+                <TitanPartCellData
+                    partNames={['Armor Head', 'Body Head']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Head', damagedParts)?.value, findPart('Body Head', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
+                <TitanPartCellData
+                    partNames={['Armor Arm Left', 'Body Arm Left']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Arm Left', damagedParts)?.value, findPart('Body Arm Left', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
             </div>
 
             <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 my-2 grid-cols-3`}>
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Hand Right', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Hand Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Hand Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Hand Right', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Hand Right', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Hand Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Hand Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Hand Right', parts))}
-                        sequenceParts={findSequencePart('Body Hand Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Hand Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
-
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Chest', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Chest', cursedParts)?.target ? 'hidden' : 'border-red-500'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Chest', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Chest', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Chest', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Chest', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Chest', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Chest', parts))}
-                        sequenceParts={findSequencePart('Body Chest', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Chest', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
-
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Hand Left', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Hand Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Hand Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Hand Left', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Hand Left', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Hand Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Hand Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Hand Left', parts))}
-                        sequenceParts={findSequencePart('Body Hand Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Hand Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
+                <TitanPartCellData
+                    partNames={['Armor Hand Right', 'Body Hand Right']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Hand Right', damagedParts)?.value, findPart('Body Hand Right', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
+                <TitanPartCellData
+                    partNames={['Armor Chest', 'Body Chest']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Chest', damagedParts)?.value, findPart('Body Chest', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
+                <TitanPartCellData
+                    partNames={['Armor Hand Left', 'Body Hand Left']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Hand Left', damagedParts)?.value, findPart('Body Hand Left', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
             </div>
 
             <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 mx-11 items-center grid-cols-2`}>
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Leg Right', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Leg Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Leg Right', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Leg Right', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Leg Right', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Leg Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Leg Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Leg Right', parts))}
-                        sequenceParts={findSequencePart('Body Leg Right', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Leg Right', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
-
-                <div
-                    className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${
-                        !!findSequencePart('Armor Leg Left', cursedParts)?.target ? 'border-green-500' : 'border-red-500'
-                    }`}
-                >
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Leg Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-
-                    <div
-                        className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[42deg] z-10 rounded ${
-                            !!findSequencePart('Armor Leg Left', cursedParts)?.target ? 'hidden' : 'border-red-500/50'
-                        }`}
-                    ></div>
-                    <TableRowArmour
-                        text={getPartDamageText(findPart('Armor Leg Left', parts))}
-                        cursedColor={getCurseTypeColor(findCursedPart('Armor Leg Left', cursedParts), curse_type)}
-                        sequenceParts={findSequencePart('Armor Leg Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Armor Leg Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                    <TableRowBody
-                        text={getPartDamageText(findPart('Body Leg Left', parts))}
-                        sequenceParts={findSequencePart('Body Leg Left', cursedParts)}
-                        isOffstratPart={!!!findSequencePart('Body Leg Left', cursedParts)?.target}
-                        showHealthbars={showHealthbars}
-                    />
-                </div>
+                <TitanPartCellData
+                    partNames={['Armor Leg Right', 'Body Leg Right']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Leg Right', damagedParts)?.value, findPart('Body Leg Right', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
+                <TitanPartCellData
+                    partNames={['Armor Leg Left', 'Body Leg Left']}
+                    parts={cursedParts}
+                    damagedPartsValue={[findPart('Armor Leg Left', damagedParts)?.value, findPart('Body Leg Left', damagedParts)?.value]}
+                    curse_type={curse_type}
+                    showHealthbars={showHealthbars}
+                />
             </div>
         </div>
     );

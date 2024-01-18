@@ -26,7 +26,8 @@ export function Dashboard() {
     const { data: raidTitansData } = useRaidTitans();
     const { data: raidListData } = useRaidList();
 
-    const raidAttacks = useLatestAttacks(raidListData?.raids[0].raid_id);
+    // const raidAttacks = useLatestAttacks(raidListData?.raids[0].raid_id);
+    const raidAttacks = useLatestAttacks();
 
     // const attackTimeline = useAttackTimeline();
     // console.log('attackTimeline', attackTimeline.data);

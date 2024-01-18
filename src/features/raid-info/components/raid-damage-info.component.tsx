@@ -61,16 +61,16 @@ function CardValues({ items }: DamageData) {
 }
 
 export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
-    data = [
-        { name: '1', average: 47000000, overall: 47000000 },
-        { name: '2', average: 51000000, overall: 49000000 },
-        { name: '3', average: 55000000, overall: 52000000 },
-        { name: '4', average: 56000000, overall: 54000000 },
-        { name: '5', average: 50000000, overall: 52000000 },
-        { name: '6', average: 50500000, overall: 51000000 },
-        { name: '7', average: 55500000, overall: 53000000 },
-        { name: '8', average: 60000000, overall: 56000000 },
-    ];
+    // data = [
+    //     { name: '1', average: 47000000, overall: 47000000 },
+    //     { name: '2', average: 51000000, overall: 49000000 },
+    //     { name: '3', average: 55000000, overall: 52000000 },
+    //     { name: '4', average: 56000000, overall: 54000000 },
+    //     { name: '5', average: 50000000, overall: 52000000 },
+    //     { name: '6', average: 50500000, overall: 51000000 },
+    //     { name: '7', average: 55500000, overall: 53000000 },
+    //     { name: '8', average: 60000000, overall: 56000000 },
+    // ];
 
     let overallRaidDamage = 0;
 

@@ -31,7 +31,7 @@ const findSequencePart = (partName: RaidTitanPart, data: TitanSequenceParts[] | 
 const CurseTypeColorMap = {
     BodyDamagePerCurse: 'warning',
     AfflictedDamagePerCurse: 'secondary',
-    BurstDamagePerCurse: 'error',
+    BurstDamagePerCurse: 'danger',
 } as const;
 
 const getCurseTypeColor = (part: TitanSequenceParts | undefined, curseType: CurseTypes | undefined): CurseColors => {

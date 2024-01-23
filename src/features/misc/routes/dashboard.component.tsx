@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 import { useBoundStore } from '@/stores/bound.store';
-import { LatestAttacksList, useLatestAttacks } from '@/features/attacks';
+import { AttacksCard, useFetchedAttacks } from '@/features/attacks';
 import {
     CardBonusData,
     DamageCardChartData,
@@ -16,7 +16,6 @@ import { CurrentTitanStatus, TitanSequence, TitansSequence, useRaidTitans } from
 import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
 import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
 import AverageDamageCardLogo from '@/assets/Decks.webp';
-import AttacksCardLogo from '@/assets/Attack.webp';
 
 export function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
@@ -27,7 +26,7 @@ export function Dashboard() {
     const { data: raidListData } = useRaidList();
 
     // const raidAttacks = useLatestAttacks(raidListData?.raids[0].raid_id);
-    const raidAttacks = useLatestAttacks();
+    const raidAttacks = useFetchedAttacks();
 
     // const attackTimeline = useAttackTimeline();
     // console.log('attackTimeline', attackTimeline.data);
@@ -210,24 +209,9 @@ export function Dashboard() {
                 </div>
             </div>
 
-            <div className={`${raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 ? '' : 'hidden'} md:px-4`}>
-                <Card className="dark:bg-neutral-800 p-2">
-                    <CardHeader className="justify-between">
-                        <div className="flex flex-row items-center justify-start gap-4">
-                            <div className="min-w-fit">
-                                <Image src={AttacksCardLogo} className="rounded flex object-cover h-8 w-8" />
-                            </div>
-                            <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
-                        </div>
-                        <Button size="sm" color="primary" isLoading={raidAttacks.isRefetching} onPress={() => raidAttacks.refetch()}>
-                            Refresh
-                        </Button>
-                    </CardHeader>
-                    <CardBody>
-                        <Divider />
-                        <LatestAttacksList {...raidAttacks} />
-                    </CardBody>
-                </Card>
+            {/* ${raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 ? '' : 'hidden'} */}
+            <div className={`md:px-4`}>
+                <AttacksCard {...raidAttacks} />
             </div>
         </>
     );

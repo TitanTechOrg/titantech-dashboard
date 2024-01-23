@@ -1,13 +1,37 @@
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { RaidTitanData } from '@/components';
 import { useBoundStore } from '@/stores/bound.store';
-import { RaidAttack } from '../types';
+import { RaidAttack, TitanPart } from '../types';
 import { RaidDeck } from './raid-deck.component';
 import { formatter } from '@/utils/number-formatter';
 import { useMediaQueries } from '@react-hook/media-query';
+import { useMemo } from 'react';
+import { QuickView } from '..';
 
 type RaidLogProps = {
     data: RaidAttack[];
+};
+
+const mapUniqueParts = (parts: TitanPart[]) => {
+    const renamedParts: TitanPart[] = parts.map((part) => {
+        const partName = part.name.replace(/Armor|Body/g, '').trim();
+
+        return { ...part, ...{ name: partName } };
+    });
+
+    const summedUpValueInParts = renamedParts.reduce((accumulator: TitanPart[], cur: TitanPart) => {
+        const name = cur.name;
+        const found = accumulator.find(function (elem) {
+            return elem.name === name;
+        });
+        if (found) found.value += cur.value;
+        else accumulator.push(cur);
+        return accumulator;
+    }, []);
+
+    const uniqueParts: TitanPart[] = Array.from(new Set(summedUpValueInParts));
+
+    return uniqueParts;
 };
 
 export function RaidLog({ data }: RaidLogProps) {
@@ -16,21 +40,27 @@ export function RaidLog({ data }: RaidLogProps) {
         width: '(max-width: 640px)',
     });
 
-    const titan = useBoundStore((state) => state.currentTitan);
+    const { titans, showRaidCards } = useBoundStore();
 
-    if (!titan) return null;
     if (data.length === 0) return null;
+
+    const titan = useMemo(() => (id: string) => titans.find((titan) => titan.id === id), [titans]);
 
     return (
         <Accordion selectionMode="multiple">
-            {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts }: RaidAttack) => {
+            {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts, raid_titan_id }: RaidAttack) => {
                 return matches.width ? (
                     <AccordionItem
                         key={titan_attack_id}
                         aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
                         title={
                             <div className="flex flex-row justify-between items-center gap-4">
-                                <RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />
+                                {showRaidCards ? (
+                                    <RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />
+                                ) : (
+                                    <QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} isSmallView={true} />
+                                )}
+
                                 <p className="font-bold text-lg">{formatter().format(damage)}</p>
                             </div>
                         }
@@ -43,7 +73,7 @@ export function RaidLog({ data }: RaidLogProps) {
                             </div>
                         }
                     >
-                        <RaidTitanData titan={titan} damagedParts={parts} />
+                        <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
                     </AccordionItem>
                 ) : (
                     <AccordionItem
@@ -52,15 +82,18 @@ export function RaidLog({ data }: RaidLogProps) {
                         startContent={<RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />}
                         title={<p className="flex flex-row justify-between items-center pl-2">{formatter().format(damage)}</p>}
                         subtitle={
-                            <p className="font-bold flex flex-row justify-between items-center pl-2">
-                                {player_name}{' '}
-                                <span className="font-light text-xs pl-2">
-                                    {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
-                                </span>
-                            </p>
+                            <div className="relative">
+                                <QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} />
+                                <p className="font-bold flex flex-row justify-between items-center pl-2">
+                                    {player_name}
+                                    <span className="font-light text-xs pl-2">
+                                        {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
+                                    </span>
+                                </p>
+                            </div>
                         }
                     >
-                        <RaidTitanData titan={titan} damagedParts={parts} />
+                        <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
                     </AccordionItem>
                 );
             })}

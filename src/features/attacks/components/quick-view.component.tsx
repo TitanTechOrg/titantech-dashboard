@@ -5,7 +5,7 @@ import { percentage } from '@/utils/number-formatter';
 type QuickViewProps = {
     data: TitanPart[];
     titan: TitanSequence | undefined;
-    isSmallView?: boolean;
+    isCompactView?: boolean;
 };
 
 // based on from: bg-red-50 to: bg-red-600
@@ -127,11 +127,11 @@ const getBackgroundColour = (findPartOnName: string, parts: TitanPart[], totalDa
     return MappedPercentage[key];
 };
 
-export function QuickView({ data, titan, isSmallView = false }: QuickViewProps) {
+export function QuickView({ data, titan, isCompactView = false }: QuickViewProps) {
     const totalDamage = data.reduce((prev, curr) => prev + curr.value, 0);
 
-    const classes = isSmallView
-        ? `flex flex-col text-center items-center justify-center scale-80`
+    const classes = isCompactView
+        ? `flex flex-col text-center items-center justify-center scale-75 max-h-16`
         : `flex flex-col text-center absolute -top-12 right-16`;
 
     return (

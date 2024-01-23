@@ -1,4 +1,3 @@
-import { Button, Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 import { useBoundStore } from '@/stores/bound.store';
 import { AttacksCard, useFetchedAttacks } from '@/features/attacks';

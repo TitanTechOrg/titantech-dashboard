@@ -1,10 +1,9 @@
 import { Button, Card, CardBody, CardHeader, Divider, Image, Spinner, Switch } from '@nextui-org/react';
-
-import AttacksCardLogo from '@/assets/Attack.webp';
 import { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { AttacksList, RaidLogs } from '..';
 import { useBoundStore } from '@/stores/bound.store';
 import { useMediaQueries } from '@react-hook/media-query';
+import AttacksCardLogo from '@/assets/Attack.webp';
 
 export function AttacksCard({
     data,

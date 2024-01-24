@@ -24,3 +24,42 @@ export const TitanPartMap = {
     'Skeleton Arm Left': 'SkeletonArmUpperLeft',
     'Skeleton Head': 'SkeletonHead',
 } as const;
+
+// swap left side with right side parts
+export const TitanPartMapPlayerPerspective = {
+    // armour
+    'Armor Right Shoulder': 'ArmorArmUpperLeft',
+    'Armor Head': 'ArmorHead',
+    'Armor Left Shoulder': 'ArmorArmUpperRight',
+
+    'Armor Right Hand': 'ArmorHandLeft',
+    'Armor Chest': 'ArmorChestUpper',
+    'Armor Left Hand': 'ArmorHandRight',
+
+    'Armor Right Leg': 'ArmorLegUpperLeft',
+    'Armor Left Leg': 'ArmorLegUpperRight',
+
+    // body
+    'Body Right Shoulder': 'BodyArmUpperLeft',
+    'Body Head': 'BodyHead',
+    'Body Left Shoulder': 'BodyArmUpperRight',
+
+    'Body Right Hand': 'BodyHandLeft',
+    'Body Chest': 'BodyChestUpper',
+    'Body Left Hand': 'BodyHandRight',
+
+    'Body Right Leg': 'BodyLegUpperLeft',
+    'Body Left Leg': 'BodyLegUpperRight',
+
+    // skeleton
+    'Skeleton Right Shoulder': 'SkeletonArmUpperLeft',
+    'Skeleton Head': 'SkeletonHead',
+    'Skeleton Left Shoulder': 'SkeletonArmUpperRight',
+
+    'Skeleton Right Hand': 'SkeletonHandLeft',
+    'Skeleton Chest': 'SkeletonChestUpper',
+    'Skeleton Left Hand': 'SkeletonHandRight',
+
+    'Skeleton Right Leg': 'SkeletonLegUpperLeft',
+    'Skeleton Left Leg': 'SkeletonLegUpperRight',
+} as const;

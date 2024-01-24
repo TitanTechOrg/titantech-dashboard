@@ -1,5 +1,5 @@
 import { formatter, percentage } from '@/utils/number-formatter';
-import { TitanPartMap } from '@/constants/titans';
+import { TitanPartMap, TitanPartMapPlayerPerspective } from '@/constants/titans';
 import { Progress, Tooltip } from '@nextui-org/react';
 import { TitanPart } from '@/features/attacks/types';
 import { CurseTypes, TitanCurseData, TitanSequenceParts } from '@/features/titans';
@@ -14,6 +14,7 @@ type TitanPartTableDataProps = {
 };
 
 export type RaidTitanPart = keyof typeof TitanPartMap;
+export type RaidTitanPartPlayerPerspective = keyof typeof TitanPartMapPlayerPerspective;
 
 type TableRowProps = {
     value: number;

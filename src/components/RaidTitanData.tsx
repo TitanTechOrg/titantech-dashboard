@@ -1,9 +1,9 @@
 import { TitanCurseData, TitanSequence, TitanSequenceParts } from '@/features/titans';
 import { Image } from '@nextui-org/react';
 import { TitanPart } from '@/features/attacks';
-import { RaidTitanPart, TitanPartTableData } from '.';
+import { RaidTitanPartPlayerPerspective, TitanPartTableData } from '.';
 import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
-import { TitanPartMap } from '@/constants/titans';
+import { TitanPartMapPlayerPerspective } from '@/constants/titans';
 
 type RaidTitanDataProps = {
     titan?: TitanSequence;
@@ -28,34 +28,39 @@ const findSkeletalSmashTarget = (data: TitanSequenceParts[]) => {
 
     if (!foundTarget) return null;
 
-    function getKeyByValue() {
-        return Object.keys(TitanPartMap).find((key) => TitanPartMap[key as RaidTitanPart] === foundTarget?.name);
-    }
-    let ssTargetPart = getKeyByValue();
+    let ssTargetPart = Object.keys(TitanPartMapPlayerPerspective).find(
+        (key) => TitanPartMapPlayerPerspective[key as RaidTitanPartPlayerPerspective] === foundTarget.name
+    );
 
     if (!ssTargetPart) return null;
 
-    if (ssTargetPart) {
-        ssTargetPart = ssTargetPart.replace(/Armor|Body/g, '').trim();
-        ssTargetPart = ssTargetPart.replace(/Arm/g, 'Shoulder').trim();
-    }
+    ssTargetPart = ssTargetPart.replace(/Armor|Body/g, '').trim();
 
     return ssTargetPart;
 };
+
+type SkeletalSmashCardProps = {
+    text: string;
+};
+
+function SkeletalSmashCard({ text }: SkeletalSmashCardProps) {
+    return (
+        <div className="flex flex-row justify-center items-center gap-2 mt-4 p-2 bg-default rounded-lg max-w-fit mx-auto">
+            <div className="min-w-fit">
+                <Image src={SkeletalSmash} className="rounded flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
+            </div>
+            <span className='"text-sm font-medium'>{text}</span>
+        </div>
+    );
+}
 
 export function RaidTitanData({ titan, damagedParts, showHealthbars }: RaidTitanDataProps) {
     const ssTarget = titan ? findSkeletalSmashTarget(getTitanCursedParts(titan).parts) : null;
     return (
         <div className="flex flex-col flex-wrap">
             {titan && <TitanPartTableData damagedParts={damagedParts ?? []} titanData={getTitanCursedParts(titan)} showHealthbars={showHealthbars} />}
-            {ssTarget && showHealthbars ? (
-                <div className="flex flex-row justify-center items-center gap-2 mt-4 p-2 bg-default rounded-lg max-w-fit mx-auto">
-                    <div className="min-w-fit">
-                        <Image src={SkeletalSmash} className="rounded flex object-cover h-8 w-8" alt="Skeletal Smash icon" />
-                    </div>
-                    <span className='"text-sm font-medium'>{ssTarget}</span>
-                </div>
-            ) : null}
+
+            {ssTarget && showHealthbars ? <SkeletalSmashCard text={ssTarget} /> : null}
         </div>
     );
 }

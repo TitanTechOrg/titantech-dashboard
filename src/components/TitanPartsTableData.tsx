@@ -199,11 +199,11 @@ function TitanPartCellData({ partNames, showHealthbars, parts, damagedPartsValue
     }
 
     const isSkeletalSmashTarget = !!armourPart?.skeleton_smash_target || !!bodyPart?.skeleton_smash_target;
-    const borders = isSkeletalSmashTarget
-        ? 'border-gray-500 border-dashed'
-        : isTargetPart
-        ? 'border-green-500 border-solid'
-        : 'border-red-400 border-solid';
+    let borders = isTargetPart ? 'border-green-500 border-solid' : 'border-red-400 border-solid';
+
+    if (isSkeletalSmashTarget) {
+        borders += ' border-dashed';
+    }
 
     return (
         <div className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${borders}`}>

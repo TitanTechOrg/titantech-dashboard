@@ -1,5 +1,6 @@
 export const MappedArmourColour = {
-    '0': 'bg-transparent',
+    '-1': 'bg-transparent',
+    '0': 'bg-[rgb(229,231,235)]',
     '1': 'bg-[rgb(227.78,229.83,233.93)]',
     '2': 'bg-[rgb(226.56,228.66,232.86)]',
     '3': 'bg-[rgb(225.34,227.49,231.79)]',
@@ -103,6 +104,7 @@ export const MappedArmourColour = {
 } as const;
 
 export const MappedBodyColour = {
+    '-1': 'bg-transparent',
     '0': 'bg-[rgb(191,219,254)]',
     '1': 'bg-[rgb(189.68,218.11,253.92)]',
     '2': 'bg-[rgb(188.36,217.22,253.84)]',

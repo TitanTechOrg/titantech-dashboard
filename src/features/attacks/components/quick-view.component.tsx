@@ -13,11 +13,18 @@ type PartAndColour = [TitanPart | undefined, string];
 const getBackgroundKey = (findPartOnName: string, parts: TitanPart[], totalDamage: number): PartAndColour => {
     const foundPart = parts.find((part) => part.name === findPartOnName);
 
-    let key: MappedArmourType = '0';
+    let key: MappedArmourType = '-1';
 
     if (!foundPart) return [foundPart, key];
+    const decimals = 9;
+    const percent = percentage(totalDamage, foundPart.value, decimals);
+    const isBetweenZeroAndOnePercent = percent > 0 && percent < 1;
 
-    key = Math.round(percentage(totalDamage, foundPart.value)).toString() as MappedArmourType;
+    if (isBetweenZeroAndOnePercent) {
+        key = '0';
+    } else {
+        key = Math.round(percent).toString() as MappedArmourType;
+    }
 
     return [foundPart, key];
 };

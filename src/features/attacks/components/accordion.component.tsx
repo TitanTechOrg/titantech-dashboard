@@ -14,13 +14,7 @@ type RaidLogProps = {
 };
 
 const mapUniqueParts = (parts: TitanPart[]) => {
-    const renamedParts: TitanPart[] = parts.map((part) => {
-        const partName = part.name.replace(/Armor|Body/g, '').trim();
-
-        return { ...part, ...{ name: partName } };
-    });
-
-    const summedUpValueInParts = renamedParts.reduce((accumulator: TitanPart[], cur: TitanPart) => {
+    const summedUpValueInParts = parts.reduce((accumulator: TitanPart[], cur: TitanPart) => {
         const name = cur.name;
         const found = accumulator.find(function (elem) {
             return elem.name === name;
@@ -30,9 +24,7 @@ const mapUniqueParts = (parts: TitanPart[]) => {
         return accumulator;
     }, []);
 
-    const uniqueParts: TitanPart[] = Array.from(new Set(summedUpValueInParts));
-
-    return uniqueParts;
+    return summedUpValueInParts;
 };
 
 type MobileViewProps = {

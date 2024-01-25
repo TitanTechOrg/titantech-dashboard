@@ -1,3 +1,5 @@
+import { MappedArmourColour, MappedBodyColour } from '../constants';
+
 export type RaidAttack = {
     sources: RaidCard[];
     damage: number;
@@ -25,3 +27,6 @@ export type RaidLogs = {
     count: number;
     raid_id: string;
 };
+
+export type MappedArmourType = keyof typeof MappedArmourColour;
+export type MappedBodyType = keyof typeof MappedBodyColour;

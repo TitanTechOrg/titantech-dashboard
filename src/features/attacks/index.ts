@@ -9,3 +9,5 @@ export * from './types/index';
 export * from './api/fetchAttacks.api';
 
 export * from './hooks/useFetchedAttacks.hook';
+
+export * from './constants/index';

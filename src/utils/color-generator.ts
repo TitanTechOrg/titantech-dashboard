@@ -9,38 +9,38 @@ const getColourGradient = (color1: Color, color2: Color, percentage: number) => 
     const resultGreen = color1.green + percentage * (color2.green - color1.green);
     const resultBlue = color1.blue + percentage * (color2.blue - color1.blue);
 
-    // return [resultRed, resultGreen, resultBlue];
     const resultColor: Color = { red: resultRed, green: resultGreen, blue: resultBlue };
+
     return resultColor;
 };
 
 // bg-gray-200 background-color: rgb(229 231 235);
-// const ArmourStartColor: Color = {
-//     red: 229,
-//     green: 231,
-//     blue: 235,
-// };
+export const ArmourStartColor: Color = {
+    red: 229,
+    green: 231,
+    blue: 235,
+};
 
 // bg-gray-500 background-color: rgb(107 114 128);
-// const ArmourEndColor: Color = {
-//     red: 107,
-//     green: 114,
-//     blue: 128,
-// };
+export const ArmourEndColor: Color = {
+    red: 107,
+    green: 114,
+    blue: 128,
+};
 
-// bg-sky-200 background-color: rgb(186 230 253);
-// const BodyStartColor: Color = {
-//     red: 186,
-//     green: 230,
-//     blue: 253,
-// };
+// bg-blue-200 background-color: rgb(191 219 254);
+export const BodyStartColor: Color = {
+    red: 191,
+    green: 219,
+    blue: 254,
+};
 
-// bg-sky-500 background-color: rgb(14 165 233);
-// const BodyEndColor: Color = {
-//     red: 14,
-//     green: 165,
-//     blue: 233,
-// };
+// bg-blue-500 background-color: rgb(59 130 246);
+export const BodyEndColor: Color = {
+    red: 59,
+    green: 130,
+    blue: 246,
+};
 
 export const loop100 = (color1: Color, color2: Color, prefix?: 'from' | 'to') => {
     let result = [];

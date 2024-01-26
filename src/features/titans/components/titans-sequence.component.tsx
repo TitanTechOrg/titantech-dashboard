@@ -62,12 +62,12 @@ export function TitansSequence() {
     const isDefeatedTitan = (otherTitanSequenceIndex: number) => !!(currentTitan && currentTitan?.sequence_index > otherTitanSequenceIndex);
 
     return (
-        <Card className="dark:bg-neutral-800 p-2 h-full">
+        <Card className="h-full p-2 dark:bg-neutral-800">
             <CardHeader>
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                            <Image src={CardLogo} className="rounded flex object-cover h-8 w-8" />
+                            <Image src={CardLogo} className="flex h-8 w-8 rounded object-cover" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
@@ -78,28 +78,28 @@ export function TitansSequence() {
 
             <CardBody className="flex flex-col gap-4">
                 <Divider />
-                <div className="flex flex-col gap-2 justify-center items-center">
+                <div className="flex flex-col items-center justify-center gap-2">
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                         {selectedTitan && (
-                            <ButtonGroup variant="solid" className="flex flex-row justify-center items-center">
+                            <ButtonGroup variant="solid" className="flex flex-row items-center justify-center">
                                 <Dropdown placement="top">
                                     <DropdownTrigger>
                                         <Button
                                             key={selectedTitan.id}
-                                            className="p-0 m-0 flex flex-row w-44 min-h-fit"
+                                            className="m-0 flex min-h-fit w-44 flex-row p-0"
                                             radius="sm"
                                             color="primary"
                                             startContent={
-                                                <div className="flex flex-row justify-start items-center w-full gap-2 relative">
+                                                <div className="relative flex w-full flex-row items-center justify-start gap-2">
                                                     {isDefeatedTitan(selectedTitan.sequence_index) && (
-                                                        <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
+                                                        <CheckIcon className="absolute z-10 h-10 w-10 bg-transparent text-green-500" />
                                                     )}
                                                     <Image
                                                         shadow="sm"
                                                         radius="sm"
                                                         width="100%"
                                                         alt={selectedTitan.name}
-                                                        className={`object-cover h-10 w-10 z-0 ${
+                                                        className={`z-0 h-10 w-10 object-cover ${
                                                             isDefeatedTitan(selectedTitan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                         }`}
                                                         src={TitanImageMapping[selectedTitan.name as TitanImageMappingType]}
@@ -130,16 +130,16 @@ export function TitansSequence() {
                                                 title={titan.name}
                                                 description={`${titan.sequence_index! + 1} / ${titans.length}`}
                                                 startContent={
-                                                    <div className="relative min-w-fit h-auto">
+                                                    <div className="relative h-auto min-w-fit">
                                                         {isDefeatedTitan(titan.sequence_index) && (
-                                                            <CheckIcon className="text-green-500 h-10 w-10 bg-transparent absolute z-10" />
+                                                            <CheckIcon className="absolute z-10 h-10 w-10 bg-transparent text-green-500" />
                                                         )}
                                                         <Image
                                                             shadow="sm"
                                                             radius="sm"
                                                             width="100%"
                                                             alt={titan.name}
-                                                            className={`object-cover h-10 w-10 z-0 ${
+                                                            className={`z-0 h-10 w-10 object-cover ${
                                                                 isDefeatedTitan(titan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                             }`}
                                                             src={TitanImageMapping[titan.name as TitanImageMappingType]}

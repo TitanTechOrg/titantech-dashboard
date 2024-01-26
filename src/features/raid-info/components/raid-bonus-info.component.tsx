@@ -13,7 +13,7 @@ type MoralePreviousValueProps = {
 function CardPreviousValue({ index, listLength, value }: MoralePreviousValueProps) {
     const showArrow: boolean = index !== listLength - 1;
     return (
-        <span className="flex flex-row justify-center items-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
+        <span className="flex flex-row items-center justify-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
             {value}
             {showArrow ? <ArrowRightIcon /> : null}
         </span>
@@ -36,7 +36,7 @@ type CardBonusDataProps = {
 
 export function CardBonusData({ data }: CardBonusDataProps) {
     return (
-        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full">
+        <Card className="h-full w-full min-w-72 dark:bg-neutral-800">
             <Accordion>
                 {data?.map(({ title, imageUrl, bonus }: PercentageCardsType) => {
                     const latestBonus: string = bonus[bonus.length - 1] ?? 0;
@@ -48,7 +48,7 @@ export function CardBonusData({ data }: CardBonusDataProps) {
                                 <CardHeader className="flex flex-row items-center justify-between gap-4">
                                     <div className="flex flex-row items-center justify-start gap-4">
                                         <div className="min-w-fit">
-                                            <Image src={imageUrl} className="rounded object-cover h-8 w-8" />
+                                            <Image src={imageUrl} className="h-8 w-8 rounded object-cover" />
                                         </div>
                                         <h3 className="text-lg font-medium">{title}</h3>
                                     </div>

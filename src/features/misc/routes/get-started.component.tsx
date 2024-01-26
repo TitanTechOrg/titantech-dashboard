@@ -18,10 +18,10 @@ import Logo from '@/assets/Logo.webp';
 
 export function GetStarted() {
     return (
-        <Card className="max-w-[400px] w-full mx-auto">
+        <Card className="mx-auto w-full max-w-[400px]">
             <CardHeader className="flex gap-3">
-                <Image alt="TitanTech logo" className="rounded h-10 w-10" src={Logo} />
-                <div className="flex flex-col justify-center items-start">
+                <Image alt="TitanTech logo" className="h-10 w-10 rounded" src={Logo} />
+                <div className="flex flex-col items-start justify-center">
                     <p className="text-lg">TitanTech</p>
                     <p className="text-small text-default-500">Some description</p>
                 </div>
@@ -29,7 +29,7 @@ export function GetStarted() {
             <CardBody>
                 <p>Maybe more description here.</p>
             </CardBody>
-            <CardFooter className="flex flex-col justify-center items-start">
+            <CardFooter className="flex flex-col items-start justify-center">
                 <div className="flex flex-row gap-3">
                     <Link isExternal href={import.meta.env.VITE_DISCORD_INVITE_LINK} target="_blank" rel="noopener noreferrer">
                         <Button color="primary" startContent={<DiscordLogoIcon />}>

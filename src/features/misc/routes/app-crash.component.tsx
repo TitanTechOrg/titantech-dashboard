@@ -27,7 +27,7 @@ export function ErrorPage() {
     };
 
     return (
-        <div id="error-page" className="container flex flex-col space-y-2 items-center justify-center h-screen">
+        <div id="error-page" className="container flex h-screen flex-col items-center justify-center space-y-2">
             <h1>Oops!</h1>
             <p>Sorry, an unexpected error has occurred.</p>
             <p>

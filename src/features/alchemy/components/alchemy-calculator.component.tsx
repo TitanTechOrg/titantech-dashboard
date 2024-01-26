@@ -71,7 +71,7 @@ export function AlchemyCalculator() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center flex-col gap-4">
+        <div className="flex flex-col items-center justify-center gap-4">
             {data == null ? (
                 <form onSubmit={onSubmit} className="flex max-w-xs flex-wrap gap-4">
                     {ingredients.map(({ name: ingredient, imgUrl }: Ingredients) => {
@@ -94,8 +94,8 @@ export function AlchemyCalculator() {
                     </Button>
                 </form>
             ) : (
-                <div className="flex flex-col gap-4 w-full">
-                    <Code className="whitespace-pre text-left overflow-x-auto">{data}</Code>
+                <div className="flex w-full flex-col gap-4">
+                    <Code className="overflow-x-auto whitespace-pre text-left">{data}</Code>
                     <Button className="w-2" variant="flat" color="primary" onClick={resetData}>
                         Reset
                     </Button>

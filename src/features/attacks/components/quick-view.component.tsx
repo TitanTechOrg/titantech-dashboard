@@ -58,7 +58,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
             <span>{titan?.name}</span>
             <div className="flex flex-row items-center justify-center gap-0">
                 <div
-                    className={`border-1 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorArmUpperRight', data, totalDamage),
                         getBackgroundKey('BodyArmUpperRight', data, totalDamage)
                     )}`}
@@ -66,7 +66,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
                     &nbsp;
                 </div>
                 <div
-                    className={`border-1 border-x-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-x-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorHead', data, totalDamage),
                         getBackgroundKey('BodyHead', data, totalDamage)
                     )}`}
@@ -74,7 +74,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
                     &nbsp;
                 </div>
                 <div
-                    className={`border-1 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorArmUpperLeft', data, totalDamage),
                         getBackgroundKey('BodyArmUpperLeft', data, totalDamage)
                     )}`}
@@ -84,7 +84,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
             </div>
             <div className="flex flex-row items-center justify-center gap-0">
                 <div
-                    className={`border-1 border-t-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-t-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorHandRight', data, totalDamage),
                         getBackgroundKey('BodyHandRight', data, totalDamage)
                     )}`}
@@ -92,7 +92,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
                     &nbsp;
                 </div>
                 <div
-                    className={`border-1 border-t-0 border-x-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-x-0 border-t-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorChestUpper', data, totalDamage),
                         getBackgroundKey('BodyChestUpper', data, totalDamage)
                     )}`}
@@ -100,7 +100,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
                     &nbsp;
                 </div>
                 <div
-                    className={`border-1 border-t-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-t-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorHandLeft', data, totalDamage),
                         getBackgroundKey('BodyHandLeft', data, totalDamage)
                     )}`}
@@ -110,7 +110,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
             </div>
             <div className="flex flex-row items-center justify-center gap-0">
                 <div
-                    className={`border-1 border-t-0 border-r-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-r-0 border-t-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorLegUpperRight', data, totalDamage),
                         getBackgroundKey('BodyLegUpperRight', data, totalDamage)
                     )}`}
@@ -118,7 +118,7 @@ export function QuickView({ data, titan, isCompactView = false }: QuickViewProps
                     &nbsp;
                 </div>
                 <div
-                    className={`border-1 border-t-0 border-gray-400 min-w-6 ${getGradientColour(
+                    className={`min-w-6 border-1 border-t-0 border-gray-400 ${getGradientColour(
                         getBackgroundKey('ArmorLegUpperLeft', data, totalDamage),
                         getBackgroundKey('BodyLegUpperLeft', data, totalDamage)
                     )}`}

@@ -44,7 +44,7 @@ export function Dashboard() {
         let foundLatestTitan: TitanSequence | undefined = undefined;
 
         // raid has yet to start
-        if (!raidAttacks?.data.pages[0]?.attack_logs[0]) {
+        if (!raidAttacks?.data?.pages[0]?.attack_logs[0]) {
             foundLatestTitan = titans[0];
         }
 
@@ -86,7 +86,7 @@ export function Dashboard() {
 
         if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
 
-        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
         const cycles = raidCycles.data.cycles;
 
@@ -104,14 +104,14 @@ export function Dashboard() {
         data[1].bonus = mirrorForceBonuses(cycles);
 
         return data;
-    }, [raidCycles.data?.cycles.length]);
+    }, [raidCycles.data?.cycles?.length]);
 
     const mapDamageStatsData = useMemo(() => {
         let data: DamageCardChartData[] = [];
 
         if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
 
-        raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
 
         const cycles = raidCycles.data.cycles;
 
@@ -170,27 +170,27 @@ export function Dashboard() {
         data = mapDamageData(getAverageClanDamage(cycles), getOverallClanDamage(cycles));
 
         return data;
-    }, [raidCycles.data?.cycles.length]);
+    }, [raidCycles.data?.cycles?.length]);
 
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 px-0 pb-4 lg:grid-rows-3 lg:grid-cols-3 md:p-4 md:grid-cols-2 md:grid-rows-4">
-                <div className="row-start-1 lg:row-span-1 md:row-span-1 md:col-start-1 md:row-start-1">
+            <div className="grid grid-cols-1 gap-4 px-0 pb-4 md:grid-cols-2 md:grid-rows-4 md:p-4 lg:grid-cols-3 lg:grid-rows-3">
+                <div className="row-start-1 md:col-start-1 md:row-span-1 md:row-start-1 lg:row-span-1">
                     <RaidInfo
-                        raidData={raidListData?.raids && raidListData?.raids.length > 0 ? raidListData?.raids[0] : undefined}
-                        raidCycle={raidCycles.data?.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles.length - 1]}
+                        raidData={raidListData?.raids && raidListData?.raids?.length > 0 ? raidListData?.raids[0] : undefined}
+                        raidCycle={raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles?.length - 1]}
                     />
                 </div>
 
-                <div className="row-start-2 lg:row-span-2 lg:col-start-2 lg:row-start-1 md:row-span-2 md:col-start-1 md:row-start-2">
+                <div className="row-start-2 md:col-start-1 md:row-span-2 md:row-start-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
                     <CurrentTitanStatus titan={currentTitan} />
                 </div>
 
                 <div
                     className={`${
                         mapDamageStatsData.length ? '' : 'hidden'
-                    } row-start-5 lg:min-h-36 lg:row-span-1 lg:col-span-3 lg:row-start-3 lg:col-start-1 md:row-span-1 md:col-span-2 md:col-start-1 md:row-start-4`}
+                    } row-start-5 md:col-span-2 md:col-start-1 md:row-span-1 md:row-start-4 lg:col-span-3 lg:col-start-1 lg:row-span-1 lg:row-start-3 lg:min-h-36`}
                 >
                     <RaidDamageInfo title="Damage stats" imageUrl={AverageDamageCardLogo} data={mapDamageStatsData} />
                 </div>
@@ -198,12 +198,12 @@ export function Dashboard() {
                 <div
                     className={`${
                         getBonuses.length && getBonuses[0].bonus.length ? '' : 'hidden'
-                    } row-start-4 lg:min-h-36 lg:row-span-1 lg:row-start-2 lg:col-start-1 md:row-span-1 md:col-start-2 md:row-start-3`}
+                    } row-start-4 md:col-start-2 md:row-span-1 md:row-start-3 lg:col-start-1 lg:row-span-1 lg:row-start-2 lg:min-h-36`}
                 >
                     <CardBonusData data={getBonuses} />
                 </div>
 
-                <div className="row-start-3 lg:row-span-2 lg:col-start-3 lg:col-span-1 md:row-span-2 md:col-start-2 md:row-start-1">
+                <div className="row-start-3 md:col-start-2 md:row-span-2 md:row-start-1 lg:col-span-1 lg:col-start-3 lg:row-span-2">
                     <TitansSequence />
                 </div>
             </div>

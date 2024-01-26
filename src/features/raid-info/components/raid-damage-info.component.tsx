@@ -15,7 +15,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
             typeof payload[1].value === 'number'
         ) {
             return (
-                <div className="bg-default-200/90 rounded-lg p-2">
+                <div className="rounded-lg bg-default-200/90 p-2">
                     <p className="text-base font-semibold">{`Round ${label}`}</p>
                     <Divider className="my-1" />
                     <p className="text-sm font-medium">{`${capitaliseFirstLetter(payload[0].name)} — ${formatter().format(payload[0].value)}`}</p>
@@ -43,7 +43,7 @@ type DamageData = {
 function CardPreviousValue({ index, listLength, value }: PreviousValueProps) {
     const showArrow: boolean = index !== listLength - 1;
     return (
-        <span className="flex flex-row justify-center items-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
+        <span className="flex flex-row items-center justify-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
             {value}
             {showArrow ? <ArrowRightIcon /> : null}
         </span>
@@ -61,17 +61,6 @@ function CardValues({ items }: DamageData) {
 }
 
 export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
-    // data = [
-    //     { name: '1', average: 47000000, overall: 47000000 },
-    //     { name: '2', average: 51000000, overall: 49000000 },
-    //     { name: '3', average: 55000000, overall: 52000000 },
-    //     { name: '4', average: 56000000, overall: 54000000 },
-    //     { name: '5', average: 50000000, overall: 52000000 },
-    //     { name: '6', average: 50500000, overall: 51000000 },
-    //     { name: '7', average: 55500000, overall: 53000000 },
-    //     { name: '8', average: 60000000, overall: 56000000 },
-    // ];
-
     let overallRaidDamage = 0;
 
     if (data.length > 1) {
@@ -80,11 +69,11 @@ export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
     }
 
     return (
-        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full px-2">
+        <Card className="h-full w-full min-w-72 px-2 dark:bg-neutral-800">
             <CardHeader className="flex flex-row items-start justify-between gap-4 py-4">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
-                        <Image src={imageUrl} className="rounded object-cover h-8 w-8" />
+                        <Image src={imageUrl} className="h-8 w-8 rounded object-cover" />
                     </div>
                     <h3 className="text-lg font-medium">{title}</h3>
                 </div>
@@ -115,7 +104,7 @@ export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
                         </ResponsiveContainer>
                     </div>
                 ) : (
-                    <div className="flex justify-center items-center">
+                    <div className="flex items-center justify-center">
                         <p className="text-base">No chart data</p>
                     </div>
                 )}

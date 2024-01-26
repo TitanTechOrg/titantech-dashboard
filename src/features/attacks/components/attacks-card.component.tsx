@@ -20,16 +20,16 @@ export function AttacksCard({
         width: '(max-width: 640px)',
     });
 
-    const hasData: boolean = !!(data && data?.pages && data?.pages[0]?.attack_logs.length > 0);
+    const hasData: boolean = !!(data && data?.pages && data?.pages[0]?.attack_logs?.length > 0);
 
     const { showRaidCards, setShowRaidCards } = useBoundStore();
 
     return (
-        <Card className="dark:bg-neutral-800 p-2">
+        <Card className="p-2 dark:bg-neutral-800">
             <CardHeader className="justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
-                        <Image src={AttacksCardLogo} className="rounded flex object-cover h-8 w-8" />
+                        <Image src={AttacksCardLogo} className="flex h-8 w-8 rounded object-cover" />
                     </div>
                     <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
                 </div>

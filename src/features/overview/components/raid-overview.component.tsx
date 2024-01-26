@@ -3099,7 +3099,7 @@ export function Overview() {
             case 'average_damage':
             case 'offstrat_damage':
                 return (
-                    <div className="flex flex-row justify-start items-cente">
+                    <div className="items-cente flex flex-row justify-start">
                         <p className="text-bold text-small">{formatter().format(Number(cellValue))}</p>
                     </div>
                 );
@@ -3122,7 +3122,7 @@ export function Overview() {
             //         </div>
             //     );
             default:
-                return <span className="flex justify-start items-center">{cellValue}</span>;
+                return <span className="flex items-center justify-start">{cellValue}</span>;
         }
     }, []);
 
@@ -3141,7 +3141,7 @@ export function Overview() {
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between gap-3 items-center">
+                <div className="flex items-center justify-between gap-3">
                     <Input
                         isClearable
                         label="Search"
@@ -3169,7 +3169,7 @@ export function Overview() {
                         }}
                         placeholder="Type to search..."
                         startContent={
-                            <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+                            <SearchIcon className="pointer-events-none mb-0.5 flex-shrink-0 text-black/50 text-slate-400 dark:text-white/90" />
                         }
                         value={filterValue}
                         onClear={() => onClear()}

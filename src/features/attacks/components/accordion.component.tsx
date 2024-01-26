@@ -40,15 +40,15 @@ function MobileView({ data, titan }: MobileViewProps) {
                     key={titan_attack_id}
                     aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
                     title={
-                        <div className="flex flex-row justify-between items-center gap-4">
+                        <div className="flex flex-row items-center justify-between gap-4">
                             <RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />
-                            <p className="font-bold text-lg">{formatter().format(damage)}</p>
+                            <p className="text-lg font-bold">{formatter().format(damage)}</p>
                         </div>
                     }
                     subtitle={
-                        <div className="flex flex-row justify-between items-center gap-4">
+                        <div className="flex flex-row items-center justify-between gap-4">
                             <span className="text-sm font-normal text-black dark:text-white">{player_name}</span>
-                            <span className="font-light text-xs">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
+                            <span className="text-xs font-light">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
                         </div>
                     }
                 >
@@ -68,12 +68,12 @@ function MobileCompactView({ data, titan }: MobileViewProps) {
                     aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
                     startContent={<QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} isCompactView={true} />}
                     title={
-                        <div className="flex flex-col justify-center items-end">
-                            <div className="flex flex-col justify-center items-end">
-                                <p className="font-bold text-lg">{formatter().format(damage)}</p>
+                        <div className="flex flex-col items-end justify-center">
+                            <div className="flex flex-col items-end justify-center">
+                                <p className="text-lg font-bold">{formatter().format(damage)}</p>
                                 <span className="text-sm font-normal text-black dark:text-white">{player_name}</span>
                             </div>
-                            <span className="font-light text-xs">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
+                            <span className="text-xs font-light">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
                         </div>
                     }
                 >
@@ -92,13 +92,13 @@ function DesktopView({ data, titan }: MobileViewProps) {
                     key={titan_attack_id}
                     aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
                     startContent={<RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />}
-                    title={<p className="flex flex-row justify-between items-center pl-2">{formatter().format(damage)}</p>}
+                    title={<p className="flex flex-row items-center justify-between pl-2">{formatter().format(damage)}</p>}
                     subtitle={
                         <div className="relative">
                             <QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} />
-                            <p className="font-bold flex flex-row justify-between items-center pl-2">
+                            <p className="flex flex-row items-center justify-between pl-2 font-bold">
                                 {player_name}
-                                <span className="font-light text-xs pl-2">
+                                <span className="pl-2 text-xs font-light">
                                     {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
                                 </span>
                             </p>

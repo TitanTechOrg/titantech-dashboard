@@ -91,7 +91,7 @@ function TableRowArmour({ value, cursedColor, sequenceParts, isOffstratPart, sho
     return (
         <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
             <div
-                className={`${bgColour} ${textColour} w-full min-h-8 col-span-1 row-span-1 rounded-t font-semibold subpixel-antialiased min-w-[80px]`}
+                className={`${bgColour} ${textColour} col-span-1 row-span-1 min-h-8 w-full min-w-[80px] rounded-t font-semibold subpixel-antialiased`}
             >
                 {displayText}
                 {showHealthbars && displayText && (
@@ -137,7 +137,7 @@ function TableRowBody({ value, sequenceParts, isOffstratPart, showHealthbars }: 
     return (
         <Tooltip showArrow={true} content={`${healthPercentage}%`} isDisabled={healthPercentage === 0}>
             <div
-                className={`${textColour} bg-primary/40 dark:bg-blue-600/40 w-full min-h-8 col-span-1 row-span-1 rounded-b font-semibold subpixel-antialiased min-w-[80px]`}
+                className={`${textColour} col-span-1 row-span-1 min-h-8 w-full min-w-[80px] rounded-b bg-primary/40 font-semibold subpixel-antialiased dark:bg-blue-600/40`}
             >
                 {displayText}
                 {showHealthbars && displayText && (
@@ -207,15 +207,15 @@ function TitanPartCellData({ partNames, showHealthbars, parts, damagedPartsValue
     }
 
     return (
-        <div className={`flex flex-col gap-y-2 border-4 rounded-lg relative min-w-fit ${borders}`}>
+        <div className={`relative flex min-w-fit flex-col gap-y-2 rounded-lg border-4 ${borders}`}>
             <div
-                className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[-45deg] z-10 rounded ${
+                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[-45deg] rounded border-2 ${
                     isTargetPart ? 'hidden' : 'border-red-500/50'
                 }`}
             />
 
             <div
-                className={`${showHealthbars ? '' : 'hidden'} absolute top-[34px] left-0 border-2 w-[100%] rotate-[45deg] z-10 rounded ${
+                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[45deg] rounded border-2 ${
                     isTargetPart ? 'hidden' : 'border-red-500/50'
                 }`}
             />
@@ -247,9 +247,9 @@ export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: 
         <div
             className={`${
                 TitanOverlayImages[name as TitanOverlayImagesType]
-            } ${tinyScreenScale} sm:scale-100 md:scale:100 lg:scale-90 xl:scale-100 text-center w-fit min-w-fit relative before:bg-contain before:bg-center before:bg-no-repeat before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:opacity-[40%] before:z-0`}
+            } ${tinyScreenScale} md:scale:100 relative w-fit min-w-fit text-center before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:z-0 before:bg-contain before:bg-center before:bg-no-repeat before:opacity-[40%] sm:scale-100 lg:scale-90 xl:scale-100`}
         >
-            <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 grid-cols-3`}>
+            <div className={`grid ${colGap} grid-cols-3 gap-y-1 sm:gap-x-3`}>
                 <TitanPartCellData
                     partNames={['Armor Arm Right', 'Body Arm Right']}
                     parts={cursedParts}
@@ -273,7 +273,7 @@ export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: 
                 />
             </div>
 
-            <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 my-2 grid-cols-3`}>
+            <div className={`grid ${colGap} my-2 grid-cols-3 gap-y-1 sm:gap-x-3`}>
                 <TitanPartCellData
                     partNames={['Armor Hand Right', 'Body Hand Right']}
                     parts={cursedParts}
@@ -297,7 +297,7 @@ export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: 
                 />
             </div>
 
-            <div className={`grid ${colGap} sm:gap-x-3 gap-y-1 mx-11 items-center grid-cols-2`}>
+            <div className={`grid ${colGap} mx-11 grid-cols-2 items-center gap-y-1 sm:gap-x-3`}>
                 <TitanPartCellData
                     partNames={['Armor Leg Right', 'Body Leg Right']}
                     parts={cursedParts}

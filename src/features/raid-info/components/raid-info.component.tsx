@@ -11,12 +11,12 @@ type CardRaidInfoProps = {
 
 export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
     return (
-        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full p-2">
+        <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
             <CardHeader className="flex flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
-                            <Image src={CardLogo} className="rounded object-cover h-8 w-8" />
+                            <Image src={CardLogo} className="h-8 w-8 rounded object-cover" />
                         </Skeleton>
                     </div>
                     <Skeleton isLoaded={!!raidData} className="rounded-md">
@@ -40,7 +40,7 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                 <Divider />
 
                 <div className="flex flex-col gap-2">
-                    <div className="text-sm font-medium flex justify-between space-x-4">
+                    <div className="flex justify-between space-x-4 text-sm font-medium">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
                             <span>Raid Bonus</span>
                         </Skeleton>
@@ -49,7 +49,7 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                         </Skeleton>
                     </div>
 
-                    <div className="text-sm font-medium flex justify-between">
+                    <div className="flex justify-between text-sm font-medium">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
                             <span>Raid start</span>
                         </Skeleton>
@@ -63,14 +63,14 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                     </div>
 
                     {raidData?.ended_at != null ? (
-                        <div className="text-sm font-medium flex justify-between">
+                        <div className="flex justify-between text-sm font-medium">
                             <span>Raid end</span>
                             <Tooltip showArrow={true} content={new Date(raidData.ended_at).toUTCString()}>
                                 <span className="text-sm font-medium">{convertUTCDateToLocalDate(raidData.ended_at)}</span>
                             </Tooltip>
                         </div>
                     ) : raidCycle != null ? (
-                        <div className="text-sm font-medium flex justify-between">
+                        <div className="flex justify-between text-sm font-medium">
                             <Skeleton isLoaded={!!raidData} className="rounded-md">
                                 <span>Next cycle</span>
                             </Skeleton>
@@ -87,7 +87,7 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
 
                 <div className="flex items-center justify-end">
                     <Skeleton isLoaded={!!raidData} className="rounded-md">
-                        <span className="text-sm font-light text-right italic">All times are local</span>
+                        <span className="text-right text-sm font-light italic">All times are local</span>
                     </Skeleton>
                 </div>
             </CardBody>

@@ -97,9 +97,9 @@ function TitanHealthBars({
                 showValueLabel={true}
                 aria-label="Titan total armour..."
                 valueLabel={
-                    <div className="flex flex-row justify-center items-baseline gap-2">
+                    <div className="flex flex-row items-baseline justify-center gap-2">
                         <span className="text-lg font-semibold">{armourTooltipContent}</span>
-                        <span className="text-sm font-light text-right italic">({titanArmourHealthPercentage}%)</span>
+                        <span className="text-right text-sm font-light italic">({titanArmourHealthPercentage}%)</span>
                     </div>
                 }
                 value={titanArmourHealthPercentage}
@@ -113,9 +113,9 @@ function TitanHealthBars({
                 showValueLabel={true}
                 aria-label="Titan total health..."
                 valueLabel={
-                    <div className="flex flex-row justify-center items-baseline gap-2">
+                    <div className="flex flex-row items-baseline justify-center gap-2">
                         <span className="text-lg font-semibold">{bodyTooltipContent}</span>
-                        <span className="text-sm font-light text-right italic">({titanBodyHealthPercentage}%)</span>
+                        <span className="text-right text-sm font-light italic">({titanBodyHealthPercentage}%)</span>
                     </div>
                 }
                 value={titanBodyHealthPercentage}
@@ -144,7 +144,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
     const { isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
 
     return (
-        <Card className="dark:bg-neutral-800 min-w-72 w-full h-full p-2">
+        <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
@@ -152,7 +152,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                             {titan && (
                                 <Image
                                     src={TitanImageMapping[titan.name as TitanImageMappingType]}
-                                    className="rounded flex object-cover h-8 w-8"
+                                    className="flex h-8 w-8 rounded object-cover"
                                     alt="Titan image"
                                 />
                             )}
@@ -171,7 +171,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
 
             <CardBody className="flex flex-col gap-4">
                 <Divider />
-                <div className="text-sm font-medium flex justify-between space-x-4">
+                <div className="flex justify-between space-x-4 text-sm font-medium">
                     <Skeleton isLoaded={!!titan} className="rounded-md">
                         <span>Titan Debuff</span>
                     </Skeleton>
@@ -205,10 +205,10 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                     </div>
                     {hasActiveConditionals() ? (
                         <div className="flex flex-row gap-4">
-                            {isVictoryMarch() ? <Image src={VictoryMarchCard} className="rounded h-9 w-9" /> : null}
-                            {isInsanityVoid() ? <Image src={InsanityVoidCard} className="rounded h-9 w-9" /> : null}
-                            {isSkeletalSmash() ? <Image src={SkeletalSmashCard} className="rounded h-9 w-9" /> : null}
-                            {isDecayingStrike() ? <Image src={DecayingStrikeCard} className="rounded h-9 w-9" /> : null}
+                            {isVictoryMarch() ? <Image src={VictoryMarchCard} className="h-9 w-9 rounded" /> : null}
+                            {isInsanityVoid() ? <Image src={InsanityVoidCard} className="h-9 w-9 rounded" /> : null}
+                            {isSkeletalSmash() ? <Image src={SkeletalSmashCard} className="h-9 w-9 rounded" /> : null}
+                            {isDecayingStrike() ? <Image src={DecayingStrikeCard} className="h-9 w-9 rounded" /> : null}
                         </div>
                     ) : null}
                 </div>

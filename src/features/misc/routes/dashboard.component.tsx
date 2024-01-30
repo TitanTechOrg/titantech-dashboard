@@ -187,19 +187,11 @@ export function Dashboard() {
                     <CurrentTitanStatus titan={currentTitan} />
                 </div>
 
-                <div
-                    className={`${
-                        mapDamageStatsData.length ? '' : 'hidden'
-                    } row-start-5 md:col-span-2 md:col-start-1 md:row-span-1 md:row-start-4 lg:col-span-3 lg:col-start-1 lg:row-span-1 lg:row-start-3 lg:min-h-36`}
-                >
+                <div className="row-start-5 md:col-span-2 md:col-start-1 md:row-span-1 md:row-start-4 lg:col-span-3 lg:col-start-1 lg:row-span-1 lg:row-start-3 lg:min-h-36">
                     <RaidDamageInfo title="Damage stats" imageUrl={AverageDamageCardLogo} data={mapDamageStatsData} />
                 </div>
 
-                <div
-                    className={`${
-                        getBonuses.length && getBonuses[0].bonus.length ? '' : 'hidden'
-                    } row-start-4 md:col-start-2 md:row-span-1 md:row-start-3 lg:col-start-1 lg:row-span-1 lg:row-start-2 lg:min-h-36`}
-                >
+                <div className="row-start-4 md:col-start-2 md:row-span-1 md:row-start-3 lg:col-start-1 lg:row-span-1 lg:row-start-2 lg:min-h-36">
                     <CardBonusData data={getBonuses} />
                 </div>
 
@@ -208,7 +200,6 @@ export function Dashboard() {
                 </div>
             </div>
 
-            {/* ${raidAttacks?.data?.pages && raidAttacks?.data?.pages[0]?.count > 0 ? '' : 'hidden'} */}
             <div className={`md:px-4`}>
                 <AttacksCard {...raidAttacks} />
             </div>

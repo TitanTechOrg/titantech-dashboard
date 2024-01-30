@@ -6,8 +6,8 @@ import { NextUIProvider, Spinner } from '@nextui-org/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import { lazyImport } from '@/utils/lazy-import';
-import storage from '@/utils/storage.ts';
 import { ErrorBoundary, ErrorPage, FourOhFour } from '@/features/misc';
+import { usePreferencesStore } from './stores/preferences.store.ts';
 
 type DashbloardLoaderParams = {
     params: any;
@@ -16,11 +16,11 @@ type DashbloardLoaderParams = {
 const { GetStarted } = lazyImport(() => import('@/features/misc'), 'GetStarted');
 const { AlchemyCalculator } = lazyImport(() => import('@/features/alchemy'), 'AlchemyCalculator');
 const { Dashboard } = lazyImport(() => import('@/features/misc'), 'Dashboard');
-const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
+// const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
 
 const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
-    if (params?.clan_token && params?.clan_token.length === 36) {
-        storage.token.set(params.clan_token);
+    if (params?.clan_token && params?.clan_token?.length === 36) {
+        usePreferencesStore.getState().setToken(params.clan_token);
         return redirect('/dashboard');
     } else {
         return redirect('../../');
@@ -28,7 +28,7 @@ const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
 };
 
 const dashboardLoader = async () => {
-    if (storage.token.get()) {
+    if (usePreferencesStore.getState().token) {
         return null;
     } else {
         return redirect('../../');
@@ -36,7 +36,7 @@ const dashboardLoader = async () => {
 };
 
 const landingLoader = async () => {
-    if (storage.token.get()) {
+    if (usePreferencesStore.getState().token) {
         return redirect('dashboard');
     }
 
@@ -53,7 +53,7 @@ const router = createBrowserRouter(
 
                 <Route path="dashboard" element={<Dashboard />} loader={dashboardLoader} />
 
-                <Route path="overview" element={<Overview />} />
+                {/* <Route path="overview" element={<Overview />} /> */}
 
                 <Route path="alchemy" element={<AlchemyCalculator />} />
 

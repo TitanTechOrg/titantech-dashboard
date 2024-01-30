@@ -1,12 +1,13 @@
-import storage from '@/utils/storage';
+import { usePreferencesStore } from '@/stores/preferences.store';
 import { useEffect, useState } from 'react';
 
 const useDarkMode = () => {
-    const [darkMode, setDarkMode] = useState<boolean>(storage.theme.get() === 'true');
+    const { darkMode: darkModeStorage, setDarkMode: setDarkModeStorage } = usePreferencesStore();
+    const [darkMode, setDarkMode] = useState<boolean>(darkModeStorage);
 
     useEffect(() => {
         document.documentElement.classList.toggle('dark', darkMode);
-        storage.theme.set(String(darkMode));
+        setDarkModeStorage(darkMode);
     }, [darkMode]);
 
     return [darkMode, setDarkMode] as const;

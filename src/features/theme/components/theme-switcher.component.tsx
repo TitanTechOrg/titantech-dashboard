@@ -7,7 +7,7 @@ export function ThemeSwitcher() {
     const [darkMode, setDarkMode] = useDarkMode();
 
     const toggleDarkMode = useCallback(() => {
-        setDarkMode((prevMode) => !prevMode);
+        setDarkMode((prevMode: boolean) => !prevMode);
     }, []);
 
     return (

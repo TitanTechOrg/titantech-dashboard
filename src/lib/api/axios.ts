@@ -1,4 +1,4 @@
-import storage from '@/utils/storage';
+import { usePreferencesStore } from '@/stores/preferences.store';
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
 export const ENDPOINTS = {
@@ -22,7 +22,7 @@ const authRequestInterceptor = (config: InternalAxiosRequestConfig) => {
         return config;
     }
 
-    const token = storage.token.get();
+    const token = usePreferencesStore.getState().token;
 
     if (token) {
         config.headers.authorization = `${token}`;

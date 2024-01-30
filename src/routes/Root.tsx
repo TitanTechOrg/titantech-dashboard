@@ -3,21 +3,26 @@ import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { capitaliseFirstLetter } from '@/utils/string-formatter';
 import { ThemeSwitcher } from '@/features/theme';
-import storage from '@/utils/storage';
+import { usePreferencesStore } from '@/stores/preferences.store';
 
-function getImageLogoUrl(name: string): string {
-    return new URL(`../assets/${name}.webp`, import.meta.url).href;
-}
+import Logo from '@/assets/Logo.webp';
 
-const menuItems = ['dashboard', 'overview', 'alchemy'];
-const protectedRoutes = ['dashboard', 'overview'];
-const logoFileName = 'Logo';
+const menuItems = [
+    'dashboard',
+    // 'overview',
+    'alchemy',
+];
+const protectedRoutes = [
+    'dashboard',
+    // 'overview'
+];
 
 export default function Root() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
 
-    const isAuthenticated = !!storage.token.get() && storage.token.get()?.length === 36;
+    const token = usePreferencesStore.getState().token;
+    const isAuthenticated = !!token && token.length === 36;
 
     return (
         <>
@@ -49,27 +54,27 @@ export default function Root() {
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
 
                     <NavbarBrand>
-                        <NavLink to="/" className="gap-2 min-w-fit flex flex-row items-center text-foreground">
+                        <NavLink to="/" className="flex min-w-fit flex-row items-center gap-2 text-foreground">
                             <div className="h-10 w-10">
-                                <Image src={getImageLogoUrl(logoFileName)} radius="sm" />
+                                <Image src={Logo} className="rounded" />
                             </div>
                             <p className="font-bold text-inherit">TitanTech</p>
                         </NavLink>
                     </NavbarBrand>
                 </NavbarContent>
 
-                <NavbarContent className="md:flex lg:flex hidden gap-4" justify="center">
+                <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
                     <NavbarItem isActive={location.pathname === '/dashboard'} className={!isAuthenticated ? 'hidden' : ''}>
                         <NavLink to="/dashboard" className={location.pathname === '/dashboard' ? 'text-primary' : 'text-foreground'}>
                             Dashboard
                         </NavLink>
                     </NavbarItem>
 
-                    <NavbarItem isActive={location.pathname === '/overview'} className={!isAuthenticated ? 'hidden' : ''}>
+                    {/* <NavbarItem isActive={location.pathname === '/overview'} className={!isAuthenticated ? 'hidden' : ''}>
                         <NavLink to="/overview" className={location.pathname === '/overview' ? 'text-primary' : 'text-foreground'}>
                             Overview
                         </NavLink>
-                    </NavbarItem>
+                    </NavbarItem> */}
 
                     <NavbarItem isActive={location.pathname === '/alchemy'}>
                         <NavLink to="/alchemy" className={location.pathname === '/alchemy' ? 'text-primary' : 'text-foreground'}>
@@ -100,7 +105,7 @@ export default function Root() {
                 </NavbarMenu>
             </Navbar>
 
-            <div className="p-4 mt-16">
+            <div className="mt-16 p-4">
                 <Outlet />
             </div>
         </>

@@ -38,7 +38,7 @@ const getGradientColour = (armourPart: PartAndColour, bodyPart: PartAndColour) =
     }
 
     if (hasArmourPart && hasBodyPart) {
-        return `bg-gradient-to-b from-slate-300 from-40% to-blue-400 to-90%`;
+        return `bg-gradient-to-b from-[#D8E0E8] from-40% to-[#097BFC] to-90%`;
     } else if (hasArmourPart) {
         return MappedArmourColour[armourPart[1] as MappedArmourType];
     } else {

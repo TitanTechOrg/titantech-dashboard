@@ -84,7 +84,7 @@ export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
 
                 <CardValues items={data.map((val) => formatter().format(val.average))} />
 
-                {data && data.length ? (
+                {data && data.length > 1 ? (
                     <div className="h-40">
                         <ResponsiveContainer>
                             <LineChart data={data}>

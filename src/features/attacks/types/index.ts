@@ -1,7 +1,7 @@
 import { MappedArmourColour, MappedBodyColour } from '../constants';
 
 export type RaidAttack = {
-    sources: RaidCard[];
+    sources: RaidCardType[];
     damage: number;
     occurred_at: string;
     player_name: string;
@@ -11,7 +11,7 @@ export type RaidAttack = {
     parts: TitanPart[];
 };
 
-export type RaidCard = {
+export type RaidCardType = {
     name: string;
     value: number;
 };

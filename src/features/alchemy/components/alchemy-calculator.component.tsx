@@ -104,7 +104,7 @@ export function AlchemyCalculator() {
                     </Button>
                 </form>
             ) : (
-                <div className="flex w-full flex-col gap-4">
+                <div className="flex max-w-xl flex-col gap-4">
                     <Code className="overflow-x-auto whitespace-pre text-left">{data}</Code>
                     <Button className="w-2" variant="flat" color="primary" onClick={resetData}>
                         Reset

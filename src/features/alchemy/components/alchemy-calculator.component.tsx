@@ -5,14 +5,15 @@ import { Button, Input, Code, Image } from '@nextui-org/react';
 import { useCallback } from 'react';
 import { useCalculateAlchemy } from '..';
 
-import Acorn from '@/assets/alchemy/Acorn.webp';
+// import Acorn from '@/assets/alchemy/Acorn.webp';
+// import Petal from '@/assets/alchemy/Petal.webp';
+// import Berries from '@/assets/alchemy/Berries.webp';
+// import Pepper from '@/assets/alchemy/Pepper.webp';
+
 import Leaf from '@/assets/alchemy/Leaf.webp';
 import Sand from '@/assets/alchemy/Sand.webp';
-import Petal from '@/assets/alchemy/Petal.webp';
 import Steel from '@/assets/alchemy/Steel.webp';
-import Berries from '@/assets/alchemy/Berries.webp';
 import Lightning from '@/assets/alchemy/Lightning.webp';
-import Pepper from '@/assets/alchemy/Pepper.webp';
 import Scale from '@/assets/alchemy/Scale.webp';
 import Power from '@/assets/alchemy/Power.webp';
 import Flame from '@/assets/alchemy/Flame.webp';
@@ -21,6 +22,10 @@ import Egg from '@/assets/alchemy/Egg.webp';
 import Essence from '@/assets/alchemy/Essence.webp';
 import Feather from '@/assets/alchemy/Feather.webp';
 import Spirit from '@/assets/alchemy/Spirit.webp';
+import Poison from '@/assets/alchemy/Poison.webp';
+import Tooth from '@/assets/alchemy/Tooth.webp';
+import Water from '@/assets/alchemy/Water.webp';
+import Shadow from '@/assets/alchemy/Shadow.webp';
 
 const validation = z
     .number()
@@ -29,21 +34,26 @@ const validation = z
     .max(128, { message: 'Must be between 0 and 128' });
 
 const ingredients = [
-    { name: 'Acorn', fieldType: validation, imgUrl: Acorn },
-    { name: 'Leaf', fieldType: validation, imgUrl: Leaf },
-    { name: 'Sand', fieldType: validation, imgUrl: Sand },
-    { name: 'Petal', fieldType: validation, imgUrl: Petal },
+    // { name: 'Acorn', fieldType: validation, imgUrl: Acorn },
+    // { name: 'Petal', fieldType: validation, imgUrl: Petal },
+    // { name: 'Berries', fieldType: validation, imgUrl: Berries },
+    // { name: 'Pepper', fieldType: validation, imgUrl: Pepper },
+
     { name: 'Steel', fieldType: validation, imgUrl: Steel },
-    { name: 'Berries', fieldType: validation, imgUrl: Berries },
-    { name: 'Lightning', fieldType: validation, imgUrl: Lightning },
-    { name: 'Pepper', fieldType: validation, imgUrl: Pepper },
-    { name: 'Scale', fieldType: validation, imgUrl: Scale },
-    { name: 'Power', fieldType: validation, imgUrl: Power },
+    { name: 'Sand', fieldType: validation, imgUrl: Sand },
+    { name: 'Water', fieldType: validation, imgUrl: Water },
     { name: 'Flame', fieldType: validation, imgUrl: Flame },
-    { name: 'Crystal', fieldType: validation, imgUrl: Crystal },
+    { name: 'Lightning', fieldType: validation, imgUrl: Lightning },
+    { name: 'Leaf', fieldType: validation, imgUrl: Leaf },
+    { name: 'Scale', fieldType: validation, imgUrl: Scale },
     { name: 'Egg', fieldType: validation, imgUrl: Egg },
-    { name: 'Essence', fieldType: validation, imgUrl: Essence },
+    { name: 'Crystal', fieldType: validation, imgUrl: Crystal },
+    { name: 'Poison', fieldType: validation, imgUrl: Poison },
+    { name: 'Power', fieldType: validation, imgUrl: Power },
+    { name: 'Tooth', fieldType: validation, imgUrl: Tooth },
     { name: 'Feather', fieldType: validation, imgUrl: Feather },
+    { name: 'Shadow', fieldType: validation, imgUrl: Shadow },
+    { name: 'Essence', fieldType: validation, imgUrl: Essence },
     { name: 'Spirit', fieldType: validation, imgUrl: Spirit },
 ];
 

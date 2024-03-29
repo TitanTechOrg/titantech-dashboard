@@ -27,7 +27,7 @@ function RaidCard({ name: cardName, value: cardLevel }: RaidCardType) {
             <span className="absolute inset-x-0 -left-1 -top-1 z-10">
                 <Image src={getCardTypeImageUrl(cardName)} className="h-4 w-4 rounded-none sm:h-6 sm:w-6" />
             </span>
-            <Image src={getCardImageUrl(cardName)} className="z-0 h-8 w-8 object-cover sm:h-16 sm:w-16" />
+            <Image src={getCardImageUrl(cardName)} className="z-0 h-8 w-8 rounded object-cover sm:h-16 sm:w-16" />
             <span className="absolute inset-x-0 bottom-0 z-10 rounded-b bg-black/50 pr-1 text-right text-tiny text-white">{cardLevel}</span>
         </div>
     );

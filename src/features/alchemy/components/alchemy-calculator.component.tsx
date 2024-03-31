@@ -1,7 +1,7 @@
-import { FieldValues, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Button, Input, Code, Image } from '@nextui-org/react';
+import { Button, Input, Code, Image, Switch } from '@nextui-org/react';
 import { useCallback } from 'react';
 import { useCalculateAlchemy } from '..';
 
@@ -59,16 +59,17 @@ const ingredients = [
 
 type Ingredients = (typeof ingredients)[0];
 
-const schema = z.object(Object.fromEntries(ingredients.map((ingredient) => [ingredient.name, ingredient.fieldType])));
+// const schema = z.object(Object.fromEntries(ingredients.map((ingredient) => [ingredient.name, ingredient.fieldType])));
 
 export function AlchemyCalculator() {
     const {
         register,
         handleSubmit,
         reset,
+        control,
         formState: { errors },
     } = useForm({
-        resolver: zodResolver(schema),
+        // resolver: zodResolver(schema)
     });
 
     const { mutate, isPending, reset: resetAlchemyData, data } = useCalculateAlchemy();
@@ -84,6 +85,16 @@ export function AlchemyCalculator() {
         <div className="flex flex-col items-center justify-center gap-4">
             {data == null ? (
                 <form onSubmit={onSubmit} className="flex max-w-xs flex-wrap gap-4">
+                    <Controller
+                        control={control}
+                        name="dust_only"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <Switch onChange={onChange} onBlur={onBlur} value={value}>
+                                Optimise for dust only
+                            </Switch>
+                        )}
+                    />
+
                     {ingredients.map(({ name: ingredient, imgUrl }: Ingredients) => {
                         return (
                             <Input
@@ -99,6 +110,7 @@ export function AlchemyCalculator() {
                             />
                         );
                     })}
+
                     <Button type="submit" variant="solid" color="primary" isLoading={isPending} disabled={isPending}>
                         Submit
                     </Button>

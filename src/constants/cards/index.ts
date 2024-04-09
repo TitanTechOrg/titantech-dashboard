@@ -37,5 +37,8 @@ export const RaidCardMap = {
     SkeletalSmash: { name: 'SpinalTap', type: 'Support' },
     AstralEcho: { name: 'AstralEcho', type: 'Support' },
     TapDamage: { name: 'TapDamage', type: 'Support' },
+    Amplify: { name: 'MagicPotion', type: 'Affliction' },
+    RadiantKaleidoscope: { name: 'TriangleSupport', type: 'Support' },
+
     Wildcard: { name: 'Wildcard', type: 'Support' },
 } as const;

@@ -66,7 +66,7 @@ export function GetStarted() {
                         <Card shadow="none">
                             <CardBody>
                                 <p>
-                                    2. Type <Code>{'/connect <TOKEN>'}</Code>.
+                                    2. Type <Code>{'/connect_clan <TOKEN>'}</Code>.
                                 </p>
                             </CardBody>
                         </Card>

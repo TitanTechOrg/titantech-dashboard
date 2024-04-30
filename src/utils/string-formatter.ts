@@ -7,6 +7,8 @@ export const convertUTCDateToLocalDate = (dateString: string): string => {
 };
 
 export const getRaidLabel = (tier: string, level: string): string => {
-    const tierLabel: string = tier === '9999' ? 'Master Tier ⦁ ' : tier;
-    return tierLabel + ' ' + level;
+    const masterTierLabel = 'Master Tier ⦁ ' + level;
+    const otherTierLabel = 'Tier ' + tier + ' ⦁ Zone ' + level;
+
+    return tier === '9999' ? masterTierLabel : otherTierLabel;
 };

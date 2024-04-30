@@ -16,7 +16,7 @@ type DashbloardLoaderParams = {
 const { GetStarted } = lazyImport(() => import('@/features/misc'), 'GetStarted');
 const { AlchemyCalculator } = lazyImport(() => import('@/features/alchemy'), 'AlchemyCalculator');
 const { Dashboard } = lazyImport(() => import('@/features/misc'), 'Dashboard');
-// const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
+const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
 
 const dashboardSlugLoader = async ({ params }: DashbloardLoaderParams) => {
     if (params?.clan_token && params?.clan_token?.length === 36) {
@@ -53,7 +53,7 @@ const router = createBrowserRouter(
 
                 <Route path="dashboard" element={<Dashboard />} loader={dashboardLoader} />
 
-                {/* <Route path="overview" element={<Overview />} /> */}
+                <Route path="overview" element={<Overview />} />
 
                 <Route path="alchemy" element={<AlchemyCalculator />} />
 
@@ -63,7 +63,14 @@ const router = createBrowserRouter(
     )
 );
 
-const queryClient = new QueryClient();
+const minutes = 1;
+const seconds = 60;
+const milliseconds = 1000;
+
+// Refetch the data every x minutes
+const intervalMs = minutes * seconds * milliseconds;
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchInterval: intervalMs } } });
 
 export default function App() {
     return (

@@ -12,6 +12,7 @@ export const ENDPOINTS = {
     alchemy_crafts: 'api/v4/alchemy',
     raid_list: '/api/v1/raid/list',
     cycle_data: '/api/v1/raid/cycles',
+    overview: '/api/v1/overview/players',
 } as const;
 
 const authRequestInterceptor = (config: InternalAxiosRequestConfig) => {

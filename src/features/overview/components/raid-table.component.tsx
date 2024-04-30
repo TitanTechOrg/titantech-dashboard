@@ -1,4 +1,4 @@
-import React from 'react';
+import { Key, useCallback, useMemo, useState } from 'react';
 import {
     Table,
     TableHeader,
@@ -22,6 +22,7 @@ import { formatter } from '@/utils/number-formatter';
 import { CycleOptions, IconSvgProps, PlayerData } from '../types';
 import { CheckIcon, Cross2Icon, DownloadIcon } from '@radix-ui/react-icons';
 import { useOverviewPlayers } from '../api/get-overview-players';
+import { RaidCycle, useRaidCycles } from '@/features/raid-info';
 
 const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => (
     <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...otherProps}>
@@ -47,55 +48,59 @@ const statusColorMap: Record<string, ChipProps['color']> = {
     undefined: 'success',
 };
 
-const INITIAL_VISIBLE_COLUMNS = ['player_name', 'average_damage', 'attack_count', 'team_tactics_used', 'mirror_force_used'];
+const INITIAL_VISIBLE_COLUMNS = ['index', 'player_name', 'average_damage', 'attack_count', 'team_tactics_used', 'mirror_force_used'];
 
 const columns = [
+    { name: '#', uid: 'index', sortable: false },
     { name: 'Name', uid: 'player_name', sortable: true },
     { name: 'Average Damage', uid: 'average_damage', sortable: true },
     { name: 'Lowest Damage', uid: 'min_damage', sortable: true },
     { name: 'Highest Damage', uid: 'max_damage', sortable: true },
-    { name: 'Damage Range', uid: 'damage_range' },
+    { name: 'Damage Range', uid: 'damage_range', sortable: true },
     { name: 'Attack count', uid: 'attack_count', sortable: true },
-    { name: 'Duration', uid: 'duration' },
+    { name: 'Duration', uid: 'duration', sortable: true },
     { name: 'Team Tactics', uid: 'team_tactics_used', sortable: true },
     { name: 'Mirror Force', uid: 'mirror_force_used', sortable: true },
 ];
 
-type RaidTableProps = {
-    cycleOptions: CycleOptions[];
-};
+type IndexedPlayerData = { index: number } & PlayerData;
 
-export function RaidTable({ cycleOptions }: RaidTableProps) {
+const cycleOverviewOption: CycleOptions[] = [{ name: 'Overview', uid: 'all' }];
+
+export function RaidTable() {
     const { data, isLoading } = useOverviewPlayers();
+    const { data: raidCycles } = useRaidCycles();
 
-    const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-    const [statusFilter, setStatusFilter] = React.useState<Selection>(new Set(['all']));
-    const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
+    const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+    const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']));
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: 'name',
         direction: 'ascending',
     });
 
-    const headerColumns = React.useMemo(() => {
+    const headerColumns = useMemo(() => {
         if (visibleColumns === 'all') return columns;
 
         return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
     }, [visibleColumns]);
 
-    const items = React.useMemo(() => {
+    const items = useMemo(() => {
         return data?.players_data ?? [];
     }, [data?.players_data]);
 
-    const sortedItems = React.useMemo(() => {
-        return [...items].sort((a: PlayerData, b: PlayerData) => {
-            const first = a[sortDescriptor.column as keyof PlayerData] as number;
-            const second = b[sortDescriptor.column as keyof PlayerData] as number;
-            const cmp = first < second ? -1 : first > second ? 1 : 0;
+    const sortedItems = useMemo(() => {
+        return [...items]
+            .sort((a: PlayerData, b: PlayerData) => {
+                const first = a[sortDescriptor.column as keyof PlayerData] as number;
+                const second = b[sortDescriptor.column as keyof PlayerData] as number;
+                const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-            return sortDescriptor.direction === 'descending' ? -cmp : cmp;
-        });
+                return sortDescriptor.direction === 'descending' ? -cmp : cmp;
+            })
+            .map((val, index) => ({ ...val, index: index + 1 }) as IndexedPlayerData);
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback((player: PlayerData, columnKey: React.Key) => {
+    const renderCell = useCallback((player: PlayerData, columnKey: Key) => {
         const cellValue = player[columnKey as keyof PlayerData];
 
         switch (columnKey) {
@@ -134,14 +139,37 @@ export function RaidTable({ cycleOptions }: RaidTableProps) {
         }
     }, []);
 
-    const topContent = React.useMemo(() => {
+    const mapCycleOptions = useMemo(
+        () => (cycles: RaidCycle[] | undefined) => {
+            return cycleOverviewOption.concat(
+                cycles?.map(({ cycle }: RaidCycle) => {
+                    return { name: 'Round ' + cycle, uid: String(cycle) } as CycleOptions;
+                }) ?? []
+            );
+        },
+        [raidCycles?.cycles?.length]
+    );
+
+    const disableCycleDropdown = useMemo(() => {
+        const raidCycleCount = raidCycles?.cycles?.length;
+        const dropdownStartingItemsLength = 2;
+
+        if (raidCycleCount == null) return false;
+
+        return raidCycleCount <= dropdownStartingItemsLength;
+    }, [raidCycles?.cycles?.length]);
+
+    const topContent = useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center justify-between">
+                        <span className="text-small text-default-400">Total {data?.players_data.length || 0} players</span>
+                    </div>
                     <div className="flex gap-3">
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat" isDisabled={cycleOptions.length <= 2}>
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat" isDisabled={disableCycleDropdown}>
                                     Rounds
                                 </Button>
                             </DropdownTrigger>
@@ -153,7 +181,7 @@ export function RaidTable({ cycleOptions }: RaidTableProps) {
                                 selectionMode="single"
                                 onSelectionChange={setStatusFilter}
                             >
-                                {cycleOptions.map((cycle) => (
+                                {mapCycleOptions(raidCycles?.cycles).map((cycle) => (
                                     <DropdownItem
                                         key={cycle.uid}
                                         className="capitalize"
@@ -196,7 +224,7 @@ export function RaidTable({ cycleOptions }: RaidTableProps) {
                 </div>
             </div>
         );
-    }, [statusFilter, visibleColumns]);
+    }, [statusFilter, visibleColumns, data?.players_data]);
 
     return (
         <Table

@@ -7,15 +7,8 @@ import { usePreferencesStore } from '@/stores/preferences.store';
 
 import Logo from '@/assets/Logo.webp';
 
-const menuItems = [
-    'dashboard',
-    // 'overview',
-    'alchemy',
-];
-const protectedRoutes = [
-    'dashboard',
-    // 'overview'
-];
+const menuItems = ['dashboard', 'overview', 'alchemy'];
+const protectedRoutes = ['dashboard', 'overview'];
 
 export default function Root() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,11 +63,11 @@ export default function Root() {
                         </NavLink>
                     </NavbarItem>
 
-                    {/* <NavbarItem isActive={location.pathname === '/overview'} className={!isAuthenticated ? 'hidden' : ''}>
+                    <NavbarItem isActive={location.pathname === '/overview'} className={!isAuthenticated ? 'hidden' : ''}>
                         <NavLink to="/overview" className={location.pathname === '/overview' ? 'text-primary' : 'text-foreground'}>
                             Overview
                         </NavLink>
-                    </NavbarItem> */}
+                    </NavbarItem>
 
                     <NavbarItem isActive={location.pathname === '/alchemy'}>
                         <NavLink to="/alchemy" className={location.pathname === '/alchemy' ? 'text-primary' : 'text-foreground'}>

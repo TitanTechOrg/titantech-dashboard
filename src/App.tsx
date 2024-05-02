@@ -63,14 +63,15 @@ const router = createBrowserRouter(
     )
 );
 
-const minutes = 1;
-const seconds = 60;
-const milliseconds = 1000;
+// const minutes = 1;
+// const seconds = 60;
+// const milliseconds = 1000;
 
 // Refetch the data every x minutes
-const intervalMs = minutes * seconds * milliseconds;
+// const intervalMs = minutes * seconds * milliseconds;
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { refetchInterval: intervalMs } } });
+const queryClient = new QueryClient();
+// { defaultOptions: { queries: { refetchInterval: intervalMs } } }
 
 export default function App() {
     return (

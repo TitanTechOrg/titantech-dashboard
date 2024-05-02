@@ -75,8 +75,6 @@ export function RaidOverviewInfo() {
         refetchOverviewPlayers();
     };
 
-    console.log(raidList?.raids[0].ended_at);
-
     return (
         <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
             <CardHeader className="flex min-w-fit flex-row items-center justify-between">

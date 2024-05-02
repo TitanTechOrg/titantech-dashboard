@@ -37,17 +37,6 @@ const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => 
     </svg>
 );
 
-const statusColorMap: Record<string, ChipProps['color']> = {
-    0: 'danger',
-    1: 'danger',
-    2: 'danger',
-    3: 'danger',
-    4: 'warning',
-    5: 'warning',
-    6: 'success',
-    undefined: 'success',
-};
-
 const INITIAL_VISIBLE_COLUMNS = ['index', 'player_name', 'average_damage', 'total_damage', 'attack_count', 'team_tactics_used', 'mirror_force_used'];
 
 const columns = [
@@ -68,11 +57,22 @@ type IndexedPlayerData = { index: number } & PlayerData;
 
 const cycleOverviewOption: CycleOptions[] = [{ name: 'Overview', uid: 'all' }];
 
-const attacksPerCycle = (raidTier?: string) => {
+const countAttacksPerCycleByTier = (raidTier?: string) => {
     return raidTier === '9999' ? 6 : 5;
 };
-const countTotalCycles = (currentCycle: number, raidTier?: string) => {
-    return currentCycle * attacksPerCycle(raidTier);
+
+const countTotalAttacks = (currentCycle: number, raidTier?: string) => {
+    return currentCycle * countAttacksPerCycleByTier(raidTier);
+};
+
+const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number, raidTier?: string): ChipProps['color'] => {
+    const totalAttacksAvailable = countTotalAttacks(currentCycle, raidTier);
+    const percentAttacksDone = (playerAttackCount / totalAttacksAvailable) * 100;
+
+    if (percentAttacksDone <= 40) return 'danger';
+    if (percentAttacksDone <= 85) return 'warning';
+
+    return 'success';
 };
 
 export function RaidTable() {
@@ -136,14 +136,16 @@ export function RaidTable() {
                     );
 
                 case 'attack_count':
+                    const currentCycle = selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : 1;
                     return (
                         <div className="flex flex-row items-center justify-start">
-                            <Chip className="capitalize" color={statusColorMap[player.attack_count] ?? 'success'} size="sm" variant="flat">
-                                {cellValue}/
-                                {countTotalCycles(
-                                    selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : Number(selectedStatusValue),
-                                    raidListData?.raids[0].tier
-                                )}
+                            <Chip
+                                className="capitalize"
+                                color={getAttacksStatusColour(currentCycle, player.attack_count, raidListData?.raids[0].tier)}
+                                size="sm"
+                                variant="flat"
+                            >
+                                {cellValue}/{countTotalAttacks(currentCycle, raidListData?.raids[0].tier)}
                             </Chip>
                         </div>
                     );

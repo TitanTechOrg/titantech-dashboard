@@ -6,6 +6,8 @@ import { useMediaQueries } from '@react-hook/media-query';
 import AttacksCardLogo from '@/assets/Attack.webp';
 import { formatter } from '@/utils/number-formatter';
 import { usePreferencesStore } from '@/stores/preferences.store';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { useRaidList } from '@/features/raid-info';
 
 export function AttacksCard({
     data,
@@ -21,6 +23,8 @@ export function AttacksCard({
         screen: 'screen',
         width: '(max-width: 640px)',
     });
+
+    const { data: raidList } = useRaidList();
 
     const hasData: boolean = !!(data && data?.pages && data?.pages[0]?.attack_logs?.length > 0);
 
@@ -42,7 +46,23 @@ export function AttacksCard({
                     </div>
                     <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
                 </div>
-                <Button size="sm" color="primary" isLoading={isRefetching} onPress={() => refetch()}>
+                <Button
+                    className="flex sm:hidden"
+                    color="primary"
+                    isLoading={isRefetching}
+                    onPress={() => refetch()}
+                    isIconOnly
+                    isDisabled={!!raidList?.raids[0].ended_at}
+                >
+                    <ReloadIcon />
+                </Button>
+                <Button
+                    className="hidden sm:flex"
+                    color="primary"
+                    isLoading={isRefetching}
+                    onPress={() => refetch()}
+                    isDisabled={!!raidList?.raids[0].ended_at}
+                >
                     Refresh
                 </Button>
             </CardHeader>

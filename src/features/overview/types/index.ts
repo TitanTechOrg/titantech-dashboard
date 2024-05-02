@@ -4,6 +4,7 @@ export type PlayerData = {
     player_id: string;
     player_name: string;
     average_damage: number;
+    total_damage: number;
     max_damage: number;
     min_damage: number;
     damage_range: number;

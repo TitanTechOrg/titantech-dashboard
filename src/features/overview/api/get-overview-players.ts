@@ -3,16 +3,27 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { PlayersData } from '../types';
 
-export function useOverviewPlayers(cycle?: number) {
+export function useOverviewPlayers(raidId?: string, cycle?: number) {
     return useQuery({
-        queryKey: ['overview_players', cycle],
-        queryFn: async () => await fetchRaidPlayersOverview(cycle),
+        queryKey: ['overview_players', raidId, cycle],
+        queryFn: async () => await fetchRaidPlayersOverview(raidId, cycle),
+        enabled: !!raidId,
     });
 }
 
-async function fetchRaidPlayersOverview(cycle?: number) {
+async function fetchRaidPlayersOverview(raidId?: string, cycle?: number) {
     let params = '';
-    if (cycle) params += `?cycle=${cycle}`;
+
+    const searchParams = new URLSearchParams();
+
+    if (raidId) searchParams.append('raid_id', raidId);
+    if (cycle) searchParams.append('cycle', String(cycle));
+
+    if (searchParams) {
+        params += '?';
+        params += searchParams;
+    }
+
     const url = ENDPOINTS.overview + params;
 
     return await axios.get<AxiosResponse<PlayersData>, PlayersData>(url);

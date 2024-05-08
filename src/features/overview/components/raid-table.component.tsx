@@ -22,7 +22,7 @@ import { formatter } from '@/utils/number-formatter';
 import { CycleOptions, IconSvgProps, PlayerData } from '../types';
 import { CheckIcon, Cross2Icon, DownloadIcon } from '@radix-ui/react-icons';
 import { useOverviewPlayers } from '../api/get-overview-players';
-import { RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
+import { RaidCycle, RaidData, useRaidCycles } from '@/features/raid-info';
 
 const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => (
     <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...otherProps}>
@@ -70,19 +70,27 @@ const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number,
     const percentAttacksDone = (playerAttackCount / totalAttacksAvailable) * 100;
 
     if (percentAttacksDone <= 40) return 'danger';
-    if (percentAttacksDone <= 85) return 'warning';
+    if (percentAttacksDone <= 99) return 'warning';
 
     return 'success';
 };
 
-export function RaidTable() {
+type RaidTableProps = {
+    raidId: string;
+    raid: RaidData;
+};
+
+export function RaidTable({ raidId, raid }: RaidTableProps) {
+    const { data: raidCycles } = useRaidCycles(raidId);
+
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']));
     const selectedStatusValue = Array.from(statusFilter).at(0);
 
-    const { data: overviewPlayers, isLoading } = useOverviewPlayers(selectedStatusValue === 'all' ? undefined : Number(selectedStatusValue));
-    const { data: raidCycles } = useRaidCycles();
-    const { data: raidListData } = useRaidList();
+    const { data: overviewPlayers, isLoading } = useOverviewPlayers(
+        raid.raid_id,
+        selectedStatusValue === 'all' ? undefined : Number(selectedStatusValue)
+    );
 
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: 'name',
@@ -97,7 +105,7 @@ export function RaidTable() {
 
     const items = useMemo(() => {
         return overviewPlayers?.players_data ?? [];
-    }, [overviewPlayers?.players_data]);
+    }, [overviewPlayers?.players_data, raidCycles?.cycles?.length]);
 
     const sortedItems = useMemo(() => {
         return [...items]
@@ -109,7 +117,7 @@ export function RaidTable() {
                 return sortDescriptor.direction === 'descending' ? -cmp : cmp;
             })
             .map((val, index) => ({ ...val, index: index + 1 }) as IndexedPlayerData);
-    }, [sortDescriptor, items]);
+    }, [sortDescriptor, items, raidCycles?.cycles?.length]);
 
     const renderCell = useCallback(
         (player: PlayerData, columnKey: Key) => {
@@ -141,11 +149,11 @@ export function RaidTable() {
                         <div className="flex flex-row items-center justify-start">
                             <Chip
                                 className="capitalize"
-                                color={getAttacksStatusColour(currentCycle, player.attack_count, raidListData?.raids[0].tier)}
+                                color={getAttacksStatusColour(currentCycle, player.attack_count, raid.tier)}
                                 size="sm"
                                 variant="flat"
                             >
-                                {cellValue}/{countTotalAttacks(currentCycle, raidListData?.raids[0].tier)}
+                                {cellValue}/{countTotalAttacks(currentCycle, raid.tier)}
                             </Chip>
                         </div>
                     );

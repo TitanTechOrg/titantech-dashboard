@@ -85,7 +85,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
 
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = useState<Selection>(new Set(['all']));
-    const selectedStatusValue = Array.from(statusFilter).at(0);
+    const selectedStatusValue = Array.from(statusFilter)[0];
 
     const { data: overviewPlayers, isLoading } = useOverviewPlayers(
         raid.raid_id,

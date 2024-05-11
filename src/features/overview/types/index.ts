@@ -9,7 +9,7 @@ export type PlayerData = {
     min_damage: number;
     damage_range: number;
     attack_count: number;
-    duration: number;
+    duration: number | string;
     team_tactics_used: boolean;
     mirror_force_used: boolean;
 };

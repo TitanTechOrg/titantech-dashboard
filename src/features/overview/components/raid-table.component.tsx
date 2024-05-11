@@ -18,11 +18,12 @@ import {
     Spinner,
 } from '@nextui-org/react';
 
-import { formatter } from '@/utils/number-formatter';
 import { CycleOptions, IconSvgProps, PlayerData } from '../types';
 import { CheckIcon, Cross2Icon, DownloadIcon } from '@radix-ui/react-icons';
 import { useOverviewPlayers } from '../api/get-overview-players';
 import { RaidCycle, RaidData, useRaidCycles } from '@/features/raid-info';
+import { abbreviateNumber } from '@/utils/number-formatter';
+import { formatTime } from '@/utils/datetime-formatter';
 
 const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => (
     <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...otherProps}>
@@ -37,7 +38,18 @@ const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => 
     </svg>
 );
 
-const INITIAL_VISIBLE_COLUMNS = ['index', 'player_name', 'average_damage', 'total_damage', 'attack_count', 'team_tactics_used', 'mirror_force_used'];
+const INITIAL_VISIBLE_COLUMNS = [
+    'index',
+    'player_name',
+    'average_damage',
+    'total_damage',
+    'min_damage',
+    'max_damage',
+    'attack_count',
+    'duration',
+    'team_tactics_used',
+    'mirror_force_used',
+];
 
 const columns = [
     { name: '#', uid: 'index', sortable: false },
@@ -48,7 +60,7 @@ const columns = [
     { name: 'Highest Damage', uid: 'max_damage', sortable: true },
     { name: 'Damage Range', uid: 'damage_range', sortable: true },
     { name: 'Attack count', uid: 'attack_count', sortable: true },
-    { name: 'Duration', uid: 'duration', sortable: true },
+    { name: 'Duration (hh:mm:ss)', uid: 'duration', sortable: true },
     { name: 'Team Tactics', uid: 'team_tactics_used', sortable: true },
     { name: 'Mirror Force', uid: 'mirror_force_used', sortable: true },
 ];
@@ -71,6 +83,7 @@ const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number,
 
     if (percentAttacksDone <= 40) return 'danger';
     if (percentAttacksDone <= 99) return 'warning';
+    if (percentAttacksDone > 100) return 'primary';
 
     return 'success';
 };
@@ -78,6 +91,11 @@ const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number,
 type RaidTableProps = {
     raidId: string;
     raid: RaidData;
+};
+
+const textAlignment = {
+    center: ['team_tactics_used', 'mirror_force_used'],
+    end: ['average_damage', 'max_damage', 'min_damage', 'damage_range', 'total_damage'],
 };
 
 export function RaidTable({ raidId, raid }: RaidTableProps) {
@@ -104,7 +122,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
     }, [visibleColumns]);
 
     const items = useMemo(() => {
-        return overviewPlayers?.players_data ?? [];
+        return overviewPlayers?.players_data || []; // .map((val) => ({ ...val, duration: durationInHHMMSS(Number(val.duration)) })) ?? [];
     }, [overviewPlayers?.players_data, raidCycles?.cycles?.length]);
 
     const sortedItems = useMemo(() => {
@@ -129,16 +147,24 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                 case 'min_damage':
                 case 'damage_range':
                 case 'total_damage':
+                    const text: number | string[] = abbreviateNumber(Number(cellValue));
                     return (
-                        <div className="flex flex-row items-center justify-start">
-                            <p className="text-bold text-small">{formatter().format(Number(cellValue))}</p>
+                        <div className="flex flex-row items-center justify-end ">
+                            {typeof text === 'number' ? (
+                                <p className="text-bold">{text}</p>
+                            ) : (
+                                <p className="text-bold">
+                                    {text[0]}
+                                    <span className="inline-block w-4 pl-1 text-left">{text[1]}</span>
+                                </p>
+                            )}
                         </div>
                     );
 
                 case 'team_tactics_used':
                 case 'mirror_force_used':
                     return (
-                        <div className="flex flex-row items-center justify-start">
+                        <div className="flex flex-row items-center justify-center">
                             {cellValue ? <CheckIcon className="text-green-500" /> : <Cross2Icon className="text-red-500" />}
                         </div>
                     );
@@ -146,7 +172,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                 case 'attack_count':
                     const currentCycle = selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : 1;
                     return (
-                        <div className="flex flex-row items-center justify-start">
+                        <div className="flex flex-row items-center justify-center">
                             <Chip
                                 className="capitalize"
                                 color={getAttacksStatusColour(currentCycle, player.attack_count, raid.tier)}
@@ -158,8 +184,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                         </div>
                     );
                 case 'duration':
-                    const durationInHHMMSS = new Date(Number(cellValue) * 1000).toISOString().substring(11, 16);
-                    return <span className="flex items-start justify-start">{durationInHHMMSS}</span>;
+                    return <span className="flex items-start justify-center">{formatTime(Number(cellValue))}</span>;
 
                 default:
                     return <span className="flex items-start justify-start">{cellValue}</span>;
@@ -259,11 +284,17 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
             color={'primary'}
         >
             <TableHeader columns={headerColumns}>
-                {(column) => (
-                    <TableColumn key={column.uid} allowsSorting={column.sortable}>
-                        {column.name}
-                    </TableColumn>
-                )}
+                {(column) => {
+                    return (
+                        <TableColumn
+                            className={`${!textAlignment.center.includes(column.uid) ? (textAlignment.end.includes(column.uid) ? 'text-right' : 'text-left') : 'text-center'}`}
+                            key={column.uid}
+                            allowsSorting={column.sortable}
+                        >
+                            {column.name}
+                        </TableColumn>
+                    );
+                }}
             </TableHeader>
             <TableBody emptyContent={isLoading ? <Spinner label="Loading..." /> : <p>No players found</p>} items={sortedItems} isLoading={isLoading}>
                 {(item) => <TableRow key={item.player_id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}

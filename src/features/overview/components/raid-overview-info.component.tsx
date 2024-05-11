@@ -229,7 +229,7 @@ type RaidOverviewInfoProps = {
 export function RaidOverviewInfo({ raidId, raid, raidList, overviewPlayers, handleSelectionChange }: RaidOverviewInfoProps) {
     const { data: raidCycles } = useRaidCycles(raidId);
     return (
-        <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
+        <Card className="h-full w-full min-w-72 p-2">
             <CardHeader className="flex min-w-fit flex-col items-center justify-between gap-4 sm:flex-row">
                 <div className="flex w-full flex-row justify-between">
                     <div className="flex flex-row justify-start gap-4">

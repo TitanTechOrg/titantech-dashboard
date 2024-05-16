@@ -122,7 +122,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
     }, [visibleColumns]);
 
     const items = useMemo(() => {
-        return overviewPlayers?.players_data || []; // .map((val) => ({ ...val, duration: durationInHHMMSS(Number(val.duration)) })) ?? [];
+        return overviewPlayers?.players_data || [];
     }, [overviewPlayers?.players_data, raidCycles?.cycles?.length]);
 
     const sortedItems = useMemo(() => {
@@ -173,12 +173,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                     const currentCycle = selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : 1;
                     return (
                         <div className="flex flex-row items-center justify-center">
-                            <Chip
-                                className="capitalize"
-                                color={getAttacksStatusColour(currentCycle, player.attack_count, raid.tier)}
-                                size="sm"
-                                variant="flat"
-                            >
+                            <Chip color={getAttacksStatusColour(currentCycle, player.attack_count, raid.tier)} size="sm" variant="flat">
                                 {cellValue}/{countTotalAttacks(currentCycle, raid.tier)}
                             </Chip>
                         </div>
@@ -229,7 +224,7 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                             </DropdownTrigger>
                             <DropdownMenu
                                 disallowEmptySelection
-                                aria-label="Table Columns"
+                                aria-label="Cycles dropdown"
                                 closeOnSelect={true}
                                 selectedKeys={statusFilter}
                                 selectionMode="single"

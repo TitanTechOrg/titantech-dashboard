@@ -1,8 +1,39 @@
 import { RaidTable } from './raid-table.component';
 import { RaidOverviewInfo } from './raid-overview-info.component';
-import { useRaidList } from '@/features/raid-info';
+import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { useOverviewPlayers } from '../api/get-overview-players';
 import { useCallback, useEffect, useState } from 'react';
+import { RaidListDropdown } from './raid-list-dropdown';
+import { RaidBuffMapping } from '@/constants/buffs';
+import { Card, CardBody, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { convertUTCDateToLocalDate } from '@/utils/string-formatter';
+import { RaidPlayerDamageOverview } from './raid-player-damage-overview.component';
+
+const calculateRounds = (date1: Date, date2: Date) => {
+    const totalHours = Math.abs(date1.getTime() - date2.getTime()) / 36e5;
+    const hoursPerRound = 12;
+
+    return (totalHours / hoursPerRound).toFixed(2);
+};
+
+type RaidNextCycleTextProps = {
+    cycles: RaidCycle[];
+};
+
+const RaidNextCycleText = ({ cycles }: RaidNextCycleTextProps) => {
+    if (!cycles || !cycles.length) return null;
+
+    const nextReset = cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[cycles.length - 1].next_reset_at;
+
+    return (
+        <div className="flex justify-between text-sm font-medium">
+            <span>Next Cycle</span>
+            <Tooltip showArrow={true} content={new Date(nextReset).toUTCString()}>
+                <span className="text-sm font-medium">{convertUTCDateToLocalDate(nextReset)}</span>
+            </Tooltip>
+        </div>
+    );
+};
 
 export function Overview() {
     const { data: raidList } = useRaidList();
@@ -30,18 +61,59 @@ export function Overview() {
 
     const findRaid = () => raidList?.raids?.find((r) => r.raid_id === value);
 
+    const { data: raidCycles } = useRaidCycles(value);
+
     return (
         <div className="flex flex-col gap-4">
-            {raidList && value && (
-                <RaidOverviewInfo
-                    raidId={value}
-                    raid={findRaid()!}
-                    raidList={raidList}
-                    // refetchData={refetchData}
-                    overviewPlayers={overviewPlayers}
-                    handleSelectionChange={handleSelectionChange}
-                />
-            )}
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
+                {raidList && value && (
+                    <>
+                        <RaidListDropdown selectedItem={value} raidList={raidList} handleSelectionChange={handleSelectionChange} />
+                        <Card className="w-full sm:max-w-sm">
+                            <CardHeader className="text-lg font-medium">Raid Info</CardHeader>
+                            <CardBody className="gap-4">
+                                <Divider />
+                                <div className="gap-2">
+                                    <div className="flex justify-between text-sm font-medium">
+                                        <span>Bonus</span>
+                                        <span>{RaidBuffMapping[findRaid()!.buff_type as RaidBuffMappingType]} </span>
+                                    </div>
+                                    <div className="flex justify-between text-sm font-medium">
+                                        <span>Start</span>
+                                        <Tooltip showArrow={true} content={new Date(findRaid()!.started_at).toUTCString()}>
+                                            <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid()!.started_at)}</span>
+                                        </Tooltip>
+                                    </div>
+
+                                    {findRaid()!.ended_at != null ? (
+                                        <div className="flex justify-between text-sm font-medium">
+                                            <span>End</span>
+                                            <Tooltip showArrow={true} content={new Date(findRaid()!.ended_at!).toUTCString()}>
+                                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid()!.ended_at!)}</span>
+                                            </Tooltip>
+                                        </div>
+                                    ) : (
+                                        <RaidNextCycleText cycles={raidCycles?.cycles || []} />
+                                    )}
+
+                                    {findRaid()!.ended_at != null ? (
+                                        <div className="flex justify-between space-x-4 text-sm font-medium">
+                                            <span>Rounds</span>
+                                            {raidCycles && (
+                                                <span>{calculateRounds(new Date(findRaid()!.started_at), new Date(findRaid()!.ended_at!))}</span>
+                                            )}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </>
+                )}
+                {value && <RaidOverviewInfo raidId={value} raid={findRaid()!} overviewPlayers={overviewPlayers} />}
+            </div>
+
+            {overviewPlayers?.players_data && <RaidPlayerDamageOverview playersData={overviewPlayers?.players_data} />}
+
             {value && <RaidTable raidId={value} raid={findRaid()!} />}
         </div>
     );

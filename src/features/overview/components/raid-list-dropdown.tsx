@@ -9,7 +9,7 @@ type RaidListDropdownProps = {
 
 export function RaidListDropdown({ selectedItem, raidList, handleSelectionChange }: RaidListDropdownProps) {
     return (
-        <div className="flex w-full max-w-64 flex-col gap-2">
+        <div className="flex w-full flex-col gap-2 sm:max-w-64">
             <Select
                 color="primary"
                 label="Select a raid"

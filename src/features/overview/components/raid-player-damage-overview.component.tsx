@@ -59,26 +59,24 @@ export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOvervi
     };
 
     return (
-        <div className="">
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between text-lg font-medium">
-                    Overall Player Damages
-                    <ButtonGroup>
-                        <Button
-                            color={selected === 'ALPHABETICAL' || selected === 'ALPHABETICAL_REVERSED' ? 'primary' : undefined}
-                            onPress={() => handleOnPress(invertSort(selected))}
-                        >
-                            A-Z
-                        </Button>
-                        <Button color={selected === 'AVERAGE' ? 'primary' : undefined} onPress={() => handleOnPress('AVERAGE')}>
-                            Average
-                        </Button>
-                    </ButtonGroup>
-                </CardHeader>
-                <CardBody className="w-full overflow-auto">
-                    <BoxPlotChartData playersData={sortedData.length > 0 ? sortedData : playersData} />
-                </CardBody>
-            </Card>
-        </div>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between text-lg font-medium">
+                Overall Player Damages
+                <ButtonGroup>
+                    <Button
+                        color={selected === 'ALPHABETICAL' || selected === 'ALPHABETICAL_REVERSED' ? 'primary' : undefined}
+                        onPress={() => handleOnPress(invertSort(selected))}
+                    >
+                        A-Z
+                    </Button>
+                    <Button color={selected === 'AVERAGE' ? 'primary' : undefined} onPress={() => handleOnPress('AVERAGE')}>
+                        Average
+                    </Button>
+                </ButtonGroup>
+            </CardHeader>
+            <CardBody>
+                <BoxPlotChartData playersData={sortedData.length > 0 ? sortedData : playersData} />
+            </CardBody>
+        </Card>
     );
 }

@@ -65,9 +65,9 @@ export function Overview() {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-row">
                 {raidList && value && (
-                    <>
+                    <div className="flex flex-col items-start justify-between gap-4 sm:flex-col">
                         <RaidListDropdown selectedItem={value} raidList={raidList} handleSelectionChange={handleSelectionChange} />
                         <Card className="w-full sm:max-w-sm">
                             <CardHeader className="text-lg font-medium">Raid Info</CardHeader>
@@ -107,12 +107,16 @@ export function Overview() {
                                 </div>
                             </CardBody>
                         </Card>
-                    </>
+                    </div>
                 )}
-                {value && <RaidOverviewInfo raidId={value} raid={findRaid()!} overviewPlayers={overviewPlayers} />}
-            </div>
 
-            {overviewPlayers?.players_data && <RaidPlayerDamageOverview playersData={overviewPlayers?.players_data} />}
+                {value && overviewPlayers?.players_data && overviewPlayers?.players_data?.length > 0 && (
+                    <RaidOverviewInfo raidId={value} raid={findRaid()!} overviewPlayers={overviewPlayers} />
+                )}
+            </div>
+            {value && overviewPlayers?.players_data && overviewPlayers?.players_data?.length > 0 && (
+                <RaidPlayerDamageOverview playersData={overviewPlayers?.players_data} />
+            )}
 
             {value && <RaidTable raidId={value} raid={findRaid()!} />}
         </div>

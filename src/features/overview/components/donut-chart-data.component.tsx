@@ -19,7 +19,7 @@ type DonutChartDataProps = {
 
 export function DonutChartData({ chartData, labels, title }: DonutChartDataProps) {
     return (
-        <Card className="w-full sm:max-w-sm">
+        <Card className="w-full sm:max-w-md">
             <CardHeader className="text-lg font-medium">{title}</CardHeader>
             <CardBody>
                 <Divider className="mb-4 mt-0" />

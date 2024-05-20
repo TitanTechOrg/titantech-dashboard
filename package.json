@@ -46,7 +46,7 @@
     "chartjs-chart-box-and-violin-plot": "^4.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^11.2.4",
     "localforage": "^1.10.0",
     "lucide-react": "^0.268.0",
     "match-sorter": "^6.3.1",

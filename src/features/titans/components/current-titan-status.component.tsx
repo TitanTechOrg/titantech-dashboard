@@ -105,7 +105,6 @@ function TitanHealthBars({
                 value={titanArmourHealthPercentage}
                 size="md"
                 color="default"
-                isStriped={true}
             />
             <Progress
                 className="!gap-1"
@@ -121,7 +120,6 @@ function TitanHealthBars({
                 value={titanBodyHealthPercentage}
                 size="md"
                 color="primary"
-                isStriped={true}
             />
         </div>
     );

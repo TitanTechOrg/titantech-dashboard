@@ -51,6 +51,8 @@ function CardPreviousValue({ index, listLength, value }: PreviousValueProps) {
 }
 
 function CardValues({ items }: DamageData) {
+    if (items && !items?.length && items?.length === 0) return null;
+
     return (
         <div className="flex flex-row flex-wrap gap-x-2">
             {items?.map((value: string, index: number) => (
@@ -79,12 +81,12 @@ export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
                 </div>
                 <div className="text-xl font-bold">{formatter().format(overallRaidDamage)}</div>
             </CardHeader>
-            <CardBody className="flex flex-col gap-4 py-0">
+            <CardBody className="flex flex-col gap-4">
                 <Divider />
 
                 <CardValues items={data.map((val) => formatter().format(val.average))} />
 
-                {data && data.length > 1 ? (
+                {data && data.length > 0 ? (
                     <div className="h-40">
                         <ResponsiveContainer>
                             <LineChart data={data}>
@@ -104,9 +106,7 @@ export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
                         </ResponsiveContainer>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-center">
-                        <p className="text-base">No chart data</p>
-                    </div>
+                    <div>No chart data</div>
                 )}
             </CardBody>
         </Card>

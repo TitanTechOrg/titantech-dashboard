@@ -2,10 +2,10 @@ import { RaidTable } from './raid-table.component';
 import { RaidOverviewInfo } from './raid-overview-info.component';
 import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { useOverviewPlayers } from '../api/get-overview-players';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RaidListDropdown } from './raid-list-dropdown';
 import { RaidBuffMapping } from '@/constants/buffs';
-import { Card, CardBody, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from '@nextui-org/react';
 import { convertUTCDateToLocalDate } from '@/utils/string-formatter';
 import { RaidPlayerDamageOverview } from './raid-player-damage-overview.component';
 
@@ -42,7 +42,7 @@ export function Overview() {
 
     const [value, setValue] = useState<string | undefined>(raidId);
 
-    const { data: overviewPlayers } = useOverviewPlayers(value);
+    const { data: overviewPlayers, isLoading: isLoadingOverviewPlayers } = useOverviewPlayers(value);
 
     useEffect(() => {
         setValue(raidId);
@@ -59,14 +59,27 @@ export function Overview() {
         setValue(e.target.value);
     }, []);
 
-    const findRaid = () => raidList?.raids?.find((r) => r.raid_id === value);
+    const findRaid = useMemo(() => raidList?.raids?.find((r) => r.raid_id === value), [value]);
 
     const { data: raidCycles } = useRaidCycles(value);
+
+    // const hasRaidStarted = () => {
+    //     const raid = findRaid;
+
+    //     if (!raid) return false;
+
+    //     const startDate = new Date(raid.started_at);
+    //     const now = new Date();
+
+    //     const diff = startDate.getTime() - now.getTime();
+
+    //     return diff < 0;
+    // };
 
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4 sm:flex-row">
-                {raidList && value && (
+                {raidList && value && findRaid && (
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-col">
                         <RaidListDropdown selectedItem={value} raidList={raidList} handleSelectionChange={handleSelectionChange} />
                         <Card className="w-full sm:max-w-sm">
@@ -76,31 +89,31 @@ export function Overview() {
                                 <div className="gap-2">
                                     <div className="flex justify-between text-sm font-medium">
                                         <span>Bonus</span>
-                                        <span>{RaidBuffMapping[findRaid()!.buff_type as RaidBuffMappingType]} </span>
+                                        <span>{RaidBuffMapping[findRaid?.buff_type as RaidBuffMappingType]} </span>
                                     </div>
                                     <div className="flex justify-between text-sm font-medium">
                                         <span>Start</span>
-                                        <Tooltip showArrow={true} content={new Date(findRaid()!.started_at).toUTCString()}>
-                                            <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid()!.started_at)}</span>
+                                        <Tooltip showArrow={true} content={new Date(findRaid.started_at).toUTCString()}>
+                                            <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid.started_at)}</span>
                                         </Tooltip>
                                     </div>
 
-                                    {findRaid()!.ended_at != null ? (
+                                    {findRaid.ended_at != null ? (
                                         <div className="flex justify-between text-sm font-medium">
                                             <span>End</span>
-                                            <Tooltip showArrow={true} content={new Date(findRaid()!.ended_at!).toUTCString()}>
-                                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid()!.ended_at!)}</span>
+                                            <Tooltip showArrow={true} content={new Date(findRaid.ended_at!).toUTCString()}>
+                                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid.ended_at!)}</span>
                                             </Tooltip>
                                         </div>
                                     ) : (
                                         <RaidNextCycleText cycles={raidCycles?.cycles || []} />
                                     )}
 
-                                    {findRaid()!.ended_at != null ? (
+                                    {findRaid.ended_at != null ? (
                                         <div className="flex justify-between space-x-4 text-sm font-medium">
                                             <span>Rounds</span>
                                             {raidCycles && (
-                                                <span>{calculateRounds(new Date(findRaid()!.started_at), new Date(findRaid()!.ended_at!))}</span>
+                                                <span>{calculateRounds(new Date(findRaid.started_at), new Date(findRaid.ended_at!))}</span>
                                             )}
                                         </div>
                                     ) : null}
@@ -110,15 +123,34 @@ export function Overview() {
                     </div>
                 )}
 
-                {value && overviewPlayers?.players_data && overviewPlayers?.players_data?.length > 0 && (
-                    <RaidOverviewInfo raidId={value} raid={findRaid()!} overviewPlayers={overviewPlayers} />
+                {isLoadingOverviewPlayers ? (
+                    <>
+                        <Card className="flex w-full flex-row items-center justify-center space-y-5 p-4 sm:max-w-md" radius="lg">
+                            <Spinner />
+                        </Card>
+                        <Card className="flex w-full flex-row items-center justify-center space-y-5 p-4 sm:max-w-md" radius="lg">
+                            <Spinner />
+                        </Card>
+                    </>
+                ) : (
+                    value &&
+                    overviewPlayers?.players_data &&
+                    overviewPlayers?.players_data?.length > 0 &&
+                    findRaid && <RaidOverviewInfo raidId={value} raid={findRaid} overviewPlayers={overviewPlayers} />
                 )}
             </div>
-            {value && overviewPlayers?.players_data && overviewPlayers?.players_data?.length > 0 && (
-                <RaidPlayerDamageOverview playersData={overviewPlayers?.players_data} />
+            {isLoadingOverviewPlayers ? (
+                <Card className="flex w-full flex-row items-center justify-center space-y-5 p-4 sm:max-w-md" radius="lg">
+                    <Spinner />
+                </Card>
+            ) : (
+                value &&
+                overviewPlayers?.players_data &&
+                overviewPlayers?.players_data?.length > 0 &&
+                findRaid && <RaidPlayerDamageOverview playersData={overviewPlayers?.players_data} />
             )}
 
-            {value && <RaidTable raidId={value} raid={findRaid()!} />}
+            {value && findRaid && <RaidTable raidId={value} raid={findRaid} />}
         </div>
     );
 }

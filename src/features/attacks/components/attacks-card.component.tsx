@@ -38,7 +38,7 @@ export function AttacksCard({
     };
 
     return (
-        <Card className="p-2 dark:bg-neutral-800">
+        <Card className="dark:bg-neutral-800">
             <CardHeader className="justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
@@ -119,7 +119,7 @@ export function AttacksCard({
                             isFetchingNextPage={isFetchingNextPage}
                         />
                     </>
-                ) : (
+                ) : isFetching ? null : (
                     <div>No data yet</div>
                 )}
             </CardBody>

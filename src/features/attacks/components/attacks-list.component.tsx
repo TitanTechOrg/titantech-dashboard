@@ -17,7 +17,7 @@ export function AttacksList({ pages, fetchNextPage, hasNextPage, isFetching, isF
     const { ref, inView } = useInView();
 
     useEffect(() => {
-        if (inView) {
+        if (inView && hasNextPage) {
             fetchNextPage();
         }
     }, [fetchNextPage, inView]);

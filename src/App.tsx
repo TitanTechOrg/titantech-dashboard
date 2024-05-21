@@ -35,19 +35,19 @@ const dashboardLoader = async () => {
     }
 };
 
-const landingLoader = async () => {
-    if (usePreferencesStore.getState().token) {
-        return redirect('dashboard');
-    }
+// const landingLoader = async () => {
+//     if (usePreferencesStore.getState().token) {
+//         return redirect('dashboard');
+//     }
 
-    return null;
-};
+//     return null;
+// };
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
             <Route errorElement={<ErrorPage />}>
-                <Route index element={<GetStarted />} loader={landingLoader} />
+                <Route index element={<GetStarted />} />
 
                 <Route path=":clan_token" element={<Dashboard />} loader={dashboardSlugLoader} />
 

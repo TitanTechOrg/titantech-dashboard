@@ -23,11 +23,14 @@ export function GetStarted() {
                 <Image alt="TitanTech logo" className="h-10 w-10 rounded" src={Logo} />
                 <div className="flex flex-col items-start justify-center">
                     <p className="text-lg">TitanTech</p>
-                    <p className="text-small text-default-500">Some description</p>
+                    {/* <p className="text-small text-default-500">Some description</p> */}
                 </div>
             </CardHeader>
             <CardBody>
-                <p>Maybe more description here.</p>
+                <p className="text-sm">
+                    Titan Tech is an anayltics app for Tap Titans 2. That provides real-time data and insights to help clan members and leaders
+                    optimize their raiding strategy.
+                </p>
             </CardBody>
             <CardFooter className="flex flex-col items-start justify-center">
                 <div className="flex flex-row gap-3">
@@ -49,8 +52,8 @@ export function GetStarted() {
                 </div>
                 <Spacer y={8} />
                 <Divider />
-                <Accordion>
-                    <AccordionItem aria-label="Tap here for more info" title="Read here for more info">
+                <Accordion defaultExpandedKeys={['instructions-accordion']}>
+                    <AccordionItem key={'instructions-accordion'} aria-label="Instructions" title="Instructions">
                         <Card shadow="none">
                             <CardBody>
                                 <p className="font-medium italic">

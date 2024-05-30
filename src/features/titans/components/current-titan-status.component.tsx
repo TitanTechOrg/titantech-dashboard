@@ -90,7 +90,7 @@ function TitanHealthBars({
     const bodyTooltipContent = `${formatter().format(titanBodyHealthValue)}`;
 
     return (
-        <div className="flex flex-col items-center gap-2 py-2">
+        <div className="flex flex-col items-center gap-2">
             <Progress
                 className="!gap-1"
                 label={<span className="text-sm font-medium">Armor</span>}
@@ -139,7 +139,7 @@ const TitanDebuff = {
 type TitanDebuffType = keyof typeof TitanDebuff;
 
 export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
-    const { isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
+    const { titans, isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
 
     return (
         <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
@@ -163,7 +163,10 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                 </div>
 
                 <Skeleton isLoaded={!!titan} className="rounded-md">
-                    {titan && <div className="text-xl font-bold">{titan.name}</div>}
+                    <div className="flex flex-row items-center gap-2">
+                        {titan && <div className="text-xl font-bold">{titan.name}</div>}
+                        {titan && titan.sequence_index + 1} / {titans.length}
+                    </div>
                 </Skeleton>
             </CardHeader>
 

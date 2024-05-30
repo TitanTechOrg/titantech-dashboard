@@ -21,7 +21,7 @@ const TOGGLE_GROUP_VALUE = { ALPHABETICAL: 0, ALPHABETICAL_REVERSED: 1, AVERAGE:
 type ToggleGroupValues = keyof typeof TOGGLE_GROUP_VALUE;
 
 export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOverview) {
-    const [selected, setSelected] = useState<ToggleGroupValues>('ALPHABETICAL');
+    const [selected, setSelected] = useState<ToggleGroupValues>('AVERAGE');
     const prevSelected = useRef<ToggleGroupValues>();
     const [sortedData, setSortedData] = useState<PlayerData[]>(playersData);
 
@@ -74,7 +74,7 @@ export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOvervi
                     </Button>
                 </ButtonGroup>
             </CardHeader>
-            <CardBody>
+            <CardBody className="sm:pr-12">
                 <BoxPlotChartData playersData={sortedData.length > 0 ? sortedData : playersData} />
             </CardBody>
         </Card>

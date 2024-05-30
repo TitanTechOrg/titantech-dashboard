@@ -55,7 +55,6 @@ export function Overview() {
     // }, []);
 
     const handleSelectionChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value === value || !e.target.value) return;
         setValue(e.target.value);
     }, []);
 

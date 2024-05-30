@@ -7,6 +7,11 @@ export function useRaidCycles(raidId?: string) {
     return useQuery({
         queryKey: ['cycle_data', raidId],
         queryFn: async () => await fetchRaidCycles(raidId),
+        select: (data) => {
+            const raid_id = data.raid_id;
+            const cycles = data.cycles.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
+            return { raid_id, cycles };
+        },
     });
 }
 

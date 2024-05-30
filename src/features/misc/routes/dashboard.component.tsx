@@ -19,7 +19,7 @@ import AverageDamageCardLogo from '@/assets/Decks.webp';
 export function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
 
-    const raidCycles = useRaidCycles();
+    const { data: raidCycles } = useRaidCycles();
 
     const { data: raidTitansData } = useRaidTitans();
     const { data: raidListData } = useRaidList();
@@ -37,7 +37,6 @@ export function Dashboard() {
     }, [raidTitansData, setTitans]);
 
     useEffect(() => {
-        // TODO: surely this can be done better...
         if (!titans) return;
         if (!raidAttacks?.data?.pages || !raidAttacks?.data?.pages?.length) return;
 
@@ -84,11 +83,9 @@ export function Dashboard() {
         data.push(moraleData);
         data.push(mirrorForceData);
 
-        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
+        if (!raidCycles || raidCycles.cycles.length === 0) return data;
 
-        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
-
-        const cycles = raidCycles.data.cycles;
+        const cycles = raidCycles.cycles;
 
         const moraleBonuses = (raidCycles: RaidCycle[]) =>
             raidCycles.map(({ morale, team_tactics }: RaidCycle) => {
@@ -104,16 +101,14 @@ export function Dashboard() {
         data[1].bonus = mirrorForceBonuses(cycles);
 
         return data;
-    }, [raidCycles.data?.cycles?.length]);
+    }, [raidCycles?.cycles.length]);
 
     const mapDamageStatsData = useMemo(() => {
         let data: DamageCardChartData[] = [];
 
-        if (!raidCycles.data || raidCycles.data.cycles.length === 0) return data;
+        if (!raidCycles || raidCycles.cycles.length === 0) return data;
 
-        raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1));
-
-        const cycles = raidCycles.data.cycles;
+        const cycles = raidCycles;
 
         const getAverageClanDamage = (raidCycles: RaidCycle[]) => {
             const averageDamage = raidCycles.map(({ average_damage }: RaidCycle) => {
@@ -167,10 +162,10 @@ export function Dashboard() {
             return mergedArr;
         };
 
-        data = mapDamageData(getAverageClanDamage(cycles), getOverallClanDamage(cycles));
+        data = mapDamageData(getAverageClanDamage(cycles.cycles), getOverallClanDamage(cycles.cycles));
 
         return data;
-    }, [raidCycles.data?.cycles?.length]);
+    }, [raidCycles?.cycles.length]);
 
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
@@ -179,7 +174,7 @@ export function Dashboard() {
                 <div className="row-start-1 md:col-start-1 md:row-span-1 md:row-start-1 lg:row-span-1">
                     <RaidInfo
                         raidData={raidListData?.raids && raidListData?.raids?.length > 0 ? raidListData?.raids[0] : undefined}
-                        raidCycle={raidCycles.data?.cycles?.sort((a, b) => (a.cycle > b.cycle ? 1 : -1))[raidCycles.data?.cycles?.length - 1]}
+                        raidCycle={raidCycles?.cycles[raidCycles?.cycles.length - 1]}
                     />
                 </div>
 

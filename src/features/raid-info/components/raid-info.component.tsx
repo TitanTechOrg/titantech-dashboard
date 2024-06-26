@@ -45,7 +45,11 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
                             <span>Raid Bonus</span>
                         </Skeleton>
                         <Skeleton isLoaded={!!raidData} className="rounded-md">
-                            {raidData && <span>{RaidBuffMapping[raidData.buff_type as RaidBuffMappingType]} </span>}
+                            {raidData && raidData.buff_type ? (
+                                <span>{RaidBuffMapping[raidData.buff_type as RaidBuffMappingType]} </span>
+                            ) : (
+                                <span>None</span>
+                            )}
                         </Skeleton>
                     </div>
 

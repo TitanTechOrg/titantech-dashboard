@@ -1,7 +1,6 @@
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Spinner } from '@nextui-org/react';
+import { Button, Spinner } from '@nextui-org/react';
 import { RaidLogs } from '@/features/attacks/types';
 import { RaidLog } from '@/features/attacks';
 
@@ -13,14 +12,8 @@ type AttacksListProps = {
     fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<InfiniteData<RaidLogs, unknown>, Error>>;
 };
 
-export function AttacksList({ pages, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage }: AttacksListProps) {
-    const { ref, inView } = useInView();
-
-    useEffect(() => {
-        if (inView && hasNextPage) {
-            fetchNextPage();
-        }
-    }, [fetchNextPage, inView]);
+export function AttacksList({ pages, fetchNextPage, hasNextPage, isFetchingNextPage }: AttacksListProps) {
+    const { ref } = useInView();
 
     return (
         <>
@@ -28,11 +21,10 @@ export function AttacksList({ pages, fetchNextPage, hasNextPage, isFetching, isF
                 <RaidLog key={`raid-log-page-${index}`} data={attack_logs} />
             ))}
             <div>
-                <button ref={ref} onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
-                    {isFetchingNextPage ? <Spinner /> : hasNextPage ? 'Load Newer' : 'Nothing more to load'}
-                </button>
+                <Button ref={ref} color="primary" variant="bordered" onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+                    {isFetchingNextPage ? <Spinner /> : hasNextPage ? 'Load More' : 'Nothing more to load'}
+                </Button>
             </div>
-            <div>{isFetching && !isFetchingNextPage ? 'Background Updating...' : null}</div>
         </>
     );
 }

@@ -88,7 +88,11 @@ export function Overview() {
                                 <div className="gap-2">
                                     <div className="flex justify-between text-sm font-medium">
                                         <span>Bonus</span>
-                                        <span>{RaidBuffMapping[findRaid?.buff_type as RaidBuffMappingType]} </span>
+                                        {findRaid?.buff_type ? (
+                                            <span>{RaidBuffMapping[findRaid?.buff_type as RaidBuffMappingType]} </span>
+                                        ) : (
+                                            <span>None</span>
+                                        )}
                                     </div>
                                     <div className="flex justify-between text-sm font-medium">
                                         <span>Start</span>
@@ -97,23 +101,21 @@ export function Overview() {
                                         </Tooltip>
                                     </div>
 
-                                    {findRaid.ended_at != null ? (
+                                    {findRaid?.ended_at != null ? (
                                         <div className="flex justify-between text-sm font-medium">
                                             <span>End</span>
-                                            <Tooltip showArrow={true} content={new Date(findRaid.ended_at!).toUTCString()}>
-                                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid.ended_at!)}</span>
+                                            <Tooltip showArrow={true} content={new Date(findRaid.ended_at).toUTCString()}>
+                                                <span className="text-sm font-medium">{convertUTCDateToLocalDate(findRaid.ended_at)}</span>
                                             </Tooltip>
                                         </div>
                                     ) : (
                                         <RaidNextCycleText cycles={raidCycles?.cycles || []} />
                                     )}
 
-                                    {findRaid.ended_at != null ? (
+                                    {findRaid?.ended_at != null ? (
                                         <div className="flex justify-between space-x-4 text-sm font-medium">
                                             <span>Rounds</span>
-                                            {raidCycles && (
-                                                <span>{calculateRounds(new Date(findRaid.started_at), new Date(findRaid.ended_at!))}</span>
-                                            )}
+                                            {raidCycles && <span>{calculateRounds(new Date(findRaid.started_at), new Date(findRaid.ended_at))}</span>}
                                         </div>
                                     ) : null}
                                 </div>

@@ -15,20 +15,24 @@ import {
 } from '@nextui-org/react';
 import { CopyIcon, DiscordLogoIcon } from '@radix-ui/react-icons';
 import Logo from '@/assets/Logo.webp';
+import { useCallback } from 'react';
 
 export function GetStarted() {
+    const copyToClipboard = useCallback(() => {
+        navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK);
+    }, []);
+
     return (
         <Card className="mx-auto w-full max-w-[400px]">
             <CardHeader className="flex gap-3">
                 <Image alt="TitanTech logo" className="h-10 w-10 rounded" src={Logo} />
                 <div className="flex flex-col items-start justify-center">
                     <p className="text-lg">TitanTech</p>
-                    {/* <p className="text-small text-default-500">Some description</p> */}
                 </div>
             </CardHeader>
             <CardBody>
                 <p className="text-sm">
-                    Titan Tech is an anayltics app for Tap Titans 2. That provides real-time data and insights to help clan members and leaders
+                    Titan Tech is an analytics app for Tap Titans 2. That provides real-time data and insights to help clan members and leaders
                     optimize their raiding strategy.
                 </p>
             </CardBody>
@@ -40,12 +44,7 @@ export function GetStarted() {
                         </Button>
                     </Link>
                     <Tooltip content="Copy invite link">
-                        <Button
-                            isIconOnly
-                            color="primary"
-                            aria-label="Copy invite link"
-                            onClick={() => navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK)}
-                        >
+                        <Button isIconOnly color="primary" aria-label="Copy invite link" onClick={copyToClipboard}>
                             <CopyIcon />
                         </Button>
                     </Tooltip>

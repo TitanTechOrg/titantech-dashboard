@@ -19,8 +19,8 @@ export type CycleData = {
 };
 
 export type RaidData = {
-    buff_amount: number;
-    buff_type: string;
+    buff_amount?: number;
+    buff_type?: string;
     external_reference: string;
     level: string;
     raid_id: string;

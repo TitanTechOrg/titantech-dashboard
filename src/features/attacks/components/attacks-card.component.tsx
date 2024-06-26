@@ -52,7 +52,7 @@ export function AttacksCard({
                     isLoading={isRefetching}
                     onPress={() => refetch()}
                     isIconOnly
-                    isDisabled={!!raidList?.raids[0].ended_at}
+                    isDisabled={!!raidList?.raids[0]?.ended_at}
                 >
                     <ReloadIcon />
                 </Button>
@@ -61,14 +61,14 @@ export function AttacksCard({
                     color="primary"
                     isLoading={isRefetching}
                     onPress={() => refetch()}
-                    isDisabled={!!raidList?.raids[0].ended_at}
+                    isDisabled={!!raidList?.raids[0]?.ended_at}
                 >
                     Refresh
                 </Button>
             </CardHeader>
             <CardBody className="gap-4">
                 <Divider />
-                {isFetching && <Spinner label="Loading..." color="primary" />}
+                {isFetching && !isRefetching && <Spinner label="Loading..." color="primary" />}
                 {error && <div>'An error has occurred: ' + {error.message}</div>}
                 {hasData ? (
                     <>

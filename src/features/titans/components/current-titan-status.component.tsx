@@ -50,7 +50,7 @@ const getTitanHealthPercentage = (titan: TitanSequence | undefined, partType: 'B
 
     let result = partType === 'Armor' ? percentage(totalHealth, totalRemainingHealth) : percentage(titan.health, remainingTitanBodyHealth);
 
-    if (result < 0) result = 0;
+    if (result < 0 || isNaN(result)) result = 0;
 
     return result;
 };
@@ -177,13 +177,15 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                         <span>Titan Debuff</span>
                     </Skeleton>
                     <Skeleton isLoaded={!!titan} className="rounded-md">
-                        {titan && (
+                        {titan && titan.area_amount && titan.area_type ? (
                             <span>
                                 {TitanDebuff[titan.area_type as TitanDebuffType]}
                                 &nbsp;
                                 {titan.area_amount.toString().startsWith('-') ? '' : '+'}
                                 {titan.area_amount.toLocaleString('en', { style: 'percent' })}
                             </span>
+                        ) : (
+                            <span>None</span>
                         )}
                     </Skeleton>
                 </div>

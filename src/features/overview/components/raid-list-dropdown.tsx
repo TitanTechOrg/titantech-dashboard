@@ -26,7 +26,7 @@ export function RaidListDropdown({ selectedItem, raidList, handleSelectionChange
                             <div className="flex flex-row items-center justify-center gap-0.5 text-xs text-default-500">
                                 <span>Zone {item.data?.level}</span>
                                 <span>|</span>
-                                <span>Tier {item.data?.tier === '9999' ? 'Master' : item.data?.tier}</span>
+                                <span>{item.data?.tier || 'Master Tier'}</span>
                                 <span>|</span>
                                 <span>Season {item.data?.raid_season_sequence}</span>
                             </div>
@@ -38,7 +38,7 @@ export function RaidListDropdown({ selectedItem, raidList, handleSelectionChange
                     <SelectItem key={raid.raid_id} textValue={raid.level} color="primary">
                         <div className="flex items-center gap-2">
                             <div className="flex flex-col">
-                                <span className="text-small">Tier {raid.tier === '9999' ? 'Master' : raid.tier}</span>
+                                <span className="text-small">{raid.tier || 'Master Tier'}</span>
                                 <span className="text-tiny">
                                     Zone {raid.level}, Season {raid.raid_season_sequence}
                                 </span>

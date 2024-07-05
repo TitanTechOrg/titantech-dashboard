@@ -1,13 +1,13 @@
-import { RaidTable } from './raid-table.component';
-import { RaidOverviewInfo } from './raid-overview-info.component';
-import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
-import { useOverviewPlayers } from '../api/get-overview-players';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { RaidListDropdown } from './raid-list-dropdown';
 import { RaidBuffMapping } from '@/constants/buffs';
-import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from '@nextui-org/react';
+import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { convertUTCDateToLocalDate } from '@/utils/string-formatter';
+import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from '@nextui-org/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useOverviewPlayers } from '../api/get-overview-players';
+import { RaidListDropdown } from './raid-list-dropdown';
+import { RaidOverviewInfo } from './raid-overview-info.component';
 import { RaidPlayerDamageOverview } from './raid-player-damage-overview.component';
+import { RaidTable } from './raid-table.component';
 
 const calculateRounds = (date1: Date, date2: Date) => {
     const totalHours = Math.abs(date1.getTime() - date2.getTime()) / 36e5;
@@ -48,12 +48,6 @@ export function Overview() {
         setValue(raidId);
     }, [raidId]);
 
-    // const refetchData = useCallback(() => {
-    //     refetchRaidCycles();
-    //     refetchRaidList();
-    //     refetchOverviewPlayers();
-    // }, []);
-
     const handleSelectionChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setValue(e.target.value);
     }, []);
@@ -61,19 +55,6 @@ export function Overview() {
     const findRaid = useMemo(() => raidList?.raids?.find((r) => r.raid_id === value), [value]);
 
     const { data: raidCycles } = useRaidCycles(value);
-
-    // const hasRaidStarted = () => {
-    //     const raid = findRaid;
-
-    //     if (!raid) return false;
-
-    //     const startDate = new Date(raid.started_at);
-    //     const now = new Date();
-
-    //     const diff = startDate.getTime() - now.getTime();
-
-    //     return diff < 0;
-    // };
 
     return (
         <div className="flex flex-col gap-4">

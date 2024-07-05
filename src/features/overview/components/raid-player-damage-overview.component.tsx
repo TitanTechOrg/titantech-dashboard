@@ -1,7 +1,7 @@
-import { PlayerData } from '../types';
-import { BoxPlotChartData } from './box-plot-chart-data.component';
 import { Button, ButtonGroup, Card, CardBody, CardHeader } from '@nextui-org/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PlayerData } from '../types';
+import { BoxPlotChartData } from './box-plot-chart-data.component';
 
 type RaidPlayerDamageOverview = {
     playersData: PlayerData[];
@@ -9,13 +9,11 @@ type RaidPlayerDamageOverview = {
 
 const collator = new Intl.Collator('en-US');
 
-function sortAsc(a: string, b: string) {
-    return collator.compare(a, b);
-}
+type SortType = 'ASC' | 'DESC';
 
-function sortDesc(a: string, b: string) {
-    return collator.compare(b, a);
-}
+const sortBy = (a: string, b: string, orderBy: SortType = 'ASC') => {
+    return orderBy === 'ASC' ? collator.compare(a, b) : collator.compare(b, a);
+};
 
 const TOGGLE_GROUP_VALUE = { ALPHABETICAL: 0, ALPHABETICAL_REVERSED: 1, AVERAGE: 2 } as const;
 type ToggleGroupValues = keyof typeof TOGGLE_GROUP_VALUE;
@@ -38,9 +36,9 @@ export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOvervi
 
     useEffect(() => {
         if (selected === 'ALPHABETICAL') {
-            setSortedData([...playersData].sort(({ player_name: a }, { player_name: b }) => sortAsc(a, b)));
+            setSortedData([...playersData].sort(({ player_name: a }, { player_name: b }) => sortBy(a, b, 'ASC')));
         } else if (selected === 'ALPHABETICAL_REVERSED') {
-            setSortedData([...playersData].sort(({ player_name: a }, { player_name: b }) => sortDesc(a, b)));
+            setSortedData([...playersData].sort(({ player_name: a }, { player_name: b }) => sortBy(a, b, 'DESC')));
         } else if (selected === 'AVERAGE') {
             setSortedData(
                 [...playersData].sort((a, b) => {

@@ -1,8 +1,8 @@
-export const formatter = () => {
+export const formatter = (minimumFractionDigits=1, maximumFractionDigits=1) => {
     return Intl.NumberFormat('en-US', {
         notation: 'compact',
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
+        minimumFractionDigits: minimumFractionDigits,
+        maximumFractionDigits: maximumFractionDigits,
     });
 };
 

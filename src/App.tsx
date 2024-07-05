@@ -1,12 +1,11 @@
+import { ErrorBoundary, ErrorPage, FourOhFour } from '@/features/misc';
+import { lazyImport } from '@/utils/lazy-import';
+import { NextUIProvider, Spinner } from '@nextui-org/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense } from 'react';
 import { createBrowserRouter, createRoutesFromElements, redirect, Route, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { NextUIProvider, Spinner } from '@nextui-org/react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ToastContainer } from 'react-toastify';
-import { lazyImport } from '@/utils/lazy-import';
-import { ErrorBoundary, ErrorPage, FourOhFour } from '@/features/misc';
 import { usePreferencesStore } from './stores/preferences.store.ts';
 
 type DashbloardLoaderParams = {
@@ -79,7 +78,6 @@ export default function App() {
             <QueryClientProvider client={queryClient}>
                 <NextUIProvider>
                     <ReactQueryDevtools initialIsOpen={false} />
-                    <ToastContainer />
                     <Suspense fallback={<Spinner />}>
                         <RouterProvider router={router} />
                     </Suspense>

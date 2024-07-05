@@ -1,6 +1,8 @@
 import { RaidBuffMapping } from '@/constants/buffs';
+import { AttacksRaidTierMapping } from '../constants';
 
 export type RaidBuffMappingType = keyof typeof RaidBuffMapping;
+export type RaidTierType = keyof typeof AttacksRaidTierMapping;
 
 export type RaidCycle = {
     id: string;
@@ -27,7 +29,8 @@ export type RaidData = {
     raid_season_sequence: number;
     started_at: string;
     ended_at?: string;
-    tier: string;
+    tier: RaidTierType | string;
+    attacksPerTier: number;
 };
 export type RaidList = {
     count: number;
@@ -51,3 +54,4 @@ export type DamageCardData = {
     title: string;
     data: DamageCardChartData[];
 };
+

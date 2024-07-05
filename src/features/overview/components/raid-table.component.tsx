@@ -1,42 +1,28 @@
-import { Key, useCallback, useMemo, useState } from 'react';
+import { RaidCycle, RaidData, useRaidCycles } from '@/features/raid-info';
+import { formatTime } from '@/utils/datetime-formatter';
+import { abbreviateNumber } from '@/utils/number-formatter';
 import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
     Button,
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Selection,
-    SortDescriptor,
     Chip,
     ChipProps,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+    Selection,
+    SortDescriptor,
     Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
 } from '@nextui-org/react';
-
-import { CycleOptions, IconSvgProps, PlayerData } from '../types';
-import { CheckIcon, Cross2Icon, DownloadIcon } from '@radix-ui/react-icons';
+import { CheckIcon, ChevronDownIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { Key, useCallback, useMemo, useState } from 'react';
 import { useOverviewPlayers } from '../api/get-overview-players';
-import { RaidCycle, RaidData, useRaidCycles } from '@/features/raid-info';
-import { abbreviateNumber } from '@/utils/number-formatter';
-import { formatTime } from '@/utils/datetime-formatter';
-
-const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => (
-    <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...otherProps}>
-        <path
-            d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeMiterlimit={10}
-            strokeWidth={strokeWidth}
-        />
-    </svg>
-);
+import { CycleOptions, PlayerData } from '../types';
 
 const INITIAL_VISIBLE_COLUMNS = [
     'index',
@@ -46,7 +32,6 @@ const INITIAL_VISIBLE_COLUMNS = [
     'min_damage',
     'max_damage',
     'attack_count',
-    'duration',
     'team_tactics_used',
     'mirror_force_used',
 ];
@@ -69,16 +54,12 @@ type IndexedPlayerData = { index: number } & PlayerData;
 
 const cycleOverviewOption: CycleOptions[] = [{ name: 'Overview', uid: 'all' }];
 
-const countAttacksPerCycleByTier = (raidTier?: string) => {
-    return raidTier === '9999' ? 6 : 5;
+const countTotalAttacks = (currentCycle: number, attacksPerTier: number) => {
+    return currentCycle * attacksPerTier;
 };
 
-const countTotalAttacks = (currentCycle: number, raidTier?: string) => {
-    return currentCycle * countAttacksPerCycleByTier(raidTier);
-};
-
-const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number, raidTier?: string): ChipProps['color'] => {
-    const totalAttacksAvailable = countTotalAttacks(currentCycle, raidTier);
+const getAttacksStatusColour = (currentCycle: number, playerAttackCount: number, attacksPerTier: number): ChipProps['color'] => {
+    const totalAttacksAvailable = countTotalAttacks(currentCycle, attacksPerTier);
     const percentAttacksDone = (playerAttackCount / totalAttacksAvailable) * 100;
 
     if (percentAttacksDone <= 40) return 'danger';
@@ -173,8 +154,8 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                     const currentCycle = selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : 1;
                     return (
                         <div className="flex flex-row items-center justify-center">
-                            <Chip color={getAttacksStatusColour(currentCycle, player.attack_count, raid.tier)} size="sm" variant="flat">
-                                {cellValue}/{countTotalAttacks(currentCycle, raid.tier)}
+                            <Chip color={getAttacksStatusColour(currentCycle, player.attack_count, raid.attacksPerTier)} size="sm" variant="flat">
+                                {cellValue}/{countTotalAttacks(currentCycle, raid.attacksPerTier)}
                             </Chip>
                         </div>
                     );
@@ -213,7 +194,9 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
             <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center justify-between">
-                        <span className="text-small text-default-400">Total {overviewPlayers?.players_data.length || 0} players</span>
+                        {overviewPlayers && overviewPlayers?.players_data.length > 0 && (
+                            <span className="text-small text-default-400">Total {overviewPlayers.players_data.length} players</span>
+                        )}
                     </div>
                     <div className="flex gap-3">
                         <Dropdown>
@@ -252,15 +235,15 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                                 onSelectionChange={setVisibleColumns}
                             >
                                 {columns.map((column) => (
-                                    <DropdownItem key={column.uid} className="capitalize" isReadOnly={column.uid === 'player_name'}>
+                                    <DropdownItem key={column.uid} isReadOnly={column.uid === 'player_name'}>
                                         {column.name}
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Button color="primary" endContent={<DownloadIcon />} isDisabled>
+                        {/* <Button color="primary" endContent={<DownloadIcon />} isDisabled>
                             Download CSV
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
             </div>

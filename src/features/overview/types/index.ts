@@ -1,5 +1,3 @@
-import { SVGProps } from 'react';
-
 export type PlayerData = {
     player_id: string;
     player_name: string;
@@ -20,9 +18,6 @@ export type PlayersData = {
     players_data: PlayerData[];
 };
 
-export type IconSvgProps = SVGProps<SVGSVGElement> & {
-    size?: number;
-};
 
 export type CycleOptions = {
     name: string;

@@ -1,6 +1,6 @@
 import { RaidData, useRaidCycles } from '@/features/raid-info';
-import { PlayerData, PlayersData } from '../types';
 import { formatter } from '@/utils/number-formatter';
+import { PlayerData, PlayersData } from '../types';
 import { DonutChartData } from './donut-chart-data.component';
 
 const calculateSum = (obj: any[], field: string) => obj.map((items) => items[field]).reduce((prev: number, curr: number) => prev + curr, 0);
@@ -54,13 +54,12 @@ const calculateTotalDamage2 = (overviewPlayers: PlayerData[] | undefined) => {
 //     return `${attackCount}/${totalAttacks}`;
 // };
 
-const countAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
-    if (overviewPlayers == null || cycleAmount == null || raidTier == null) return 0;
+const countAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
+    if (overviewPlayers == null || cycleAmount == null) return 0;
 
     // const attackCount = calculateSum(overviewPlayers, 'attack_count');
 
-    const attacksPerCycle = raidTier === '9999' ? 6 : 5;
-    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerCycle;
+    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
 
     return totalAttacks;
 };
@@ -77,13 +76,12 @@ const countAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerD
 //     return `${missedAttacks}`;
 // };
 
-const countMissedAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
-    if (overviewPlayers == null || cycleAmount == null || raidTier == null) return 0;
+const countMissedAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
+    if (overviewPlayers == null || cycleAmount == null) return 0;
 
     const attackCount = calculateSum(overviewPlayers, 'attack_count');
 
-    const attacksPerCycle = raidTier === '9999' ? 6 : 5;
-    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerCycle;
+    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
     const missedAttacks = totalAttacks - attackCount;
 
     return missedAttacks;
@@ -103,10 +101,10 @@ const countMissedAttacks2 = (cycleAmount: number | undefined, overviewPlayers: P
 //     return formattedDamage;
 // };
 
-const countMissingDamage2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
-    if (overviewPlayers == null || cycleAmount == null || raidTier == null) return 0;
+const countMissingDamage2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
+    if (overviewPlayers == null || cycleAmount == null) return 0;
 
-    const attacksPerCycle = (raidTier === '9999' ? 6 : 5) * cycleAmount;
+    const attacksPerCycle = attacksPerTier * cycleAmount;
     const playersMissingAttacks = overviewPlayers.filter(({ attack_count }: PlayerData) => attack_count !== attacksPerCycle);
     const totalMissingDamage = playersMissingAttacks
         .map(({ average_damage, attack_count }: PlayerData) => average_damage * (attacksPerCycle - attack_count))
@@ -133,7 +131,7 @@ export function RaidOverviewInfo({ raidId, raid, overviewPlayers }: RaidOverview
                         {
                             data: [
                                 calculateSum(overviewPlayers?.players_data || [], 'attack_count'),
-                                countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier),
+                                countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
                             ],
                             backgroundColor: ['rgba(16, 185, 129, 0.2)', 'rgba(244, 63, 94, 0.2)'],
                             borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
@@ -146,12 +144,12 @@ export function RaidOverviewInfo({ raidId, raid, overviewPlayers }: RaidOverview
                     {
                         title: 'Missing',
                         colour: 'danger',
-                        value: countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier),
+                        value: countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
                     },
                     {
                         title: 'Total',
                         colour: 'default',
-                        value: countAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier),
+                        value: countAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
                     },
                 ]}
             />
@@ -164,7 +162,7 @@ export function RaidOverviewInfo({ raidId, raid, overviewPlayers }: RaidOverview
                         {
                             data: [
                                 calculateTotalDamage2(overviewPlayers?.players_data),
-                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier),
+                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
                             ],
                             backgroundColor: ['rgba(16, 185, 129, 0.2)', 'rgba(244, 63, 94, 0.2)'],
                             borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
@@ -177,14 +175,16 @@ export function RaidOverviewInfo({ raidId, raid, overviewPlayers }: RaidOverview
                     {
                         title: 'Missing',
                         colour: 'danger',
-                        value: formatter().format(countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier)),
+                        value: formatter().format(
+                            countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier)
+                        ),
                     },
                     {
                         title: 'Est. Total',
                         colour: 'default',
                         value: formatter().format(
                             calculateTotalDamage2(overviewPlayers?.players_data) +
-                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid?.tier)
+                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier)
                         ),
                     },
                     {

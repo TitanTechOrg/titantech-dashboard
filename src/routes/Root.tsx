@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@nextui-org/react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { capitaliseFirstLetter } from '@/utils/string-formatter';
 import { ThemeSwitcher } from '@/features/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
+import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
+import { useState } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import Logo from '@/assets/Logo.webp';
 
@@ -90,8 +89,11 @@ export default function Root() {
                         })
                         .map((item, index) => (
                             <NavbarMenuItem key={`${item}-${index}`} onClick={() => setIsMenuOpen(false)}>
-                                <NavLink className={`/${item}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${item}`}>
-                                    {capitaliseFirstLetter(item)}
+                                <NavLink
+                                    className={`capitalize ${'/' + item === location.pathname ? 'text-primary' : 'text-foreground'}`}
+                                    to={`/${item}`}
+                                >
+                                    {item}
                                 </NavLink>
                             </NavbarMenuItem>
                         ))}

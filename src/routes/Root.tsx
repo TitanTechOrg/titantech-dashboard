@@ -1,10 +1,10 @@
+import Logo from '@/assets/Logo.webp';
 import { ThemeSwitcher } from '@/features/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
+import { capitaliseFirstLetter } from '@/utils/string-formatter';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-
-import Logo from '@/assets/Logo.webp';
 
 const menuItems = ['dashboard', 'overview', 'alchemy'];
 const protectedRoutes = ['dashboard', 'overview'];
@@ -21,7 +21,7 @@ export default function Root() {
             <Navbar
                 onMenuOpenChange={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
-                className="fixed"
+                disableAnimation={true}
                 classNames={{
                     item: [
                         'flex',
@@ -40,7 +40,6 @@ export default function Root() {
                     wrapper: ['max-w-screen-2xl'],
                 }}
                 isBordered={true}
-                isBlurred={false}
             >
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
@@ -89,18 +88,15 @@ export default function Root() {
                         })
                         .map((item, index) => (
                             <NavbarMenuItem key={`${item}-${index}`} onClick={() => setIsMenuOpen(false)}>
-                                <NavLink
-                                    className={`capitalize ${'/' + item === location.pathname ? 'text-primary' : 'text-foreground'}`}
-                                    to={`/${item}`}
-                                >
-                                    {item}
+                                <NavLink className={`/${item}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${item}`}>
+                                    {capitaliseFirstLetter(item)}
                                 </NavLink>
                             </NavbarMenuItem>
                         ))}
                 </NavbarMenu>
             </Navbar>
 
-            <div className="mt-16 p-4">
+            <div className="p-4">
                 <Outlet />
             </div>
         </>

@@ -1,7 +1,7 @@
-import { Controller, FieldValues, useForm } from 'react-hook-form';
-// import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Code, Image, Input, Switch } from '@nextui-org/react';
 import { useCallback } from 'react';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useCalculateAlchemy } from '..';
 // import Acorn from '@/assets/alchemy/Acorn.webp';
@@ -27,7 +27,7 @@ import Tooth from '@/assets/alchemy/Tooth.webp';
 // import Water from '@/assets/alchemy/Water.webp';
 
 const validation = z
-    .number()
+    .number({ message: 'Please enter a number between 0 and 128' })
     .nonnegative({ message: 'Must be a positive number' })
     .min(0, { message: 'Required' })
     .max(128, { message: 'Must be between 0 and 128' });
@@ -62,7 +62,7 @@ const ingredients: {
 
 type Ingredients = (typeof ingredients)[0];
 
-// const schema = z.object(Object.fromEntries(ingredients.map((ingredient) => [ingredient.name, ingredient.fieldType])));
+const schema = z.object(Object.fromEntries(ingredients.map((ingredient) => [ingredient.name, ingredient.fieldType])));
 
 export function AlchemyCalculator() {
     const {
@@ -72,7 +72,7 @@ export function AlchemyCalculator() {
         control,
         formState: { errors },
     } = useForm({
-        // resolver: zodResolver(schema)
+        resolver: zodResolver(schema),
     });
 
     const { mutate, isPending, reset: resetAlchemyData, data } = useCalculateAlchemy();
@@ -104,7 +104,7 @@ export function AlchemyCalculator() {
                                 key={ingredient}
                                 type="number"
                                 label={ingredient}
-                                isRequired
+                                isRequired={true}
                                 {...register(ingredient, { valueAsNumber: true })}
                                 errorMessage={errors[ingredient]?.message?.toString()}
                                 isInvalid={errors[ingredient]?.message != null}

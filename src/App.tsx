@@ -1,19 +1,22 @@
-import { ErrorBoundary, ErrorPage, FourOhFour } from '@/features/misc';
+import { AlchemyCalculator } from '@/features/alchemy/index.ts';
+import { PlayerExport } from '@/features/editor/index.ts';
+import { ErrorBoundary, ErrorPage, FourOhFour, GetStarted } from '@/features/misc';
+import Root from '@/routes/Root';
+import { usePreferencesStore } from '@/stores/preferences.store.ts';
 import { lazyImport } from '@/utils/lazy-import';
 import { NextUIProvider, Spinner } from '@nextui-org/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense } from 'react';
 import { createBrowserRouter, createRoutesFromElements, redirect, Route, RouterProvider } from 'react-router-dom';
-import Root from './routes/Root.tsx';
-import { usePreferencesStore } from './stores/preferences.store.ts';
 
 type DashbloardLoaderParams = {
     params: any;
 };
 
-const { GetStarted } = lazyImport(() => import('@/features/misc'), 'GetStarted');
-const { AlchemyCalculator } = lazyImport(() => import('@/features/alchemy'), 'AlchemyCalculator');
+// const { GetStarted } = lazyImport(() => import('@/features/misc'), 'GetStarted');
+// const { AlchemyCalculator } = lazyImport(() => import('@/features/alchemy'), 'AlchemyCalculator');
+// const { PlayerExport } = lazyImport(() => import('@/features/editor'), 'PlayerExport');
 const { Dashboard } = lazyImport(() => import('@/features/misc'), 'Dashboard');
 const { Overview } = lazyImport(() => import('@/features/overview'), 'Overview');
 
@@ -55,6 +58,8 @@ const router = createBrowserRouter(
                 <Route path="overview" element={<Overview />} />
 
                 <Route path="alchemy" element={<AlchemyCalculator />} />
+
+                <Route path="player-export-editor" element={<PlayerExport />} />
 
                 <Route path="*" element={<FourOhFour />} />
             </Route>

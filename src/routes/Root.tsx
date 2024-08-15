@@ -1,12 +1,26 @@
 import Logo from '@/assets/Logo.webp';
 import { ThemeSwitcher } from '@/features/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
-import { capitaliseFirstLetter } from '@/utils/string-formatter';
-import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
+import {
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+    Image,
+    Navbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarItem,
+    NavbarMenu,
+    NavbarMenuItem,
+    NavbarMenuToggle,
+} from '@nextui-org/react';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
-const menuItems = ['dashboard', 'overview', 'alchemy'];
+const menuItems = ['dashboard', 'overview', ['alchemy', 'player-export-editor']];
 const protectedRoutes = ['dashboard', 'overview'];
 
 export default function Root() {
@@ -55,7 +69,66 @@ export default function Root() {
                 </NavbarContent>
 
                 <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
-                    <NavbarItem isActive={location.pathname === '/dashboard'} className={!isAuthenticated ? 'hidden' : ''}>
+                    {menuItems.map((item) => {
+                        if (typeof item === 'string') {
+                            const path = '/' + item;
+
+                            return (
+                                <NavbarItem
+                                    key={`menu-${item}`}
+                                    isActive={location.pathname === path}
+                                    className={protectedRoutes.includes(item) && !isAuthenticated ? 'hidden' : ''}
+                                >
+                                    <NavLink to={path} className={location.pathname === path ? 'text-primary' : 'text-foreground'}>
+                                        <span className="capitalize">{item}</span>
+                                    </NavLink>
+                                </NavbarItem>
+                            );
+                        } else {
+                            return (
+                                <Dropdown key={`menu-dropdown`}>
+                                    <NavbarItem>
+                                        <DropdownTrigger>
+                                            <Button
+                                                disableRipple
+                                                className="bg-transparent p-0 text-medium data-[hover=true]:bg-transparent"
+                                                endContent={<ChevronDownIcon />}
+                                                radius="sm"
+                                                variant="light"
+                                            >
+                                                Tools
+                                            </Button>
+                                        </DropdownTrigger>
+                                    </NavbarItem>
+                                    <DropdownMenu
+                                        aria-label="ACME features"
+                                        className="w-[340px]"
+                                        itemClasses={{
+                                            base: 'gap-4',
+                                        }}
+                                    >
+                                        {item.flatMap((dropdownItem) => {
+                                            const pageName = dropdownItem.replace(/-/g, ' ');
+                                            const dropdownPath = '/' + dropdownItem;
+                                            return (
+                                                <DropdownItem
+                                                    key={`menu-dropdown-${dropdownItem}`}
+                                                    href={dropdownPath}
+                                                    title={<span className="capitalize">{pageName}</span>}
+                                                    className={
+                                                        location.pathname === dropdownPath
+                                                            ? 'bg-primary/20 text-primary group-hover:bg-primary/20'
+                                                            : ''
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                    </DropdownMenu>
+                                </Dropdown>
+                            );
+                        }
+                    })}
+                    {/* <NavbarItem isActive={location.pathname === '/dashboard'} className={!isAuthenticated ? 'hidden' : ''}>
                         <NavLink to="/dashboard" className={location.pathname === '/dashboard' ? 'text-primary' : 'text-foreground'}>
                             Dashboard
                         </NavLink>
@@ -71,7 +144,7 @@ export default function Root() {
                         <NavLink to="/alchemy" className={location.pathname === '/alchemy' ? 'text-primary' : 'text-foreground'}>
                             Alchemy
                         </NavLink>
-                    </NavbarItem>
+                    </NavbarItem> */}
                 </NavbarContent>
 
                 <NavbarContent justify="end">
@@ -82,23 +155,29 @@ export default function Root() {
 
                 <NavbarMenu className="min-h-lvh pb-32">
                     {menuItems
+                        .flat()
                         .filter((route) => {
                             if (!isAuthenticated && protectedRoutes.includes(route)) return '';
                             return route;
                         })
-                        .map((item, index) => (
-                            <NavbarMenuItem key={`${item}-${index}`} onClick={() => setIsMenuOpen(false)}>
-                                <NavLink className={`/${item}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${item}`}>
-                                    {capitaliseFirstLetter(item)}
-                                </NavLink>
-                            </NavbarMenuItem>
-                        ))}
+                        .map((item) => {
+                            const pageName = item.replace(/-/g, ' ');
+                            return (
+                                <NavbarMenuItem key={`mobile-menu-${item}`} onClick={() => setIsMenuOpen(false)}>
+                                    <NavLink className={`/${item}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${item}`}>
+                                        <span className="capitalize">{pageName}</span>
+                                    </NavLink>
+                                </NavbarMenuItem>
+                            );
+                        })}
                 </NavbarMenu>
             </Navbar>
 
-            <div className="p-4">
-                <Outlet />
-            </div>
+            <main id="content" className="flex w-full flex-col items-center justify-center">
+                <div className="w-full max-w-screen-2xl p-4">
+                    <Outlet />
+                </div>
+            </main>
         </>
     );
 }

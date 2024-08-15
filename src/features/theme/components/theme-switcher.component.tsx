@@ -8,7 +8,7 @@ export function ThemeSwitcher() {
 
     const toggleDarkMode = useCallback(() => {
         setDarkMode((prevMode: boolean) => !prevMode);
-    }, []);
+    }, [setDarkMode]);
 
     return (
         <Button onClick={toggleDarkMode} isIconOnly variant="light" aria-label="Toggle between dark and light mode">

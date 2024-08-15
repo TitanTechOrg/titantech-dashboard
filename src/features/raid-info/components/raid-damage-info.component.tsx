@@ -1,10 +1,9 @@
-import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts';
-import { DamageCardData } from '..';
 import { formatter } from '@/utils/number-formatter';
-import { capitaliseFirstLetter } from '@/utils/string-formatter';
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
+import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts';
+import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
+import { DamageCardData } from '..';
 
 const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length && payload.length > 1) {
@@ -18,8 +17,8 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
                 <div className="rounded-lg bg-default-200/90 p-2">
                     <p className="text-base font-semibold">{`Round ${label}`}</p>
                     <Divider className="my-1" />
-                    <p className="text-sm font-medium">{`${capitaliseFirstLetter(payload[0].name)} — ${formatter().format(payload[0].value)}`}</p>
-                    <p className="text-sm font-medium">{`${capitaliseFirstLetter(payload[1].name)} — ${formatter().format(payload[1].value)}`}</p>
+                    <p className="text-sm font-medium capitalize">{`${payload[0].name} — ${formatter().format(payload[0].value)}`}</p>
+                    <p className="text-sm font-medium capitalize">{`${payload[1].name} — ${formatter().format(payload[1].value)}`}</p>
                 </div>
             );
         }

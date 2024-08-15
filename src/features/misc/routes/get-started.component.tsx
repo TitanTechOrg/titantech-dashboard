@@ -1,25 +1,25 @@
+import Logo from '@/assets/Logo.webp';
 import {
     Accordion,
     AccordionItem,
+    Button,
     Card,
-    CardHeader,
     CardBody,
     CardFooter,
+    CardHeader,
+    Code,
     Divider,
     Image,
-    Button,
-    Spacer,
     Link,
+    Spacer,
     Tooltip,
-    Code,
 } from '@nextui-org/react';
 import { CopyIcon, DiscordLogoIcon } from '@radix-ui/react-icons';
-import Logo from '@/assets/Logo.webp';
 import { useCallback } from 'react';
 
 export function GetStarted() {
-    const copyToClipboard = useCallback(() => {
-        navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK);
+    const copyToClipboard = useCallback(async () => {
+        await navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK);
     }, []);
 
     return (

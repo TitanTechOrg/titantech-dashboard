@@ -1,22 +1,21 @@
 #root {
-  max-width: 1536px;
-  margin: 0 auto;
-  padding: 0rem;
-  text-align: center;
+    margin: 0 auto;
+    padding: 0rem;
+    text-align: center;
 }
 
-#rechartsXFillColor, 
+#rechartsXFillColor,
 #rechartsYFillColor {
-  fill: rgb(17, 24, 28);
-  font-size: 0.875rem/* 14px */;
-  line-height: 1.25rem/* 20px */;
-  font-weight: 500;
+    fill: rgb(17, 24, 28);
+    font-size: 0.875rem /* 14px */;
+    line-height: 1.25rem /* 20px */;
+    font-weight: 500;
 }
 
 .dark #rechartsXFillColor,
 .dark #rechartsYFillColor {
-  fill: rgb(236, 237, 238);
-  font-size: 0.875rem/* 14px */;
-  line-height: 1.25rem/* 20px */;
-  font-weight: 500;
+    fill: rgb(236, 237, 238);
+    font-size: 0.875rem /* 14px */;
+    line-height: 1.25rem /* 20px */;
+    font-weight: 500;
 }

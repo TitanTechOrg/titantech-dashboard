@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
-import { useBoundStore } from '@/stores/bound.store';
+import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
+import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
+import AverageDamageCardLogo from '@/assets/Decks.webp';
 import { AttacksCard, useFetchedAttacks } from '@/features/attacks';
 import {
     CardBonusData,
@@ -12,9 +13,8 @@ import {
     useRaidList,
 } from '@/features/raid-info';
 import { CurrentTitanStatus, TitanSequence, TitansSequence, useRaidTitans } from '@/features/titans';
-import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
-import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
-import AverageDamageCardLogo from '@/assets/Decks.webp';
+import { useBoundStore } from '@/stores/bound.store';
+import { useEffect, useMemo } from 'react';
 
 export function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
@@ -68,13 +68,13 @@ export function Dashboard() {
     const getBonuses = useMemo(() => {
         const data: PercentageCardsType[] = [];
 
-        let moraleData: PercentageCardsType = {
+        const moraleData: PercentageCardsType = {
             bonus: [],
             imageUrl: TeamTacticsCardLogo,
             title: 'Morale',
         };
 
-        let mirrorForceData: PercentageCardsType = {
+        const mirrorForceData: PercentageCardsType = {
             bonus: [],
             imageUrl: MirrorForceCardLogo,
             title: 'Mirror Force',
@@ -170,7 +170,7 @@ export function Dashboard() {
     //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 px-0 pb-4 md:grid-cols-2 md:grid-rows-4 md:p-4 lg:grid-cols-3 lg:grid-rows-3">
+            <div className="grid grid-cols-1 gap-4 px-0 pb-4 md:grid-cols-2 md:grid-rows-4 lg:grid-cols-3 lg:grid-rows-3">
                 <div className="row-start-1 md:col-start-1 md:row-span-1 md:row-start-1 lg:row-span-1">
                     <RaidInfo
                         raidData={raidListData?.raids && raidListData?.raids?.length > 0 ? raidListData?.raids[0] : undefined}
@@ -195,9 +195,7 @@ export function Dashboard() {
                 </div>
             </div>
 
-            <div className={`md:px-4`}>
-                <AttacksCard {...raidAttacks} />
-            </div>
+            <AttacksCard {...raidAttacks} />
         </>
     );
 }

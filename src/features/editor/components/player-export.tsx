@@ -2,7 +2,9 @@
 //@ts-nocheck
 import { Button, Input, Tooltip } from '@nextui-org/react';
 import { CopyIcon } from '@radix-ui/react-icons';
+import fromExponential from 'from-exponential';
 import { useCallback, useState } from 'react';
+
 type RaidKey =
     | 'MoonBeam'
     | 'Fragmentize'
@@ -179,27 +181,68 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
     return '';
 };
 
+type NecrobearBonuses = {
+    Head: string;
+    Torso: string;
+    Limb: string;
+    Armour: string;
+    Body: string;
+    RaidEnemy1Damage: string;
+    RaidEnemy2Damage: string;
+    RaidEnemy3Damage: string;
+    RaidEnemy4Damage: string;
+    RaidEnemy5Damage: string;
+    RaidEnemy6Damage: string;
+    RaidEnemy7Damage: string;
+    RaidEnemy8Damage: string;
+};
+
 export function PlayerExport() {
     const [inputData, setInputData] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [necrobearBonus, setNecrobearBonus] = useState<NecrobearBonuses>(undefined);
 
     const prettyJson = useCallback((data: string) => {
         if (!data) return null;
 
         try {
-            const result = JSON.stringify(JSON.parse(data), null, 2);
-
-            return result;
+            return JSON.stringify(JSON.parse(data), null, 2);
         } catch (err) {
             /* empty */
         }
     }, []);
 
+    const parseNecrobearBonus = (data: string) => {
+        if (!Object.prototype.hasOwnProperty.call(data, 'research')) return;
+
+        const bonuses: NecrobearBonuses = {
+            Head: fromExponential(data['research'].HeadDamage || 0) * 100 ?? 0,
+            Torso: fromExponential(data['research'].ChestDamage || 0) * 100 ?? 0,
+            Limb: fromExponential(data['research'].LimbDamage || 0) * 100 ?? 0,
+            Armour: fromExponential(data['research'].ArmorDamage || 0) * 100 ?? 0,
+            Body: fromExponential(data['research'].BodyDamage || 0) * 100 ?? 0,
+            Lojak: fromExponential(data['research'].RaidEnemy1Damage || 0) * 100 ?? 0,
+            Takedar: fromExponential(data['research'].RaidEnemy2Damage || 0) * 100 ?? 0,
+            Jukk: fromExponential(data['research'].RaidEnemy3Damage || 0) * 100 ?? 0,
+            Sterl: fromExponential(data['research'].RaidEnemy4Damage || 0) * 100 ?? 0,
+            Mohaca: fromExponential(data['research'].RaidEnemy5Damage || 0) * 100 ?? 0,
+            Terro: fromExponential(data['research'].RaidEnemy6Damage || 0) * 100 ?? 0,
+            Klonk: fromExponential(data['research'].RaidEnemy7Damage || 0) * 100 ?? 0,
+            Priker: fromExponential(data['research'].RaidEnemy8Damage || 0) * 100 ?? 0,
+        };
+        setNecrobearBonus(bonuses);
+    };
+
     const copyToClipboard = useCallback(async () => {
         const data = prettyJson(inputData);
-        if (!data) return;
+        if (!data) {
+            setNecrobearBonus(undefined);
+            return;
+        }
         try {
             await navigator.clipboard.writeText(JSON.stringify(updateRaidCardNames(data, raidKeyMap)));
+            parseNecrobearBonus(JSON.parse(data));
+
             setIsOpen(true);
             setTimeout(() => {
                 setIsOpen(false);
@@ -212,23 +255,25 @@ export function PlayerExport() {
     return (
         <div className="flex flex-col items-center justify-center gap-8">
             <div className="flex max-w-sm flex-col font-normal">
-                <h3>What's this tool?</h3>
+                <h3 className="text-base">What is this tool?</h3>
                 <div className="flex max-w-sm flex-col gap-4">
-                    <span className="text-xs">
-                        This is a temporary fix for making TT2 player export compatible with the{' '}
-                        <span className="italic">TT2 Raid Optimizer app</span>
-                    </span>
-                    <span className="text-xs">
+                    <p className="text-sm">
+                        This is a temporary fix for making TT2 player export compatible with the
+                        <span className="italic">&nbsp;TT2 Raid Optimizer app</span>
+                    </p>
+                    <p className="text-sm">
                         If the copied export below is not working, please re-install the <span className="italic">TT2 Raid Optimizer app</span> and
                         try again
-                    </span>
+                    </p>
                 </div>
             </div>
             <div className="s:flex-row flex w-full flex-col items-center gap-4">
                 <Input
                     className="max-w-fit"
+                    classNames={{ label: ['text-base'] }}
                     type="text"
                     isClearable={true}
+                    onClear={() => setNecrobearBonus(undefined)}
                     label="TT2 Player Export Data"
                     labelPlacement="outside"
                     placeholder="Paste here"
@@ -255,22 +300,34 @@ export function PlayerExport() {
                     </Button>
                 </Tooltip>
             </div>
-            {/* <div className="flex w-full gap-4">
-                {inputData && (
+            {necrobearBonus && (
+                <div className="flex w-full max-w-40 flex-shrink-0 flex-col gap-4 text-sm">
+                    <p>Necrobear raid bonuses</p>
+                    <div>
+                        {Object.keys(necrobearBonus).map((key) => {
+                            return (
+                                <div key={key} className="flex justify-between gap-12">
+                                    <span>{key}</span>
+                                    <span>{necrobearBonus[key]}%</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {/* {inputData && (
                     <div className="max-h-96 gap-4 text-left">
                         <p>Raw input</p>
                         <pre className="text-default-500">{prettyJson(inputData)}</pre>
                     </div>
                 )}
-                
 
                 {prettyJson(inputData) && updateRaidCardNames(prettyJson(inputData)!, raidKeyMap) && (
                     <div className="max-h-96 gap-4 text-left">
                         <p>Preview output</p>
                         <pre className="text-default-500">{prettyJson(JSON.stringify(updateRaidCardNames(prettyJson(inputData)!, raidKeyMap)))}</pre>
                     </div>
-                )}
-            </div> */}
+                )} */}
+                </div>
+            )}
         </div>
     );
 }

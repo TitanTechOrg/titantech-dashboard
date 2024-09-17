@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
-import { Button, Input, Tooltip } from '@nextui-org/react';
-import { CopyIcon } from '@radix-ui/react-icons';
+import { Button, Textarea, Tooltip } from '@nextui-org/react';
+import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import fromExponential from 'from-exponential';
 import { useCallback, useState } from 'react';
 
@@ -199,6 +199,7 @@ type NecrobearBonuses = {
 
 export function PlayerExport() {
     const [inputData, setInputData] = useState('');
+    const [outputData, setOutputData] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [necrobearBonus, setNecrobearBonus] = useState<NecrobearBonuses>(undefined);
 
@@ -252,11 +253,17 @@ export function PlayerExport() {
         }
     }, [prettyJson, inputData]);
 
+    const clearText = () => {
+        setInputData('');
+        setOutputData('');
+        setNecrobearBonus(undefined);
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center gap-8">
+        <div className="flex flex-col items-center justify-center gap-12">
             <div className="flex max-w-sm flex-col font-normal">
-                <h3 className="text-base">What is this tool?</h3>
-                <div className="flex max-w-sm flex-col gap-4">
+                <h3 className="pb-4 text-base">What is this tool?</h3>
+                <div className="flex max-w-sm flex-col gap-2 text-left">
                     <p className="text-sm">
                         This is a temporary fix for making TT2 player export compatible with the
                         <span className="italic">&nbsp;TT2 Raid Optimizer app</span>
@@ -267,43 +274,80 @@ export function PlayerExport() {
                     </p>
                 </div>
             </div>
-            <div className="s:flex-row flex w-full flex-col items-center gap-4">
-                <Input
-                    className="max-w-fit"
-                    classNames={{ label: ['text-base'] }}
-                    type="text"
-                    isClearable={true}
-                    onClear={() => setNecrobearBonus(undefined)}
-                    label="TT2 Player Export Data"
-                    labelPlacement="outside"
-                    placeholder="Paste here"
-                    value={inputData}
-                    onValueChange={setInputData}
-                    isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
-                />
-                <Tooltip
-                    aria-label="Copied to clipboard"
-                    isDisabled={!prettyJson(inputData)}
-                    isOpen={isOpen}
-                    content="Copied"
-                    showArrow={true}
-                    placement="right"
-                >
+            <div className="flex w-full flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
+                <div className="flex flex-col items-center justify-center gap-4">
+                    <Textarea
+                        label="Player Export"
+                        labelPlacement="outside"
+                        placeholder="Paste here"
+                        className="max-w-xs"
+                        classNames={{ label: ['text-left'] }}
+                        value={inputData}
+                        onValueChange={(val) => {
+                            const pretty = prettyJson(val);
+                            setInputData(val);
+                            if (pretty) {
+                                setOutputData(pretty);
+                            } else {
+                                setOutputData('');
+                                setNecrobearBonus(undefined);
+                            }
+                        }}
+                        errorMessage={'Invalid JSON data'}
+                        aria-errormessage="Invalid JSON data"
+                        isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
+                        size="lg"
+                    />
                     <Button
-                        isDisabled={!prettyJson(inputData)}
-                        color="primary"
-                        aria-label="Copy player export"
-                        onClick={copyToClipboard}
-                        startContent={<CopyIcon />}
+                        isDisabled={!inputData.length}
+                        color="default"
+                        aria-label="Clear player export text"
+                        onClick={clearText}
+                        className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
+                        startContent={<CrossCircledIcon />}
                     >
-                        Copy
+                        Clear
                     </Button>
-                </Tooltip>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-4">
+                    <Textarea
+                        label="Fixed Player Export"
+                        labelPlacement="outside"
+                        placeholder="Copy to TT2 Raid Optimizer app"
+                        className="max-w-xs"
+                        classNames={{ label: ['text-left'] }}
+                        value={outputData}
+                        onValueChange={setOutputData}
+                        isReadOnly={true}
+                        errorMessage={'Something went wrong...'}
+                        size="lg"
+                    />
+                    <Tooltip
+                        aria-label="Copied to clipboard tooltip"
+                        isDisabled={!prettyJson(inputData)}
+                        isOpen={isOpen}
+                        content="Copied"
+                        showArrow={true}
+                        placement="right"
+                    >
+                        <Button
+                            isDisabled={!prettyJson(inputData)}
+                            color="primary"
+                            aria-label="Copy player export"
+                            onClick={copyToClipboard}
+                            className="w-fit self-center"
+                            startContent={<CopyIcon />}
+                        >
+                            Copy
+                        </Button>
+                    </Tooltip>
+                </div>
             </div>
             {necrobearBonus && (
-                <div className="flex w-full max-w-40 flex-shrink-0 flex-col gap-4 text-sm">
-                    <p>Necrobear raid bonuses</p>
-                    <div>
+                <div className="flex w-full max-w-sm flex-shrink-0 flex-col gap-4 text-sm">
+                    <h3>Necrobear</h3>
+                    <p>You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.</p>
+                    <div className="max-w-40 self-center">
                         {Object.keys(necrobearBonus).map((key) => {
                             return (
                                 <div key={key} className="flex justify-between gap-12">
@@ -313,19 +357,6 @@ export function PlayerExport() {
                             );
                         })}
                     </div>
-                    {/* {inputData && (
-                    <div className="max-h-96 gap-4 text-left">
-                        <p>Raw input</p>
-                        <pre className="text-default-500">{prettyJson(inputData)}</pre>
-                    </div>
-                )}
-
-                {prettyJson(inputData) && updateRaidCardNames(prettyJson(inputData)!, raidKeyMap) && (
-                    <div className="max-h-96 gap-4 text-left">
-                        <p>Preview output</p>
-                        <pre className="text-default-500">{prettyJson(JSON.stringify(updateRaidCardNames(prettyJson(inputData)!, raidKeyMap)))}</pre>
-                    </div>
-                )} */}
                 </div>
             )}
         </div>

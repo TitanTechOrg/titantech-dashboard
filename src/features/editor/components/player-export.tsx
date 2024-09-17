@@ -262,15 +262,12 @@ export function PlayerExport() {
     return (
         <div className="flex flex-col items-center justify-center gap-12">
             <div className="flex max-w-sm flex-col font-normal">
-                <h3 className="pb-4 text-base">What is this tool?</h3>
+                <h3 className="pb-4 text-base">What is Player Export Editor?</h3>
                 <div className="flex max-w-sm flex-col gap-2 text-left">
                     <p className="text-sm">
-                        This is a temporary fix for making TT2 player export compatible with the
-                        <span className="italic">&nbsp;TT2 Raid Optimizer app</span>
-                    </p>
-                    <p className="text-sm">
-                        If the copied export below is not working, please re-install the <span className="italic">TT2 Raid Optimizer app</span> and
-                        try again
+                        This tool provides a temporary fix for making TT2 player export compatible with the
+                        <span className="italic">&nbsp;TT2 Raid Optimizer</span> app. If the copied export below is not working, please re-install the{' '}
+                        <span className="italic">TT2 Raid Optimizer</span> app and try again.
                     </p>
                 </div>
             </div>
@@ -346,16 +343,22 @@ export function PlayerExport() {
             {necrobearBonus && (
                 <div className="flex w-full max-w-sm flex-shrink-0 flex-col gap-4 text-sm">
                     <h3>Necrobear</h3>
-                    <p>You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.</p>
-                    <div className="max-w-40 self-center">
-                        {Object.keys(necrobearBonus).map((key) => {
-                            return (
-                                <div key={key} className="flex justify-between gap-12">
-                                    <span>{key}</span>
-                                    <span>{necrobearBonus[key]}%</span>
-                                </div>
-                            );
-                        })}
+                    <p className="text-left">
+                        You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.
+                    </p>
+                    <div className="self-center">
+                        <ul className={`${Object.keys(necrobearBonus).length / 2 > 5 ? 'columns-2 sm:columns-3' : 'columns-1'} gap-8`}>
+                            {Object.keys(necrobearBonus).map((key) => {
+                                return (
+                                    <li>
+                                        <div key={key} className="flex justify-between gap-4">
+                                            <span>{key}</span>
+                                            <span>{necrobearBonus[key]}%</span>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </div>
                 </div>
             )}

@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-//@ts-nocheck
-import { Button, Textarea, Tooltip } from '@nextui-org/react';
+import Amplify from '@/assets/cards/Amplify.webp';
+import InsanityVoid from '@/assets/cards/InsanityVoid.webp';
+import PrismaticRift from '@/assets/cards/PrismaticRift.webp';
+import RadiantKaleidoscope from '@/assets/cards/RadiantKaleidoscope.webp';
+import RazorWind from '@/assets/cards/RazorWind.webp';
+import ThrivingPlague from '@/assets/cards/ThrivingPlague.webp';
+import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@nextui-org/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import fromExponential from 'from-exponential';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 type RaidKey =
     | 'MoonBeam'
@@ -108,6 +112,19 @@ const newSeasonalCardBoosts = {
     'Thriving Plague': 15,
 };
 
+const cardsMap = {
+    old: [
+        { name: 'Insanity Void', level: 10, image: InsanityVoid },
+        { name: 'Amplify', level: 20, image: Amplify },
+        { name: 'Radiant Kaleidoscope', level: 20, image: RadiantKaleidoscope },
+    ],
+    new: [
+        { name: 'Prismatic Rift', level: 10, image: PrismaticRift },
+        { name: 'Razor Wind', level: 15, image: RazorWind },
+        { name: 'Thriving Plague', level: 15, image: ThrivingPlague },
+    ],
+};
+
 const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string => {
     const raidCardsKey = 'raidCards';
     const equipmentSetsKey = 'equipmentSets';
@@ -117,76 +134,75 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
 
         if (!data || typeof data !== 'object') return '';
 
-        if (raidCardsKey in data) {
+        if (Object.prototype.hasOwnProperty.call(data, raidCardsKey)) {
             const cards = data[raidCardsKey];
 
             if (typeof cards !== 'object' || cards == null) return '';
 
             for (const oldKey in keyMap) {
-                if (Object.prototype.hasOwnProperty.call(cards, oldKey)) {
-                    cards[keyMap[oldKey]] = cards[oldKey];
-
-                    if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey]], 'lv')) {
-                        cards[keyMap[oldKey]].level = cards[keyMap[oldKey]].lv;
-                        delete cards[keyMap[oldKey]].lv;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey]], 'num')) {
-                        cards[keyMap[oldKey]].cards = cards[keyMap[oldKey]].num;
-                        delete cards[keyMap[oldKey]].num;
-                    }
-
-                    if (keyMap[oldKey] === 'Insanity Void') {
-                        const finalLevel = cards[keyMap[oldKey]].level - oldSeasonalCardBoosts['Insanity Void'];
-                        cards[keyMap[oldKey]].level = finalLevel > 0 ? finalLevel : 0;
-                    }
-                    if (keyMap[oldKey] === 'Amplify') {
-                        const finalLevel = cards[keyMap[oldKey]].level - oldSeasonalCardBoosts['Amplify'];
-                        cards[keyMap[oldKey]].level = finalLevel > 0 ? finalLevel : 0;
-                    }
-                    if (keyMap[oldKey] === 'Radiant Kaleidoscope') {
-                        const finalLevel = cards[keyMap[oldKey]].level - oldSeasonalCardBoosts['Radiant Kaleidoscope'];
-                        cards[keyMap[oldKey]].level = finalLevel > 0 ? finalLevel : 0;
-                    }
-
-                    if (keyMap[oldKey] === 'Prismatic Rift') {
-                        const finalLevel = cards[keyMap[oldKey]].level + newSeasonalCardBoosts['Prismatic Rift'];
-                        cards[keyMap[oldKey]].level = finalLevel > 100 ? 100 : finalLevel;
-                    }
-                    if (keyMap[oldKey] === 'Razor Wind') {
-                        const finalLevel = cards[keyMap[oldKey]].level + newSeasonalCardBoosts['Razor Wind'];
-                        cards[keyMap[oldKey]].level = finalLevel > 100 ? 100 : finalLevel;
-                    }
-                    if (keyMap[oldKey] === 'Thriving Plague') {
-                        const finalLevel: number = cards[keyMap[oldKey]].level + newSeasonalCardBoosts['Thriving Plague'];
-                        cards[keyMap[oldKey]].level = finalLevel > 100 ? 100 : finalLevel;
-                    }
-
-                    if (oldKey !== keyMap[oldKey]) delete cards[oldKey];
+                if (!Object.prototype.hasOwnProperty.call(cards, oldKey)) {
+                    continue;
                 }
+
+                cards[keyMap[oldKey as keyof RaidKeyMapType]] = cards[oldKey];
+
+                if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey as keyof RaidKeyMapType]], 'lv')) {
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = cards[keyMap[oldKey as keyof RaidKeyMapType]].lv;
+                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]].lv;
+                }
+                if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey as keyof RaidKeyMapType]], 'num')) {
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].cards = cards[keyMap[oldKey as keyof RaidKeyMapType]].num;
+                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]].num;
+                }
+
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Insanity Void') {
+                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Insanity Void'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                }
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Amplify') {
+                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Amplify'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                }
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Radiant Kaleidoscope') {
+                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Radiant Kaleidoscope'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                }
+
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Prismatic Rift') {
+                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Prismatic Rift'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                }
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Razor Wind') {
+                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Razor Wind'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                }
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Thriving Plague') {
+                    const finalLevel: number = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Thriving Plague'];
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                }
+
+                if (oldKey !== keyMap[oldKey as keyof RaidKeyMapType]) delete cards[oldKey];
             }
-
-            const equipments = data[equipmentSetsKey];
-
-            if (typeof equipments !== 'object' || equipments == null) return '';
-
-            data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item] || item);
-
-            return data;
         }
+
+        const equipments = data[equipmentSetsKey];
+
+        if (typeof equipments !== 'object' || equipments == null) return '';
+
+        data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Jade: string }] || item);
+
+        return data;
     } catch (err) {
-        /* empty */
         return '';
     }
-
-    return '';
 };
 
 type NecrobearBonuses = {
-    Head: string;
-    Torso: string;
-    Limb: string;
-    Armour: string;
-    Body: string;
+    HeadDamage: string;
+    ChestDamage: string;
+    LimbDamage: string;
+    ArmorDamage: string;
+    BodyDamage: string;
     RaidEnemy1Damage: string;
     RaidEnemy2Damage: string;
     RaidEnemy3Damage: string;
@@ -197,81 +213,186 @@ type NecrobearBonuses = {
     RaidEnemy8Damage: string;
 };
 
+type ReadableNecrobearBonuses = {
+    Head: number;
+    Torso: number;
+    Limb: number;
+    Armour: number;
+    Body: number;
+    Lojak: number;
+    Takedar: number;
+    Jukk: number;
+    Sterl: number;
+    Mohaca: number;
+    Terro: number;
+    Klonk: number;
+    Priker: number;
+};
+
+type NecroProps = {
+    data: string;
+};
+
+function NecrobearBonus({ data }: NecroProps) {
+    const parseNecrobearBonus = (data: string) => {
+        try {
+            const parsed = JSON.parse(data);
+
+            if (!Object.prototype.hasOwnProperty.call(parsed, 'research')) return;
+
+            const research: NecrobearBonuses = parsed['research'];
+
+            const bonuses: ReadableNecrobearBonuses = {
+                Head: readDamagePercentage(research, 'HeadDamage'),
+                Torso: readDamagePercentage(research, 'ChestDamage'),
+                Limb: readDamagePercentage(research, 'LimbDamage'),
+                Armour: readDamagePercentage(research, 'ArmorDamage'),
+                Body: readDamagePercentage(research, 'BodyDamage'),
+                Lojak: readDamagePercentage(research, 'RaidEnemy1Damage'),
+                Takedar: readDamagePercentage(research, 'RaidEnemy2Damage'),
+                Jukk: readDamagePercentage(research, 'RaidEnemy3Damage'),
+                Sterl: readDamagePercentage(research, 'RaidEnemy4Damage'),
+                Mohaca: readDamagePercentage(research, 'RaidEnemy5Damage'),
+                Terro: readDamagePercentage(research, 'RaidEnemy6Damage'),
+                Klonk: readDamagePercentage(research, 'RaidEnemy7Damage'),
+                Priker: readDamagePercentage(research, 'RaidEnemy8Damage'),
+            };
+            return bonuses;
+        } catch (err) {
+            return undefined;
+        }
+    };
+
+    const readDamagePercentage = (research: NecrobearBonuses, key: keyof NecrobearBonuses) => {
+        const val = research[key];
+
+        if (Number.isNaN(val)) return 0;
+
+        const exp = fromExponential(val);
+
+        if (isNaN(Number(exp))) return 0;
+
+        return Number(exp) * 100;
+    };
+
+    const text = parseNecrobearBonus(data);
+
+    return (
+        <div className="flex w-full max-w-md shrink-0 flex-col gap-4 text-sm">
+            <h3>Necrobear</h3>
+            <p className="text-left">
+                You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.
+            </p>
+            {text && (
+                <div className="self-center">
+                    <ul className={`${Object.keys(text).length / 2 > 5 ? 'columns-2 sm:columns-3' : 'columns-1'} gap-8`}>
+                        {Object.keys(text).map((key) => {
+                            return (
+                                <li key={key}>
+                                    <div className="flex justify-between gap-4">
+                                        <span>{key}</span>
+                                        <span>{text[key as keyof ReadableNecrobearBonuses]}%</span>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+}
+
+type SeasonalCardsInfoSectionProps = {
+    title: string;
+    data: typeof cardsMap.new;
+    isNewSeason: boolean;
+};
+
+function SeasonalCardsInfoSection({ title, data, isNewSeason }: SeasonalCardsInfoSectionProps) {
+    return (
+        <div className="flex flex-col gap-2 text-sm">
+            <p>{title}</p>
+            <ul className="grid columns-1 gap-0.5">
+                {data.map(({ name, level, image }) => {
+                    return (
+                        <li key={name}>
+                            <div className="flex shrink-0 flex-row items-center gap-4">
+                                <Image src={image} alt={`${name} raid card`} className="h-8 w-8 object-cover" radius="sm" />
+                                {isNewSeason ? '+' : '-'}
+                                {level}
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+    );
+}
+
 export function PlayerExport() {
     const [inputData, setInputData] = useState('');
     const [outputData, setOutputData] = useState('');
     const [isOpen, setIsOpen] = useState(false);
-    const [necrobearBonus, setNecrobearBonus] = useState<NecrobearBonuses>(undefined);
 
-    const prettyJson = useCallback((data: string) => {
-        if (!data) return null;
+    const prettyJson = useMemo(
+        () => (data: string) => {
+            if (!data) {
+                return null;
+            }
 
-        try {
-            return JSON.stringify(JSON.parse(data), null, 2);
-        } catch (err) {
-            /* empty */
-        }
-    }, []);
-
-    const parseNecrobearBonus = (data: string) => {
-        if (!Object.prototype.hasOwnProperty.call(data, 'research')) return;
-
-        const bonuses: NecrobearBonuses = {
-            Head: fromExponential(data['research'].HeadDamage || 0) * 100 ?? 0,
-            Torso: fromExponential(data['research'].ChestDamage || 0) * 100 ?? 0,
-            Limb: fromExponential(data['research'].LimbDamage || 0) * 100 ?? 0,
-            Armour: fromExponential(data['research'].ArmorDamage || 0) * 100 ?? 0,
-            Body: fromExponential(data['research'].BodyDamage || 0) * 100 ?? 0,
-            Lojak: fromExponential(data['research'].RaidEnemy1Damage || 0) * 100 ?? 0,
-            Takedar: fromExponential(data['research'].RaidEnemy2Damage || 0) * 100 ?? 0,
-            Jukk: fromExponential(data['research'].RaidEnemy3Damage || 0) * 100 ?? 0,
-            Sterl: fromExponential(data['research'].RaidEnemy4Damage || 0) * 100 ?? 0,
-            Mohaca: fromExponential(data['research'].RaidEnemy5Damage || 0) * 100 ?? 0,
-            Terro: fromExponential(data['research'].RaidEnemy6Damage || 0) * 100 ?? 0,
-            Klonk: fromExponential(data['research'].RaidEnemy7Damage || 0) * 100 ?? 0,
-            Priker: fromExponential(data['research'].RaidEnemy8Damage || 0) * 100 ?? 0,
-        };
-        setNecrobearBonus(bonuses);
-    };
+            try {
+                return JSON.stringify(JSON.parse(data), null, 2);
+            } catch (err) {
+                return null;
+            }
+        },
+        []
+    );
 
     const copyToClipboard = useCallback(async () => {
         const data = prettyJson(inputData);
         if (!data) {
-            setNecrobearBonus(undefined);
             return;
         }
         try {
             await navigator.clipboard.writeText(JSON.stringify(updateRaidCardNames(data, raidKeyMap)));
-            parseNecrobearBonus(JSON.parse(data));
 
             setIsOpen(true);
             setTimeout(() => {
                 setIsOpen(false);
             }, 1000);
         } catch (err) {
-            //
+            return;
         }
     }, [prettyJson, inputData]);
 
     const clearText = () => {
         setInputData('');
         setOutputData('');
-        setNecrobearBonus(undefined);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-12">
-            <div className="flex max-w-sm flex-col font-normal">
-                <h3 className="pb-4 text-base">What is Player Export Editor?</h3>
-                <div className="flex max-w-sm flex-col gap-2 text-left">
+        <div className="flex flex-col items-center justify-center gap-8">
+            <div className="flex max-w-md flex-col font-normal">
+                <h3 className="pb-2 text-base">What is Player Export Editor?</h3>
+                <div className="flex max-w-md flex-col gap-2 text-left">
                     <p className="text-sm">
                         This tool provides a temporary fix for making TT2 player export compatible with the
                         <span className="italic">&nbsp;TT2 Raid Optimizer</span> app. If the copied export below is not working, please re-install the{' '}
                         <span className="italic">TT2 Raid Optimizer</span> app and try again.
                     </p>
+                    <Accordion className="px-0">
+                        <AccordionItem key="1" aria-label="Show card changes" title="Show card changes" classNames={{ title: ['text-sm'] }}>
+                            <div className="flex max-w-md flex-col gap-4">
+                                <SeasonalCardsInfoSection title="Changes to card levels in the raid app" data={cardsMap.old} isNewSeason={false} />
+                                <SeasonalCardsInfoSection title="Current seasonal card buffs" data={cardsMap.new} isNewSeason={true} />
+                            </div>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
             </div>
-            <div className="flex w-full flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
+            <div className="flex w-full max-w-md flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
                 <div className="flex flex-col items-center justify-center gap-4">
                     <Textarea
                         label="Player Export"
@@ -283,12 +404,7 @@ export function PlayerExport() {
                         onValueChange={(val) => {
                             const pretty = prettyJson(val);
                             setInputData(val);
-                            if (pretty) {
-                                setOutputData(pretty);
-                            } else {
-                                setOutputData('');
-                                setNecrobearBonus(undefined);
-                            }
+                            typeof pretty === 'string' ? setOutputData(pretty) : setOutputData('');
                         }}
                         errorMessage={'Invalid JSON data'}
                         aria-errormessage="Invalid JSON data"
@@ -340,28 +456,7 @@ export function PlayerExport() {
                     </Tooltip>
                 </div>
             </div>
-            {necrobearBonus && (
-                <div className="flex w-full max-w-sm flex-shrink-0 flex-col gap-4 text-sm">
-                    <h3>Necrobear</h3>
-                    <p className="text-left">
-                        You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.
-                    </p>
-                    <div className="self-center">
-                        <ul className={`${Object.keys(necrobearBonus).length / 2 > 5 ? 'columns-2 sm:columns-3' : 'columns-1'} gap-8`}>
-                            {Object.keys(necrobearBonus).map((key) => {
-                                return (
-                                    <li>
-                                        <div key={key} className="flex justify-between gap-4">
-                                            <span>{key}</span>
-                                            <span>{necrobearBonus[key]}%</span>
-                                        </div>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                </div>
-            )}
+            {prettyJson(inputData) && <NecrobearBonus data={inputData} />}
         </div>
     );
 }

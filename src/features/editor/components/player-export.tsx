@@ -157,15 +157,15 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
 
                 if (keyMap[oldKey as keyof RaidKeyMapType] === 'Insanity Void') {
                     const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Insanity Void'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
                 }
                 if (keyMap[oldKey as keyof RaidKeyMapType] === 'Amplify') {
                     const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Amplify'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
                 }
                 if (keyMap[oldKey as keyof RaidKeyMapType] === 'Radiant Kaleidoscope') {
                     const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Radiant Kaleidoscope'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 0 ? finalLevel : 0;
+                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
                 }
 
                 if (keyMap[oldKey as keyof RaidKeyMapType] === 'Prismatic Rift') {

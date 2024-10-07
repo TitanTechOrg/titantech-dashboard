@@ -1,85 +1,55 @@
-import Logo from '@/assets/Logo.webp';
-import {
-    Accordion,
-    AccordionItem,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    Code,
-    Divider,
-    Image,
-    Link,
-    Spacer,
-    Tooltip,
-} from '@nextui-org/react';
-import { CopyIcon, DiscordLogoIcon } from '@radix-ui/react-icons';
-import { useCallback } from 'react';
-
+import { Button, Code, Link } from '@nextui-org/react';
+import { DiscordLogoIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+// max-w-2xl
 export function GetStarted() {
-    const copyToClipboard = useCallback(async () => {
-        await navigator.clipboard.writeText(import.meta.env.VITE_DISCORD_INVITE_LINK);
-    }, []);
-
     return (
-        <Card className="mx-auto w-full max-w-[400px]">
-            <CardHeader className="flex gap-3">
-                <Image alt="TitanTech logo" className="h-10 w-10 rounded" src={Logo} />
-                <div className="flex flex-col items-start justify-center">
-                    <p className="text-lg">TitanTech</p>
+        <div className="mx-auto max-w-2xl">
+            <div className="flex flex-col items-center justify-center gap-8 sm:py-16">
+                <article>
+                    <h1 className="text-2xl font-semibold">TitanTech</h1>
+                    <p className="text-left">
+                        TitanTech is an analytics solution for Tap Titans 2 that aims to provide real-time data and insights to help clan members and
+                        leaders optimize their raiding strategy.
+                    </p>
+                </article>
+                <div className="w-full">
+                    <h1 className="text-lg font-medium">Get started</h1>
+                    <ol className="list-inside list-decimal text-left">
+                        <li>
+                            Invite the&nbsp;
+                            <Link isExternal showAnchorIcon href={import.meta.env.VITE_DISCORD_INVITE_LINK} target="_blank" rel="noopener noreferrer">
+                                TitanTech bot
+                            </Link>
+                            &nbsp;to your Discord server
+                        </li>
+                        <li>
+                            Type&nbsp;<Code>/connect_clan&nbsp;&lt;TOKEN&gt;</Code>
+                        </li>
+                        <li>Use the link provided by the TitanTech bot to access your Dashboard</li>
+                    </ol>
+                    <Code className="mt-4 text-wrap">
+                        <div className="flex items-center">
+                            <InfoCircledIcon className="h-4 w-4 flex-shrink-0 object-cover sm:mr-4" />
+                            <span>Please note that only (Grand) Master rank can generate a token for your clan</span>
+                        </div>
+                    </Code>
                 </div>
-            </CardHeader>
-            <CardBody>
-                <p className="text-sm">
-                    Titan Tech is an analytics app for Tap Titans 2. That provides real-time data and insights to help clan members and leaders
-                    optimize their raiding strategy.
-                </p>
-            </CardBody>
-            <CardFooter className="flex flex-col items-start justify-center">
-                <div className="flex flex-row gap-3">
-                    <Link isExternal href={import.meta.env.VITE_DISCORD_INVITE_LINK} target="_blank" rel="noopener noreferrer">
-                        <Button color="primary" startContent={<DiscordLogoIcon />}>
-                            Invite to Discord
-                        </Button>
-                    </Link>
-                    <Tooltip content="Copy invite link">
-                        <Button isIconOnly color="primary" aria-label="Copy invite link" onClick={copyToClipboard}>
-                            <CopyIcon />
-                        </Button>
-                    </Tooltip>
+                <div className="flex w-full flex-col items-center justify-center gap-4">
+                    <h1 className="text-lg">Got feedback or questions?</h1>
+                    <Button
+                        size="lg"
+                        as={Link}
+                        href={import.meta.env.VITE_DISCORD_SUPPORT_INVITE_LINK}
+                        color="primary"
+                        variant="ghost"
+                        target="_blank"
+                        className="w-fit"
+                        startContent={<DiscordLogoIcon />}
+                    >
+                        Discord
+                    </Button>
                 </div>
-                <Spacer y={8} />
-                <Divider />
-                <Accordion defaultExpandedKeys={['instructions-accordion']}>
-                    <AccordionItem key={'instructions-accordion'} aria-label="Instructions" title="Instructions">
-                        <Card shadow="none">
-                            <CardBody>
-                                <p className="font-medium italic">
-                                    Please note that only Grand Master and Master ranks in a clan can generate a token.
-                                </p>
-                            </CardBody>
-                        </Card>
-                        <Card shadow="none">
-                            <CardBody>
-                                <p>1. Get started by inviting TitanTech to your server using the invite button above.</p>
-                            </CardBody>
-                        </Card>
-                        <Card shadow="none">
-                            <CardBody>
-                                <p>
-                                    2. Type <Code>{'/connect_clan <TOKEN>'}</Code>.
-                                </p>
-                            </CardBody>
-                        </Card>
-                        <Card shadow="none">
-                            <CardBody>
-                                <p>3. Use the link provided by the bot to access the TitanTech Dashboard.</p>
-                            </CardBody>
-                        </Card>
-                    </AccordionItem>
-                </Accordion>
-            </CardFooter>
-        </Card>
+            </div>
+        </div>
     );
 }

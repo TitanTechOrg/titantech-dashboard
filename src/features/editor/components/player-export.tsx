@@ -1,13 +1,182 @@
 import Amplify from '@/assets/cards/Amplify.webp';
+import GuardBreak from '@/assets/cards/GuardBreak.webp';
 import InsanityVoid from '@/assets/cards/InsanityVoid.webp';
-import PrismaticRift from '@/assets/cards/PrismaticRift.webp';
+import Maelstrom from '@/assets/cards/Maelstrom.webp';
 import RadiantKaleidoscope from '@/assets/cards/RadiantKaleidoscope.webp';
-import RazorWind from '@/assets/cards/RazorWind.webp';
-import ThrivingPlague from '@/assets/cards/ThrivingPlague.webp';
+import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
 import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@nextui-org/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import fromExponential from 'from-exponential';
 import { useCallback, useMemo, useState } from 'react';
+
+// type RaidResearchNodeBaseType =
+//     | 'RAID'
+//     | 'AFFLICTION'
+//     | 'BURST'
+//     | 'ARMOR'
+//     | 'BODY'
+//     | 'TORSO'
+//     | 'LIMB'
+//     | 'HEAD'
+//     | 'LOJAK'
+//     | 'TAKEDAR'
+//     | 'JUKK'
+//     | 'STERL'
+//     | 'MOHACA'
+//     | 'TERRO'
+//     | 'KLONK'
+//     | 'PRIKER'
+//     | 'HEAD_ARMOR'
+//     | 'LIMB_ARMOR'
+//     | 'TORSO_ARMOR'
+//     | 'HEAD_BODY'
+//     | 'LIMB_BODY'
+//     | 'TORSO_BODY'
+//     | 'LOJAK_AFFLICTION'
+//     | 'TAKEDAR_AFFLICTION'
+//     | 'JUKK_AFFLICTION'
+//     | 'STERL_AFFLICTION'
+//     | 'MOHACA_BURST'
+//     | 'TERRO_BURST'
+//     | 'KLONK_BURST'
+//     | 'PRIKER_BURST'
+//     | 'LOJAK_BURST'
+//     | 'TAKEDAR_BURST'
+//     | 'JUKK_BURST'
+//     | 'STERL_BURST'
+//     | 'MOHACA_AFFLICTION'
+//     | 'TERRO_AFFLICTION'
+//     | 'KLONK_AFFLICTION'
+//     | 'PRIKER_AFFLICTION';
+
+// type RaidResearchNode = {
+//     type: RaidResearchNodeBaseType;
+//     levels: { total: number; current: number; bonusPer: number };
+// };
+
+// const RaidResearch: Record<number, RaidResearchNode[]> = {
+//     0: [{ type: 'RAID', levels: { total: 10, current: 0, bonusPer: 10 } }],
+//     1: [
+//         { type: 'AFFLICTION', levels: { total: 10, current: 0, bonusPer: 10 } },
+//         { type: 'BURST', levels: { total: 10, current: 0, bonusPer: 10 } },
+//     ],
+//     2: [
+//         { type: 'ARMOR', levels: { total: 10, current: 0, bonusPer: 10 } },
+//         { type: 'BODY', levels: { total: 10, current: 0, bonusPer: 10 } },
+//     ],
+//     3: [
+//         { type: 'HEAD', levels: { total: 8, current: 0, bonusPer: 9 } },
+//         { type: 'LIMB', levels: { total: 8, current: 0, bonusPer: 9 } },
+//         { type: 'TORSO', levels: { total: 8, current: 0, bonusPer: 9 } },
+//     ],
+//     4: [
+//         { type: 'LOJAK', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'TAKEDAR', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'JUKK', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'STERL', levels: { total: 15, current: 0, bonusPer: 4 } },
+//     ],
+//     5: [
+//         { type: 'MOHACA', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'TERRO', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'KLONK', levels: { total: 15, current: 0, bonusPer: 4 } },
+//         { type: 'PRIKER', levels: { total: 15, current: 0, bonusPer: 4 } },
+//     ],
+//     6: [
+//         { type: 'HEAD_ARMOR', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'LIMB_ARMOR', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'TORSO_ARMOR', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'HEAD_BODY', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'LIMB_BODY', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'TORSO_BODY', levels: { total: 25, current: 0, bonusPer: 2 } },
+//     ],
+//     7: [
+//         { type: 'LOJAK_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'TAKEDAR_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'JUKK_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'STERL_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//     ],
+//     8: [
+//         { type: 'MOHACA_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'TERRO_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'KLONK_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'PRIKER_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//     ],
+//     9: [
+//         { type: 'LOJAK_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'TAKEDAR_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'JUKK_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'STERL_BURST', levels: { total: 9, current: 0, bonusPer: 6 } },
+//     ],
+//     10: [
+//         { type: 'MOHACA_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'TERRO_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'KLONK_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//         { type: 'PRIKER_AFFLICTION', levels: { total: 9, current: 0, bonusPer: 6 } },
+//     ],
+//     11: [{ type: 'RAID', levels: { total: 7, current: 0, bonusPer: 8 } }],
+//     12: [
+//         { type: 'AFFLICTION', levels: { total: 25, current: 0, bonusPer: 2 } },
+//         { type: 'BURST', levels: { total: 25, current: 0, bonusPer: 2 } },
+//     ],
+//     13: [
+//         { type: 'ARMOR', levels: { total: 7, current: 0, bonusPer: 8 } },
+//         { type: 'BODY', levels: { total: 7, current: 0, bonusPer: 8 } },
+//     ],
+//     14: [
+//         { type: 'LIMB', levels: { total: 5, current: 0, bonusPer: 10 } },
+//         { type: 'HEAD', levels: { total: 5, current: 0, bonusPer: 10 } },
+//         { type: 'TORSO', levels: { total: 5, current: 0, bonusPer: 10 } },
+//     ],
+//     15: [
+//         { type: 'MOHACA', levels: { total: 8, current: 0, bonusPer: 7 } },
+//         { type: 'KLONK', levels: { total: 8, current: 0, bonusPer: 7 } },
+//     ],
+//     16: [
+//         { type: 'TAKEDAR', levels: { total: 8, current: 0, bonusPer: 7 } },
+//         { type: 'STERL', levels: { total: 8, current: 0, bonusPer: 7 } },
+//     ],
+//     17: [
+//         { type: 'PRIKER', levels: { total: 8, current: 0, bonusPer: 7 } },
+//         { type: 'TERRO', levels: { total: 8, current: 0, bonusPer: 7 } },
+//     ],
+//     18: [
+//         { type: 'LOJAK', levels: { total: 8, current: 0, bonusPer: 7 } },
+//         { type: 'JUKK', levels: { total: 8, current: 0, bonusPer: 7 } },
+//     ],
+//     19: [
+//         { type: 'HEAD_ARMOR', levels: { total: 17, current: 0, bonusPer: 3 } },
+//         { type: 'LIMB_ARMOR', levels: { total: 17, current: 0, bonusPer: 3 } },
+//         { type: 'TORSO_ARMOR', levels: { total: 17, current: 0, bonusPer: 3 } },
+//         { type: 'HEAD_BODY', levels: { total: 17, current: 0, bonusPer: 3 } },
+//         { type: 'LIMB_BODY', levels: { total: 17, current: 0, bonusPer: 3 } },
+//         { type: 'TORSO_BODY', levels: { total: 17, current: 0, bonusPer: 3 } },
+//     ],
+//     20: [
+//         { type: 'PRIKER_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'KLONK_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'TERRO_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'MOHACA_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//     ],
+//     21: [
+//         { type: 'STERL_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'JUKK_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'TAKEDAR_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'LOJAK_AFFLICTION', levels: { total: 5, current: 0, bonusPer: 12 } },
+//     ],
+//     22: [
+//         { type: 'MOHACA_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'TERRO_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'KLONK_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'PRIKER_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//     ],
+//     23: [
+//         { type: 'STERL_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'TAKEDAR_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'JUKK_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//         { type: 'LOJAK_BURST', levels: { total: 5, current: 0, bonusPer: 12 } },
+//     ],
+//     24: [{ type: 'RAID', levels: { total: 20, current: 0, bonusPer: 15 } }],
+// };
 
 type RaidKey =
     | 'MoonBeam'
@@ -48,7 +217,9 @@ type RaidKey =
     | 'TeamTactics'
     | 'SpinalTap'
     | 'AstralEcho'
-    | 'TriangleSupport';
+    | 'TriangleSupport'
+    | 'Weaken'
+    | 'SandsOfTime';
 
 type RaidKeyMapType = {
     [key in RaidKey]: string;
@@ -94,6 +265,8 @@ const raidKeyMap: RaidKeyMapType = {
     SpinalTap: 'Skeletal Smash',
     AstralEcho: 'Astral Echo',
     TriangleSupport: 'Radiant Kaleidoscope',
+    Weaken: 'Guard Break',
+    SandsOfTime: 'Sands of Time',
 };
 
 const equipmentReplacements = {
@@ -107,21 +280,21 @@ const oldSeasonalCardBoosts = {
 };
 
 const newSeasonalCardBoosts = {
-    'Prismatic Rift': 10,
-    'Razor Wind': 15,
-    'Thriving Plague': 15,
+    'Guard Break': 20,
+    'Sands of Time': 20,
+    Maelstrom: 10,
 };
 
 const cardsMap = {
     old: [
-        { name: 'Insanity Void', level: 10, image: InsanityVoid },
-        { name: 'Amplify', level: 20, image: Amplify },
-        { name: 'Radiant Kaleidoscope', level: 20, image: RadiantKaleidoscope },
+        { name: 'Insanity Void', level: 10, image: InsanityVoid, isRemoved: false },
+        { name: 'Amplify', level: 20, image: Amplify, isRemoved: false },
+        { name: 'Radiant Kaleidoscope', level: 20, image: RadiantKaleidoscope, isRemoved: false },
     ],
     new: [
-        { name: 'Prismatic Rift', level: 10, image: PrismaticRift },
-        { name: 'Razor Wind', level: 15, image: RazorWind },
-        { name: 'Thriving Plague', level: 15, image: ThrivingPlague },
+        { name: 'Guard Break', level: 20, image: GuardBreak, isRemoved: true },
+        { name: 'Sands of Time', level: 20, image: SandsOfTime, isRemoved: true },
+        { name: 'Maelstrom', level: 10, image: Maelstrom, isRemoved: false },
     ],
 };
 
@@ -168,16 +341,18 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
                     cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
                 }
 
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Prismatic Rift') {
-                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Prismatic Rift'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Guard Break') {
+                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]];
+                    // const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Guard Break'];
+                    // cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
                 }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Razor Wind') {
-                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Razor Wind'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Sands of Time') {
+                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]];
+                    // const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Sands of Time'];
+                    // cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
                 }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Thriving Plague') {
-                    const finalLevel: number = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Thriving Plague'];
+                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Maelstrom') {
+                    const finalLevel: number = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Maelstrom'];
                     cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
                 }
 
@@ -314,13 +489,14 @@ function SeasonalCardsInfoSection({ title, data, isNewSeason }: SeasonalCardsInf
         <div className="flex flex-col gap-2 text-sm">
             <p>{title}</p>
             <ul className="grid columns-1 gap-0.5">
-                {data.map(({ name, level, image }) => {
+                {data.map(({ name, level, image, isRemoved }) => {
                     return (
                         <li key={name}>
                             <div className="flex shrink-0 flex-row items-center gap-4">
                                 <Image src={image} alt={`${name} raid card`} className="h-8 w-8 object-cover" radius="sm" />
                                 {isNewSeason ? '+' : '-'}
                                 {level}
+                                {isRemoved && <span className="text-xs">(Removed from player export)</span>}
                             </div>
                         </li>
                     );
@@ -351,12 +527,8 @@ export function PlayerExport() {
     );
 
     const copyToClipboard = useCallback(async () => {
-        const data = prettyJson(inputData);
-        if (!data) {
-            return;
-        }
         try {
-            await navigator.clipboard.writeText(JSON.stringify(updateRaidCardNames(data, raidKeyMap)));
+            await navigator.clipboard.writeText(outputData);
 
             setIsOpen(true);
             setTimeout(() => {
@@ -404,7 +576,7 @@ export function PlayerExport() {
                         onValueChange={(val) => {
                             const pretty = prettyJson(val);
                             setInputData(val);
-                            typeof pretty === 'string' ? setOutputData(pretty) : setOutputData('');
+                            typeof pretty === 'string' ? setOutputData(JSON.stringify(updateRaidCardNames(pretty, raidKeyMap))) : setOutputData('');
                         }}
                         errorMessage={'Invalid JSON data'}
                         aria-errormessage="Invalid JSON data"
@@ -457,6 +629,56 @@ export function PlayerExport() {
                 </div>
             </div>
             {prettyJson(inputData) && <NecrobearBonus data={inputData} />}
+            {/* w-[56rem] min-w-max max-w-4xl */}
+            {/* <div className="w-full overflow-x-auto">
+                <ol className="">
+                    {Object.entries(RaidResearch).map(([key, node]) => (
+                        <li key={key} className={`mb-8 w-full whitespace-nowrap`}>
+                            <div className="overflow-auto">
+                                <div className="flex gap-1 overflow-x-auto sm:justify-center">
+                                    {node.map(({ levels, type }) => {
+                                        return <ResearchNode key={key + type} levels={levels} type={type} />;
+                                    })}
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+            </div> */}
         </div>
     );
 }
+
+// type ResearchNodeProps = RaidResearchNode & { key: string };
+// function ResearchNode({ key, levels, type }: ResearchNodeProps) {
+//     const title = type.replace('_', ' ').toLowerCase();
+//     const [level, setLevel] = useState<number>(levels.current);
+
+//     return (
+//         <div key={key} className="min-w-[150px] max-w-4xl rounded-lg border p-2">
+//             <span className="text-xs capitalize">{title}</span>
+//             <div className="flex items-center justify-center gap-2">
+//                 <Button
+//                     isIconOnly
+//                     size="sm"
+//                     startContent={<MinusIcon />}
+//                     onClick={() => {
+//                         if (level === 0) return;
+//                         setLevel((prev) => prev - 1);
+//                     }}
+//                 ></Button>
+//                 <span className="text-sm">
+//                     {level}/{levels.total}
+//                 </span>
+//                 <Button
+//                     isIconOnly
+//                     size="sm"
+//                     startContent={<PlusIcon />}
+//                     onClick={() => {
+//                         if (level < levels.total) setLevel((prev) => prev + 1);
+//                     }}
+//                 ></Button>
+//             </div>
+//         </div>
+//     );
+// }

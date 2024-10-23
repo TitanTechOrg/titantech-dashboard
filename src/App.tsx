@@ -1,5 +1,5 @@
-import { AlchemyCalculator } from '@/features/alchemy/index.ts';
-import { PlayerExport } from '@/features/editor/index.ts';
+// import { AlchemyCalculator } from '@/features/alchemy/index.ts';
+// import { PlayerExport } from '@/features/editor/index.ts';
 import { ErrorBoundary, ErrorPage, FourOhFour, GetStarted } from '@/features/misc';
 import Root from '@/routes/Root';
 import { usePreferencesStore } from '@/stores/preferences.store.ts';
@@ -57,9 +57,9 @@ const router = createBrowserRouter(
 
                 <Route path="overview" element={<Overview />} />
 
-                <Route path="alchemy" element={<AlchemyCalculator />} />
+                {/* <Route path="alchemy" element={<AlchemyCalculator />} />
 
-                <Route path="player-export-editor" element={<PlayerExport />} />
+                <Route path="player-export-editor" element={<PlayerExport />} /> */}
 
                 <Route path="*" element={<FourOhFour />} />
             </Route>

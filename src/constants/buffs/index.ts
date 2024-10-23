@@ -5,7 +5,7 @@ export const RaidBuffMapping = {
     AfflictedDamage: 'Affliction Damage +30%',
     AllRaidDamage: 'All Raid Damage +15%',
     BurstChance: 'Burst Chance +30%',
-    AfflictedDuration: 'Affliction Duration +40%',
+    AfflictedDuration: 'Affliction Duration +50%',
     ChestDamage: 'Torso Damage +30%',
     LimbDamage: 'Limb Damage +30%',
     AfflictedChance: 'Affliction Chance +30%',

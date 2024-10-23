@@ -1,26 +1,12 @@
 import Logo from '@/assets/Logo.webp';
 import { ThemeSwitcher } from '@/features/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
-import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-    Image,
-    Navbar,
-    NavbarBrand,
-    NavbarContent,
-    NavbarItem,
-    NavbarMenu,
-    NavbarMenuItem,
-    NavbarMenuToggle,
-} from '@nextui-org/react';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const menuItems = ['dashboard', 'overview', ['alchemy', 'player-export-editor']];
+// const menuItems = ['dashboard', 'overview', ['alchemy', 'player-export-editor']];
+const menuItems = ['dashboard', 'overview'];
 const protectedRoutes = ['dashboard', 'overview'];
 
 export function NavigationBar() {
@@ -69,60 +55,60 @@ export function NavigationBar() {
 
             <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
                 {menuItems.map((item) => {
-                    if (typeof item === 'string') {
-                        const path = '/' + item;
+                    // if (typeof item === 'string') {
+                    const path = '/' + item;
 
-                        return (
-                            <NavbarItem
-                                key={`menu-${item}`}
-                                isActive={location.pathname === path}
-                                className={protectedRoutes.includes(item) && !isAuthenticated ? 'hidden' : ''}
-                            >
-                                <NavLink to={path} className={location.pathname === path ? 'text-primary' : 'text-foreground'}>
-                                    <span className="capitalize">{item}</span>
-                                </NavLink>
-                            </NavbarItem>
-                        );
-                    } else {
-                        return (
-                            <Dropdown key={`menu-dropdown`}>
-                                <NavbarItem>
-                                    <DropdownTrigger>
-                                        <Button
-                                            disableRipple
-                                            className="bg-transparent p-0 text-medium data-[hover=true]:bg-transparent"
-                                            endContent={<ChevronDownIcon />}
-                                            radius="sm"
-                                            variant="light"
-                                        >
-                                            Tools
-                                        </Button>
-                                    </DropdownTrigger>
-                                </NavbarItem>
-                                <DropdownMenu
-                                    className="w-[340px]"
-                                    itemClasses={{
-                                        base: 'gap-4',
-                                    }}
-                                >
-                                    {item.flatMap((dropdownItem) => {
-                                        const pageName = dropdownItem.replace(/-/g, ' ');
-                                        const dropdownPath = '/' + dropdownItem;
-                                        return (
-                                            <DropdownItem
-                                                key={`menu-dropdown-${dropdownItem}`}
-                                                href={dropdownPath}
-                                                title={<span className="capitalize">{pageName}</span>}
-                                                className={
-                                                    location.pathname === dropdownPath ? 'bg-primary/20 text-primary group-hover:bg-primary/20' : ''
-                                                }
-                                            />
-                                        );
-                                    })}
-                                </DropdownMenu>
-                            </Dropdown>
-                        );
-                    }
+                    return (
+                        <NavbarItem
+                            key={`menu-${item}`}
+                            isActive={location.pathname === path}
+                            className={protectedRoutes.includes(item) && !isAuthenticated ? 'hidden' : ''}
+                        >
+                            <NavLink to={path} className={location.pathname === path ? 'text-primary' : 'text-foreground'}>
+                                <span className="capitalize">{item}</span>
+                            </NavLink>
+                        </NavbarItem>
+                    );
+                    // } else {
+                    //     return (
+                    //         <Dropdown key={`menu-dropdown`}>
+                    //             <NavbarItem>
+                    //                 <DropdownTrigger>
+                    //                     <Button
+                    //                         disableRipple
+                    //                         className="bg-transparent p-0 text-medium data-[hover=true]:bg-transparent"
+                    //                         endContent={<ChevronDownIcon />}
+                    //                         radius="sm"
+                    //                         variant="light"
+                    //                     >
+                    //                         Tools
+                    //                     </Button>
+                    //                 </DropdownTrigger>
+                    //             </NavbarItem>
+                    //             <DropdownMenu
+                    //                 className="w-[340px]"
+                    //                 itemClasses={{
+                    //                     base: 'gap-4',
+                    //                 }}
+                    //             >
+                    //                 {item.flatMap((dropdownItem) => {
+                    //                     const pageName = dropdownItem.replace(/-/g, ' ');
+                    //                     const dropdownPath = '/' + dropdownItem;
+                    //                     return (
+                    //                         <DropdownItem
+                    //                             key={`menu-dropdown-${dropdownItem}`}
+                    //                             href={dropdownPath}
+                    //                             title={<span className="capitalize">{pageName}</span>}
+                    //                             className={
+                    //                                 location.pathname === dropdownPath ? 'bg-primary/20 text-primary group-hover:bg-primary/20' : ''
+                    //                             }
+                    //                         />
+                    //                     );
+                    //                 })}
+                    //             </DropdownMenu>
+                    //         </Dropdown>
+                    //     );
+                    // }
                 })}
             </NavbarContent>
 

@@ -39,6 +39,8 @@ export const RaidCardMap = {
     TapDamage: { name: 'TapDamage', type: 'Support' },
     Amplify: { name: 'MagicPotion', type: 'Affliction' },
     RadiantKaleidoscope: { name: 'TriangleSupport', type: 'Support' },
+    GuardBreak: { name: 'Weaken', type: 'Burst' },
+    SandsOfTime: { name: 'SandsOfTime', type: 'Affliction' },
 
     Wildcard: { name: 'Wildcard', type: 'Support' },
 } as const;

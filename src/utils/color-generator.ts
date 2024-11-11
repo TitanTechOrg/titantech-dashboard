@@ -43,12 +43,12 @@ export const BodyEndColor: Color = {
 };
 
 export const loop100 = (color1: Color, color2: Color, prefix?: 'from' | 'to') => {
-    let result = [];
+    const result = [];
 
     for (let i = 0; i <= 100; i++) {
         const { red, green, blue } = getColourGradient(color1, color2, i / 100);
         const rgb = `[rgb(${red},${green},${blue})]`;
-        let taildwindString = prefix ? `${prefix}-${rgb} to-80%` : `bg-${rgb}`;
+        const taildwindString = prefix ? `${prefix}-${rgb} to-80%` : `bg-${rgb}`;
         result.push({ [i]: taildwindString });
     }
 

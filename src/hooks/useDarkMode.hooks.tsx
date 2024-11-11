@@ -8,7 +8,7 @@ const useDarkMode = () => {
     useEffect(() => {
         document.documentElement.classList.toggle('dark', darkMode);
         setDarkModeStorage(darkMode);
-    }, [darkMode]);
+    }, [darkMode, setDarkMode]);
 
     return [darkMode, setDarkMode] as const;
 };

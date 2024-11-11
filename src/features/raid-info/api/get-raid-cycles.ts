@@ -22,7 +22,7 @@ async function fetchRaidCycles(raidId?: string) {
 
     if (raidId) searchParams.append('raid_id', raidId);
 
-    if (searchParams) {
+    if (searchParams.size) {
         params += '?';
         params += searchParams;
     }

@@ -1,3 +1,15 @@
+import CardLogo from '@/assets/RaidIcon.webp';
+import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
+import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
+import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
+import MohacaAvatar from '@/assets/titans/avatars/Mohaca_avatar.webp';
+import PrikerAvatar from '@/assets/titans/avatars/Priker_avatar.webp';
+import SterlAvatar from '@/assets/titans/avatars/Sterl_avatar.webp';
+import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
+import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
+import { RaidTitanData } from '@/components/raid-titan-data';
+import { TitanSequence } from '@/features/titans';
+import { useBoundStore } from '@/stores/bound.store';
 import {
     Button,
     ButtonGroup,
@@ -13,20 +25,8 @@ import {
     Selection,
     Skeleton,
 } from '@nextui-org/react';
+import { CheckIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
-import { RaidTitanData } from '@/components';
-import { useBoundStore } from '@/stores/bound.store';
-import { ChevronDownIcon, CheckIcon } from '@radix-ui/react-icons';
-import { TitanSequence } from '@/features/titans';
-import CardLogo from '@/assets/RaidIcon.webp';
-import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
-import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
-import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
-import MohacaAvatar from '@/assets/titans/avatars/Mohaca_avatar.webp';
-import PrikerAvatar from '@/assets/titans/avatars/Priker_avatar.webp';
-import SterlAvatar from '@/assets/titans/avatars/Sterl_avatar.webp';
-import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
-import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
 
 const TitanImageMapping = {
     Jukk: JukkAvatar,

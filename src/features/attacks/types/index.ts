@@ -14,6 +14,7 @@ export type RaidAttack = {
 export type RaidCardType = {
     name: string;
     value: number;
+    readableName?: string;
 };
 
 export type TitanPart = {

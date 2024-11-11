@@ -1,7 +1,7 @@
-import { formatter, percentage } from '@/utils/number-formatter';
-import { Card, CardBody, CardHeader, Divider, Image, Progress, Skeleton } from '@nextui-org/react';
-import { useBoundStore } from '@/stores/bound.store';
-import { TitanSequence } from '..';
+import DecayingStrikeCard from '@/assets/cards/DecayingStrike.webp';
+import InsanityVoidCard from '@/assets/cards/InsanityVoid.webp';
+import SkeletalSmashCard from '@/assets/cards/SkeletalSmash.webp';
+import VictoryMarchCard from '@/assets/cards/VictoryMarch.webp';
 import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
 import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
 import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
@@ -10,10 +10,10 @@ import PrikerAvatar from '@/assets/titans/avatars/Priker_avatar.webp';
 import SterlAvatar from '@/assets/titans/avatars/Sterl_avatar.webp';
 import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
 import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
-import VictoryMarchCard from '@/assets/cards/VictoryMarch.webp';
-import SkeletalSmashCard from '@/assets/cards/SkeletalSmash.webp';
-import InsanityVoidCard from '@/assets/cards/InsanityVoid.webp';
-import DecayingStrikeCard from '@/assets/cards/DecayingStrike.webp';
+import { useBoundStore } from '@/stores/bound.store';
+import { formatter, percentage } from '@/utils';
+import { Card, CardBody, CardHeader, Divider, Image, Progress, Skeleton } from '@nextui-org/react';
+import { TitanSequence } from '..';
 
 const TitanImageMapping = {
     Jukk: JukkAvatar,

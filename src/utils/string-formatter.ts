@@ -7,3 +7,8 @@ export const convertUTCDateToLocalDate = (dateString: string): string => {
 };
 
 export const getRaidLabel = (tier: RaidTierType | string, level: string): string => `${tier} ⦁ Zone ${level}`;
+
+export const addSpacesBetweenCapitalLetters = (input: string): string => {
+    // return input.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z])([A-Z][a-z])/g, '$1 $2');
+    return input.replace(/([A-Z])/g, ' $1').trim();
+};

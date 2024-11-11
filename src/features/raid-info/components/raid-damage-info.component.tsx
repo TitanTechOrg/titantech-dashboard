@@ -1,4 +1,4 @@
-import { formatter } from '@/utils/number-formatter';
+import { formatter } from '@/utils';
 import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts';

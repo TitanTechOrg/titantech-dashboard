@@ -15,9 +15,6 @@ export function RaidListDropdown({ selectedItem, raidList, handleSelectionChange
                 label="Select a raid"
                 items={raidList.raids}
                 className="min-w-64"
-                scrollShadowProps={{
-                    isEnabled: false,
-                }}
                 selectedKeys={[selectedItem]}
                 onChange={handleSelectionChange}
                 renderValue={(items: SelectedItems<RaidData>) => {

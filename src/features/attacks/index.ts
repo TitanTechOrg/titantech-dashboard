@@ -1,13 +1,9 @@
-export * from './components/accordion.component';
-export * from './components/raid-deck.component';
-export * from './components/attacks-list.component';
-export * from './components/attacks-card.component';
-export * from './components/quick-view.component';
-
-export * from './types/index';
-
 export * from './api/fetchAttacks.api';
-
+export * from './components/accordion';
+export * from './components/attacks-card';
+export * from './components/attacks-list';
+export * from './components/quick-view';
+export * from './components/raid-deck';
+export * from './constants';
 export * from './hooks/useFetchedAttacks.hook';
-
-export * from './constants/index';
+export * from './types';

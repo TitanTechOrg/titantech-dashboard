@@ -19,3 +19,7 @@
     line-height: 1.25rem /* 20px */;
     font-weight: 500;
 }
+
+ul::-webkit-scrollbar {
+    display: none;
+}

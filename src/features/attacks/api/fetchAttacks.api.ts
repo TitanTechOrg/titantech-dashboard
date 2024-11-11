@@ -5,6 +5,14 @@ import { RaidLogs } from '../types';
 export const fetchAttacks = async ({ pageParam = 0 }) =>
     await axios.get<AxiosResponse<RaidLogs>, RaidLogs>(ENDPOINTS.raid_attack_log.v2 + '?offset=' + pageParam);
 
+export const fetchAttacksV3 = async (lastTitanAttackOccurredAt?: string) => {
+    if (lastTitanAttackOccurredAt)
+        return await axios.get<AxiosResponse<RaidLogs>, RaidLogs>(
+            ENDPOINTS.raid_attack_log.v3 + '?direction=1' + `&titan_attack_occurred_at=${lastTitanAttackOccurredAt}`
+        );
+    return await axios.get<AxiosResponse<RaidLogs>, RaidLogs>(ENDPOINTS.raid_attack_log.v3 + '?direction=0');
+};
+
 // let latestOccurredAt = '';
 // let cachedData: any;
 

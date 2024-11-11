@@ -19,7 +19,7 @@ async function fetchRaidPlayersOverview(raidId?: string, cycle?: number) {
     if (raidId) searchParams.append('raid_id', raidId);
     if (cycle) searchParams.append('cycle', String(cycle));
 
-    if (searchParams) {
+    if (searchParams.size) {
         params += '?';
         params += searchParams;
     }

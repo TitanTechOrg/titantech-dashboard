@@ -1,5 +1,5 @@
 import { TitanSequence } from '@/features/titans';
-import { percentage } from '@/utils/number-formatter';
+import { percentage } from '@/utils';
 import { StateCreator } from 'zustand';
 
 export type TitanSliceState = {

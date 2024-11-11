@@ -82,7 +82,7 @@ export function AlchemyCalculator() {
     const resetData = useCallback(() => {
         resetAlchemyData();
         reset();
-    }, []);
+    }, [resetAlchemyData, reset]);
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">

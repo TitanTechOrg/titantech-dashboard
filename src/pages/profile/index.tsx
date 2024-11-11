@@ -1,0 +1,47 @@
+import { useOverviewPlayers } from '@/features/overview';
+import { RaidCardsLevelChart, usePlayerProfile } from '@/features/players';
+import PlayerSelect from '@/features/players/components/player-select';
+import PlayerStats from '@/features/players/components/player-stats';
+import PlayerRaidCardsOverview from '@/features/players/components/raid-card-overview';
+import { useRaidList } from '@/features/raid-info';
+import { useSelectStore } from '@/stores/useSelectStore';
+import { Spinner } from '@nextui-org/react';
+
+export default function PlayerProfile() {
+    const { data: raidList, isLoading: isLoadingRaidList } = useRaidList();
+    const raidId = raidList?.raids.find((raid) => raid.ended_at != null)?.raid_id;
+    const { data: overviewPlayers, isLoading: isLoadingOverviewPlayers } = useOverviewPlayers(raidId);
+    const { selectedValues: selectedPlayerId } = useSelectStore();
+    const { data: playerProfile, isLoading: isLoadingProfile, isError: isErrorLoadingPlayer } = usePlayerProfile(selectedPlayerId['player-selector']);
+
+    if (isLoadingRaidList) {
+        return (
+            <div className="flex h-dvh justify-center">
+                <Spinner />
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-2">
+            <PlayerSelect overviewPlayers={overviewPlayers} isLoading={isLoadingOverviewPlayers} />
+            {isLoadingProfile ? (
+                <div className="col-span-2 mx-auto justify-center">
+                    <Spinner label="Loading player data..." />
+                </div>
+            ) : isErrorLoadingPlayer ? (
+                <div className="col-span-2 mx-auto justify-center">Player data could not be fetched. Is the player currently in the clan?</div>
+            ) : (
+                playerProfile && (
+                    <>
+                        <PlayerStats playerProfile={playerProfile} />
+                        <PlayerRaidCardsOverview cards={playerProfile.cards} />
+                        <div className="col-span-2 row-start-4">
+                            <RaidCardsLevelChart key={'RaidCardsLevelChart'} cards={playerProfile.cards} />
+                        </div>
+                    </>
+                )
+            )}
+        </div>
+    );
+}

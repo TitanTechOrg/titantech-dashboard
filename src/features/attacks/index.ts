@@ -5,5 +5,5 @@ export * from './components/attacks-list';
 export * from './components/quick-view';
 export * from './components/raid-deck';
 export * from './constants';
-export * from './hooks/useFetchedAttacks.hook';
+export * from './hooks/useFetchedAttacks';
 export * from './types';

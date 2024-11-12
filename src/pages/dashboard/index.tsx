@@ -1,7 +1,7 @@
 import MirrorForceCardLogo from '@/assets/cards/MirrorForce.webp';
 import TeamTacticsCardLogo from '@/assets/cards/TeamTactics.webp';
 import AverageDamageCardLogo from '@/assets/Decks.webp';
-import { AttacksCard, useFetchedAttacks, useFetchedAttacksV3 } from '@/features/attacks';
+import { AttacksCard, useFetchedAttacks } from '@/features/attacks';
 import {
     CardBonusData,
     DamageCardChartData,
@@ -18,20 +18,11 @@ import { useEffect, useMemo } from 'react';
 
 export default function Dashboard() {
     const { setTitans, currentTitan, setCurrentTitan, titans } = useBoundStore();
-
     const { data: raidCycles } = useRaidCycles();
 
     const { data: raidTitansData } = useRaidTitans();
     const { data: raidListData } = useRaidList();
-
     const raidAttacks = useFetchedAttacks();
-    const {
-        data: fetchedAttacksV3,
-        isLoading: fetchedAttacksV3IsLoading,
-        isError: fetchedAttacksV3IsError,
-    } = useFetchedAttacksV3('e0822cf3-b7ca-499c-a1b9-35582c125173');
-
-    console.log(fetchedAttacksV3, fetchedAttacksV3IsLoading, fetchedAttacksV3IsError);
 
     const isRaidStarted = useMemo(
         () => () => {
@@ -189,7 +180,6 @@ export default function Dashboard() {
         return data;
     }, [raidCycles?.cycles.length]);
 
-    //  md:bg-red-500 lg:bg-blue-500 sm:bg-yellow-500 bg-green-500 xl:bg-purple-500 2xl:bg-gray-400
     return (
         <>
             <div className="grid grid-cols-1 gap-4 px-0 pb-4 md:grid-cols-2 md:grid-rows-4 lg:grid-cols-3 lg:grid-rows-3">

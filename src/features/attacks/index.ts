@@ -1,4 +1,4 @@
-export * from './api/fetchAttacks.api';
+export * from './api/fetchAttacks';
 export * from './components/accordion';
 export * from './components/attacks-card';
 export * from './components/attacks-list';

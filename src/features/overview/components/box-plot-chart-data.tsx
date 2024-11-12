@@ -1,7 +1,6 @@
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
 import { Chart as ChartJS, ChartOptions, Tooltip, TooltipModel } from 'chart.js';
-import { useEffect } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { PlayerData } from '../types';
 
@@ -143,40 +142,6 @@ const externalTooltipHandler = (context: { chart: ChartJS; tooltip: TooltipModel
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
 };
 
-const options: ChartOptions<'boxplot'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: false,
-    },
-
-    plugins: {
-        legend: {
-            display: false,
-        },
-
-        tooltip: {
-            enabled: false,
-            external: externalTooltipHandler,
-            position: 'myCustomPositioner',
-        },
-    },
-    scales: {
-        x: {
-            stacked: 'single',
-        },
-        y: {
-            type: 'logarithmic',
-            stacked: 'single',
-            stack: 'y',
-            ticks: {
-                callback: (label) => formatter(0, 0).format(Math.trunc(Number(label))),
-            },
-        },
-    },
-};
-
 const mapBoxPlotPlayerData = (playersData: PlayerData[]) => {
     const playerNames = playersData.map(({ player_name }) => player_name);
 
@@ -225,28 +190,73 @@ const BORDER_COLOUR = { light: 'hsl(0 0% 6.67% / 0.1)', dark: 'hsl(0 0% 100% / 0
 
 export function BoxPlotChartData({ playersData }: BoxPlotChartDataProps) {
     const { darkMode: darkModeStorage } = usePreferencesStore();
-    const chart = ChartJS.getChart('player-dmg-boxplot');
 
-    useEffect(() => {
-        if (!chart) return;
-        if (!chart.config.options) return;
-        if (!chart.config.options.scales) return;
-        if (!chart.config.options.scales['x'] || !chart.config.options.scales['y']) return;
-        if (!chart.config.options.scales['x'].grid || !chart.config.options.scales['y'].grid) return;
-        if (darkModeStorage) {
-            chart.config.options.scales['x'].grid.color = BORDER_COLOUR.dark;
-            chart.config.options.scales['y'].grid.color = BORDER_COLOUR.dark;
-        } else {
-            chart.config.options.scales['x'].grid.color = BORDER_COLOUR.light;
-            chart.config.options.scales['y'].grid.color = BORDER_COLOUR.light;
-        }
+    const options: ChartOptions<'boxplot'> = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
 
-        chart?.update();
-    }, [darkModeStorage, chart]);
+        plugins: {
+            legend: {
+                display: false,
+            },
+
+            tooltip: {
+                enabled: false,
+                external: externalTooltipHandler,
+                position: 'myCustomPositioner',
+            },
+        },
+        scales: {
+            x: {
+                stacked: 'single',
+                grid: {
+                    color() {
+                        if (darkModeStorage) return BORDER_COLOUR.dark;
+                        return BORDER_COLOUR.light;
+                    },
+                },
+            },
+            y: {
+                type: 'logarithmic',
+                stacked: 'single',
+                stack: 'y',
+                ticks: {
+                    callback: (label) => formatter(0, 0).format(Math.trunc(Number(label))),
+                },
+                grid: {
+                    color() {
+                        if (darkModeStorage) return BORDER_COLOUR.dark;
+                        return BORDER_COLOUR.light;
+                    },
+                },
+            },
+        },
+    };
+
+    // useEffect(() => {
+    //     if (!chart) return;
+    //     if (!chart.config.options) return;
+    //     if (!chart.config.options.scales) return;
+    //     if (!chart.config.options.scales['x'] || !chart.config.options.scales['y']) return;
+    //     if (!chart.config.options.scales['x'].grid || !chart.config.options.scales['y'].grid) return;
+    //     if (darkModeStorage) {
+    //         chart.config.options.scales['x'].grid.color = BORDER_COLOUR.dark;
+    //         chart.config.options.scales['y'].grid.color = BORDER_COLOUR.dark;
+    //     } else {
+    //         chart.config.options.scales['x'].grid.color = BORDER_COLOUR.light;
+    //         chart.config.options.scales['y'].grid.color = BORDER_COLOUR.light;
+    //     }
+
+    //     chart?.update();
+    // }, [darkModeStorage, chart]);
 
     return (
         <div className="chart-container relative h-[512px] w-[1024px] sm:h-72 sm:w-dvw sm:max-w-full">
-            <Chart id="player-dmg-boxplot" type="boxplot" options={options} data={mapBoxPlotPlayerData(playersData)} />
+            <Chart type="boxplot" options={options} data={mapBoxPlotPlayerData(playersData)} />
         </div>
     );
 }

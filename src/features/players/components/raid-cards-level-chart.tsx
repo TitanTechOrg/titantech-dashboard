@@ -1,3 +1,4 @@
+import { usePreferencesStore } from '@/stores/preferences.store';
 import { findCard, getCardImageUrl } from '@/utils';
 import { ChartOptions } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
@@ -14,8 +15,11 @@ interface CardLevelChartProps {
 }
 
 const imgSize: number = 20;
+const BORDER_COLOUR = { light: 'hsl(0 0% 6.67% / 0.1)', dark: 'hsl(0 0% 100% / 0.1)' };
 
 export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
+    const { darkMode: darkModeStorage } = usePreferencesStore();
+
     const cardData = cards.map((card, index) => {
         const img = new Image(imgSize, imgSize);
         img.src = getCardImageUrl(card.skill_name);
@@ -52,6 +56,12 @@ export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
                     display: true,
                     text: 'Levels',
                 },
+                grid: {
+                    color() {
+                        if (darkModeStorage) return BORDER_COLOUR.dark;
+                        return BORDER_COLOUR.light;
+                    },
+                },
             },
             y: {
                 ticks: {
@@ -59,6 +69,12 @@ export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
                 },
                 title: {
                     display: false,
+                },
+                grid: {
+                    color() {
+                        if (darkModeStorage) return BORDER_COLOUR.dark;
+                        return BORDER_COLOUR.light;
+                    },
                 },
             },
         },

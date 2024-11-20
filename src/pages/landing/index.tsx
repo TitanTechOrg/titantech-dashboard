@@ -1,9 +1,10 @@
+import { PageContainer } from '@/components';
 import { Button, Code, Link } from '@nextui-org/react';
 import { DiscordLogoIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 
 export default function GetStarted() {
     return (
-        <div className="mx-auto max-w-2xl">
+        <PageContainer>
             <div className="flex flex-col items-center justify-center gap-8 sm:py-16">
                 <article>
                     <h1 className="text-2xl font-semibold">TitanTech</h1>
@@ -50,6 +51,6 @@ export default function GetStarted() {
                     </Button>
                 </div>
             </div>
-        </div>
+        </PageContainer>
     );
 }

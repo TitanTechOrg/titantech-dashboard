@@ -44,7 +44,7 @@ export type PercentageCardsType = {
 };
 
 export type DamageCardChartData = {
-    name: string;
+    name: string | number;
     average: number;
     overall: number;
 };
@@ -54,4 +54,3 @@ export type DamageCardData = {
     title: string;
     data: DamageCardChartData[];
 };
-

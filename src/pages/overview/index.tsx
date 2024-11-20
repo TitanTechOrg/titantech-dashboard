@@ -55,6 +55,10 @@ export default function Overview() {
 
     return (
         <div className="flex flex-col gap-4">
+            <div className="text-left">
+                <h1 className="text-2xl font-bold">Raid overview</h1>
+                <p>Select a raid below to view some statistics, such as raid information, attacks done, total damage, etc.</p>
+            </div>
             <div className="flex flex-col gap-4 sm:flex-row">
                 {raidList && (
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-col">

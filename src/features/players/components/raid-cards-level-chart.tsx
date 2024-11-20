@@ -1,3 +1,4 @@
+import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { findCard, getCardImageUrl } from '@/utils';
 import { ChartOptions } from 'chart.js';
@@ -15,7 +16,6 @@ interface CardLevelChartProps {
 }
 
 const imgSize: number = 20;
-const BORDER_COLOUR = { light: 'hsl(0 0% 6.67% / 0.1)', dark: 'hsl(0 0% 100% / 0.1)' };
 
 export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
     const { darkMode: darkModeStorage } = usePreferencesStore();
@@ -58,8 +58,8 @@ export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
                 },
                 grid: {
                     color() {
-                        if (darkModeStorage) return BORDER_COLOUR.dark;
-                        return BORDER_COLOUR.light;
+                        if (darkModeStorage) return CHART_GRID_COLOUR.dark;
+                        return CHART_GRID_COLOUR.light;
                     },
                 },
             },
@@ -72,8 +72,8 @@ export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
                 },
                 grid: {
                     color() {
-                        if (darkModeStorage) return BORDER_COLOUR.dark;
-                        return BORDER_COLOUR.light;
+                        if (darkModeStorage) return CHART_GRID_COLOUR.dark;
+                        return CHART_GRID_COLOUR.light;
                     },
                 },
             },

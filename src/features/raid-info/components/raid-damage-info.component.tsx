@@ -1,32 +1,39 @@
+import { CHART_GRID_COLOUR } from '@/constants/theme';
+import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts';
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
-import { DamageCardData } from '..';
+import { ChartOptions } from 'chart.js';
+import { useMemo } from 'react';
+import { Line } from 'react-chartjs-2';
+import { DamageCardData, RaidCycle, useRaidCycles } from '..';
 
-const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
-    if (active && payload && payload.length && payload.length > 1) {
-        if (
-            typeof payload[0].name === 'string' &&
-            typeof payload[0].value === 'number' &&
-            typeof payload[1].name === 'string' &&
-            typeof payload[1].value === 'number'
-        ) {
-            return (
-                <div className="rounded-lg bg-default-200/90 p-2">
-                    <p className="text-base font-semibold">{`Round ${label}`}</p>
-                    <Divider className="my-1" />
-                    <p className="text-sm font-medium capitalize">{`${payload[0].name} — ${formatter().format(payload[0].value)}`}</p>
-                    <p className="text-sm font-medium capitalize">{`${payload[1].name} — ${formatter().format(payload[1].value)}`}</p>
-                </div>
-            );
-        }
-
-        return null;
-    }
-
-    return null;
+const baseChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: true },
+        tooltip: {
+            callbacks: {
+                label: (context) => {
+                    const value = context.raw as number;
+                    return `${context.dataset.label}: ${formatter().format(value)}`;
+                },
+            },
+        },
+    },
+    scales: {
+        x: {
+            title: { display: true, text: 'Cycle' },
+        },
+        y: {
+            title: { display: true, text: 'Damage' },
+            ticks: {
+                callback: (value) => formatter().format(value as number),
+            },
+            beginAtZero: false,
+        },
+    },
 };
 
 type PreviousValueProps = {
@@ -40,73 +47,135 @@ type DamageData = {
 };
 
 function CardPreviousValue({ index, listLength, value }: PreviousValueProps) {
-    const showArrow: boolean = index !== listLength - 1;
     return (
-        <span className="flex flex-row items-center justify-center gap-1 text-sm font-bold text-neutral-600/70 dark:text-neutral-50/70">
+        <span className="flex flex-row items-center justify-center gap-1 text-xs text-neutral-600/70 dark:text-neutral-50/70">
             {value}
-            {showArrow ? <ArrowRightIcon /> : null}
+            {index !== listLength - 1 && <ArrowRightIcon />}
         </span>
     );
 }
 
 function CardValues({ items }: DamageData) {
-    if (items && !items?.length && items?.length === 0) return null;
+    if (!items?.length) return null;
 
     return (
-        <div className="flex flex-row flex-wrap gap-x-2">
-            {items?.map((value: string, index: number) => (
-                <CardPreviousValue key={`${index}_morale-bonus_${value}`} index={index} value={value} listLength={items.length} />
+        <div className="flex flex-row flex-wrap gap-x-1">
+            {items.map((value, index) => (
+                <CardPreviousValue key={`${index}_raid_damage_stats_${value}`} index={index} value={value} listLength={items.length} />
             ))}
         </div>
     );
 }
+function getYAxisRange(data: DamageCardData['data']) {
+    const allValues = data.flatMap((data) => [data.average, data.overall]);
+    const min = Math.min(...allValues);
+    const max = Math.max(...allValues);
+    const padding = (max - min) * 0.1;
+    return { min: Math.floor(min - padding), max: Math.ceil(max + padding) };
+}
 
-export function RaidDamageInfo({ imageUrl, title, data }: DamageCardData) {
-    let overallRaidDamage = 0;
+export function RaidDamageInfo() {
+    const { darkMode: darkModeStorage } = usePreferencesStore();
+    const { data: raidCycles } = useRaidCycles();
 
-    if (data.length > 1) {
-        const { overall } = data[data.length - 2];
-        overallRaidDamage = overall;
+    const data = useMemo(() => {
+        if (!raidCycles || !raidCycles.cycles?.length) return [];
+
+        const getAverageClanDamage = (raidCycles: RaidCycle[]) => raidCycles.map(({ average_damage }) => Math.round(average_damage));
+
+        const getOverallClanDamage = (raidCycles: RaidCycle[]) => {
+            let cumulativeSum = 0;
+            return raidCycles.map(({ average_damage }, index) => {
+                cumulativeSum += average_damage;
+                return Math.round(cumulativeSum / (index + 1));
+            });
+        };
+
+        const mapDamageData = (dataA: number[], dataB: number[]) =>
+            dataA.map((val, index) => ({
+                name: index + 1,
+                average: val,
+                overall: dataB[index] ?? 0,
+            }));
+
+        return mapDamageData(getAverageClanDamage(raidCycles.cycles), getOverallClanDamage(raidCycles.cycles));
+    }, [raidCycles?.cycles?.length]);
+
+    if (!data.length) {
+        return (
+            <Card className="h-full w-full px-2 dark:bg-neutral-800">
+                <CardHeader className="h-[70px]">
+                    <h3 className="text-lg font-medium">Damage stats</h3>
+                </CardHeader>
+                <Divider />
+                <CardBody className="flex flex-col items-center justify-center">
+                    <p className="text-neutral-500">No data available</p>
+                </CardBody>
+            </Card>
+        );
     }
 
+    const overallRaidDamage = data.length > 1 ? data[data.length - 2].overall : 0;
+    const { min, max } = getYAxisRange(data);
+
+    const chartData = {
+        labels: data.map(({ name }) => name.toString()),
+        datasets: [
+            {
+                label: 'Average',
+                data: data.map(({ average }) => average),
+                borderColor: 'hsl(212.14 92.45% 58.43%)',
+                backgroundColor: 'hsl(212.14 92.45% 58.43% / 0.5)',
+                borderWidth: 2,
+                pointRadius: 3,
+                fill: false,
+                lineTension: 0.4,
+            },
+            {
+                label: 'Overall',
+                data: data.map(({ overall }) => overall),
+                borderColor: 'hsl(339 90% 60.78%)',
+                backgroundColor: 'hsl(339 90% 60.78% / 0.5)',
+                borderWidth: 2,
+                pointRadius: 3,
+                fill: false,
+                lineTension: 0.4,
+            },
+        ],
+    };
+
+    const options: ChartOptions<'line'> = {
+        ...baseChartOptions,
+        scales: {
+            x: {
+                ...baseChartOptions.scales?.x,
+                grid: {
+                    color: darkModeStorage ? CHART_GRID_COLOUR.dark : CHART_GRID_COLOUR.light,
+                },
+            },
+            y: {
+                ...baseChartOptions.scales?.y,
+                grid: {
+                    color: darkModeStorage ? CHART_GRID_COLOUR.dark : CHART_GRID_COLOUR.light,
+                },
+                min,
+                max,
+            },
+        },
+    };
+
     return (
-        <Card className="h-full w-full min-w-72 px-2 dark:bg-neutral-800">
-            <CardHeader className="flex flex-row items-start justify-between gap-4 py-4">
-                <div className="flex flex-row items-center justify-start gap-4">
-                    <div className="min-w-fit">
-                        <Image src={imageUrl} className="h-8 w-8 rounded object-cover" />
-                    </div>
-                    <h3 className="text-lg font-medium">{title}</h3>
-                </div>
-                <div className="text-xl font-bold">{formatter().format(overallRaidDamage)}</div>
+        <Card className="h-full w-full px-2 dark:bg-neutral-800">
+            <CardHeader className="flex h-[70px] justify-between text-lg font-medium">
+                <h3>Damage stats</h3>
+                <span className="text-xl font-semibold">{formatter().format(overallRaidDamage)}</span>
             </CardHeader>
-            <CardBody className="flex flex-col gap-4">
-                <Divider />
-
-                <CardValues items={data.map((val) => formatter().format(val.average))} />
-
-                {data && data.length > 0 ? (
-                    <div className="h-40">
-                        <ResponsiveContainer>
-                            <LineChart data={data}>
-                                <CartesianGrid strokeDasharray="5 5" />
-                                <Legend />
-                                <XAxis dataKey="name" id="rechartsXFillColor" />
-                                <YAxis
-                                    id="rechartsYFillColor"
-                                    tickFormatter={(value) => formatter().format(value)}
-                                    type="number"
-                                    domain={['auto', 'auto']}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Line type="monotone" dataKey="average" stroke="#8884d8" strokeWidth={3} />
-                                <Line type="monotone" dataKey="overall" stroke="#82ca9d" strokeWidth={3} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                ) : (
-                    <div>No chart data</div>
-                )}
+            <Divider />
+            <CardBody className="flex h-72 flex-col gap-2">
+                <CardValues items={data.map(({ average }) => formatter().format(average))} />
+                <div className="h-full">
+                    <Line data={chartData} options={options} />
+                </div>
             </CardBody>
         </Card>
     );

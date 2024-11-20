@@ -7,6 +7,14 @@
         <link href="/src/App.css" rel="stylesheet" type="text/css" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>TitanTech</title>
+        <script>
+            document.documentElement.classList.toggle(
+                'dark',
+                JSON.parse(localStorage.getItem('titan_tech_preferences'))?.state.darkMode == true ||
+                    (!('darkMode' in JSON.parse(localStorage.getItem('titan_tech_preferences'))?.state) &&
+                        window.matchMedia('(prefers-color-scheme: dark)').matches)
+            );
+        </script>
     </head>
     <body>
         <div id="root"></div>

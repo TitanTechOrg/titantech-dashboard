@@ -1,4 +1,3 @@
-// src/components/RouteGuard.tsx
 import { usePreferencesStore } from '@/stores/preferences.store';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';

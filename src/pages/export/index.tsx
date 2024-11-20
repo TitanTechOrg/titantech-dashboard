@@ -4,6 +4,7 @@ import InsanityVoid from '@/assets/cards/InsanityVoid.webp';
 import Maelstrom from '@/assets/cards/Maelstrom.webp';
 import RadiantKaleidoscope from '@/assets/cards/RadiantKaleidoscope.webp';
 import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
+import { PageContainer } from '@/components';
 import { NecrobearResearchTree } from '@/features/editor/components/necrobear-research-tree';
 import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@nextui-org/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
@@ -377,92 +378,100 @@ export default function PlayerExport() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8">
-            <div className="flex max-w-md flex-col font-normal">
-                <h3 className="pb-2 text-base">What is Player Export Editor?</h3>
-                <div className="flex max-w-md flex-col gap-2 text-left">
-                    <p className="text-sm">
-                        This tool provides a temporary fix for making TT2 player export compatible with the
-                        <span className="italic">&nbsp;TT2 Raid Optimizer</span> app. If the copied export below is not working, please re-install the{' '}
-                        <span className="italic">TT2 Raid Optimizer</span> app and try again.
-                    </p>
-                    <Accordion className="px-0">
-                        <AccordionItem key="1" aria-label="Show card changes" title="Show card changes" classNames={{ title: ['text-sm'] }}>
-                            <div className="flex max-w-md flex-col gap-4">
-                                <SeasonalCardsInfoSection title="Changes to card levels in the raid app" data={cardsMap.old} isNewSeason={false} />
-                                <SeasonalCardsInfoSection title="Current seasonal card buffs" data={cardsMap.new} isNewSeason={true} />
-                            </div>
-                        </AccordionItem>
-                    </Accordion>
+        <PageContainer>
+            <div className="flex flex-col items-center justify-center gap-8">
+                <div className="flex max-w-md flex-col font-normal">
+                    <h3 className="pb-2 text-base">What is Player Export Editor?</h3>
+                    <div className="flex max-w-md flex-col gap-2 text-left">
+                        <p className="text-sm">
+                            This tool provides a temporary fix for making TT2 player export compatible with the
+                            <span className="italic">&nbsp;TT2 Raid Optimizer</span> app. If the copied export below is not working, please re-install
+                            the <span className="italic">TT2 Raid Optimizer</span> app and try again.
+                        </p>
+                        <Accordion className="px-0">
+                            <AccordionItem key="1" aria-label="Show card changes" title="Show card changes" classNames={{ title: ['text-sm'] }}>
+                                <div className="flex max-w-md flex-col gap-4">
+                                    <SeasonalCardsInfoSection
+                                        title="Changes to card levels in the raid app"
+                                        data={cardsMap.old}
+                                        isNewSeason={false}
+                                    />
+                                    <SeasonalCardsInfoSection title="Current seasonal card buffs" data={cardsMap.new} isNewSeason={true} />
+                                </div>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
                 </div>
-            </div>
-            <div className="flex w-full max-w-md flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
-                <div className="flex flex-col items-center justify-center gap-4">
-                    <Textarea
-                        label="Player Export"
-                        labelPlacement="outside"
-                        placeholder="Paste here"
-                        className="max-w-xs"
-                        classNames={{ label: ['text-left'] }}
-                        value={inputData}
-                        onValueChange={(val) => {
-                            const pretty = prettyJson(val);
-                            setInputData(val);
-                            typeof pretty === 'string' ? setOutputData(JSON.stringify(updateRaidCardNames(pretty, raidKeyMap))) : setOutputData('');
-                        }}
-                        errorMessage={'Invalid JSON data'}
-                        aria-errormessage="Invalid JSON data"
-                        isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
-                        size="lg"
-                    />
-                    <Button
-                        isDisabled={!inputData.length}
-                        color="default"
-                        aria-label="Clear player export text"
-                        onClick={clearText}
-                        className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
-                        startContent={<CrossCircledIcon />}
-                    >
-                        Clear
-                    </Button>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-4">
-                    <Textarea
-                        label="Fixed Player Export"
-                        labelPlacement="outside"
-                        placeholder="Copy to TT2 Raid Optimizer app"
-                        className="max-w-xs"
-                        classNames={{ label: ['text-left'] }}
-                        value={outputData}
-                        onValueChange={setOutputData}
-                        isReadOnly={true}
-                        errorMessage={'Something went wrong...'}
-                        size="lg"
-                    />
-                    <Tooltip
-                        aria-label="Copied to clipboard tooltip"
-                        isDisabled={!prettyJson(inputData)}
-                        isOpen={isOpen}
-                        content="Copied"
-                        showArrow={true}
-                        placement="right"
-                    >
+                <div className="flex w-full max-w-md flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
+                    <div className="flex flex-col items-center justify-center gap-4">
+                        <Textarea
+                            label="Player Export"
+                            labelPlacement="outside"
+                            placeholder="Paste here"
+                            className="max-w-xs"
+                            classNames={{ label: ['text-left'] }}
+                            value={inputData}
+                            onValueChange={(val) => {
+                                const pretty = prettyJson(val);
+                                setInputData(val);
+                                typeof pretty === 'string'
+                                    ? setOutputData(JSON.stringify(updateRaidCardNames(pretty, raidKeyMap)))
+                                    : setOutputData('');
+                            }}
+                            errorMessage={'Invalid JSON data'}
+                            aria-errormessage="Invalid JSON data"
+                            isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
+                            size="lg"
+                        />
                         <Button
-                            isDisabled={!prettyJson(inputData)}
-                            color="primary"
-                            aria-label="Copy player export"
-                            onClick={copyToClipboard}
-                            className="w-fit self-center"
-                            startContent={<CopyIcon />}
+                            isDisabled={!inputData.length}
+                            color="default"
+                            aria-label="Clear player export text"
+                            onClick={clearText}
+                            className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
+                            startContent={<CrossCircledIcon />}
                         >
-                            Copy
+                            Clear
                         </Button>
-                    </Tooltip>
+                    </div>
+                    <div className="flex flex-col items-center justify-center gap-4">
+                        <Textarea
+                            label="Fixed Player Export"
+                            labelPlacement="outside"
+                            placeholder="Copy to TT2 Raid Optimizer app"
+                            className="max-w-xs"
+                            classNames={{ label: ['text-left'] }}
+                            value={outputData}
+                            onValueChange={setOutputData}
+                            isReadOnly={true}
+                            errorMessage={'Something went wrong...'}
+                            size="lg"
+                        />
+                        <Tooltip
+                            aria-label="Copied to clipboard tooltip"
+                            isDisabled={!prettyJson(inputData)}
+                            isOpen={isOpen}
+                            content="Copied"
+                            showArrow={true}
+                            placement="right"
+                        >
+                            <Button
+                                isDisabled={!prettyJson(inputData)}
+                                color="primary"
+                                aria-label="Copy player export"
+                                onClick={copyToClipboard}
+                                className="w-fit self-center"
+                                startContent={<CopyIcon />}
+                            >
+                                Copy
+                            </Button>
+                        </Tooltip>
+                    </div>
                 </div>
-            </div>
-            {prettyJson(inputData) && <NecrobearBonus data={inputData} />}
+                {prettyJson(inputData) && <NecrobearBonus data={inputData} />}
 
-            <NecrobearResearchTree />
-        </div>
+                <NecrobearResearchTree />
+            </div>
+        </PageContainer>
     );
 }

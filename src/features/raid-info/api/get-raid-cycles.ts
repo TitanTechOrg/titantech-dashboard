@@ -5,7 +5,7 @@ import { CycleData } from '../types';
 
 export function useRaidCycles(raidId?: string) {
     return useQuery({
-        queryKey: ['cycle_data', raidId],
+        queryKey: ['cycle_data', raidId ?? 'latest'],
         queryFn: async () => await fetchRaidCycles(raidId),
         select: (data) => {
             const raid_id = data.raid_id;

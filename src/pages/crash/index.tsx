@@ -1,3 +1,4 @@
+import { PageContainer } from '@/components';
 import { Button } from '@nextui-org/react';
 import { useRouteError } from 'react-router-dom';
 
@@ -27,18 +28,20 @@ export default function AppCrash() {
     };
 
     return (
-        <div id="error-page" className="container flex h-screen flex-col items-center justify-center space-y-2">
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
-            <p>
-                <i>{getErrorMessage(error)}</i>
-            </p>
+        <PageContainer>
+            <div id="error-page" className="container flex h-screen flex-col items-center justify-center space-y-2">
+                <h1>Oops!</h1>
+                <p>Sorry, an unexpected error has occurred.</p>
+                <p>
+                    <i>{getErrorMessage(error)}</i>
+                </p>
 
-            <div className="py-4">
-                <Button color="primary" onClick={handleAppReload}>
-                    Click here to reload the app
-                </Button>
+                <div className="py-4">
+                    <Button color="primary" onClick={handleAppReload}>
+                        Click here to reload the app
+                    </Button>
+                </div>
             </div>
-        </div>
+        </PageContainer>
     );
 }

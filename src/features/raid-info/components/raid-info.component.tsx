@@ -1,7 +1,6 @@
-import CardLogo from '@/assets/Raid.webp';
 import { RaidBuffMapping } from '@/constants/buffs';
 import { convertUTCDateToLocalDate, getOrdinalSuffix, getRaidLabel } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Image, Skeleton, Tooltip } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Skeleton, Tooltip } from '@nextui-org/react';
 import { RaidBuffMappingType, RaidCycle, RaidData } from '..';
 
 type CardRaidInfoProps = {
@@ -12,33 +11,24 @@ type CardRaidInfoProps = {
 export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
     return (
         <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
-            <CardHeader className="flex flex-row items-center justify-between gap-4">
+            <CardHeader className="flex h-[70px] flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center justify-start gap-4">
-                    <div className="min-w-fit">
-                        <Skeleton isLoaded={!!raidData} className="rounded-md">
-                            <Image src={CardLogo} className="h-8 w-8 rounded object-cover" />
-                        </Skeleton>
-                    </div>
                     <Skeleton isLoaded={!!raidData} className="rounded-md">
-                        {raidData && <h3 className="text-lg font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
+                        {raidData && <h3 className="text-left text-lg font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
                     </Skeleton>
                 </div>
 
                 <Skeleton isLoaded={!!raidData} className="rounded-md">
                     {raidCycle != null && (
-                        <div className="text-xl font-bold">
+                        <div className="text-lg font-bold">
                             {raidCycle.cycle}
-                            <span className="text-sm font-semibold">
-                                {getOrdinalSuffix(raidCycle.cycle)}
-                                {' round'}
-                            </span>
+                            <span className="text-sm font-semibold">{`${getOrdinalSuffix(raidCycle.cycle)} round`}</span>
                         </div>
                     )}
                 </Skeleton>
             </CardHeader>
+            <Divider />
             <CardBody className="flex flex-col gap-4">
-                <Divider />
-
                 <div className="flex flex-col gap-2">
                     <div className="flex justify-between space-x-4 text-sm font-medium">
                         <Skeleton isLoaded={!!raidData} className="rounded-md">

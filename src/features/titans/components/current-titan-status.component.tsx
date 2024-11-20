@@ -139,47 +139,38 @@ const TitanDebuff = {
 type TitanDebuffType = keyof typeof TitanDebuff;
 
 export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
-    const { titans, isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
+    const { isInsanityVoid, isSkeletalSmash, isDecayingStrike, isVictoryMarch, hasActiveConditionals } = useBoundStore();
 
     return (
         <Card className="h-full w-full min-w-72 p-2 dark:bg-neutral-800">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex h-[70px] flex-row items-center justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
-                    <div className="min-w-fit">
-                        <Skeleton isLoaded={!!titan} className="rounded-md">
-                            {titan && (
-                                <Image
-                                    src={TitanImageMapping[titan.name as TitanImageMappingType]}
-                                    className="flex h-8 w-8 rounded object-cover"
-                                    alt="Titan image"
-                                />
-                            )}
-                        </Skeleton>
-                    </div>
-
-                    <Skeleton isLoaded={!!titan} className="rounded-md">
-                        <h3 className="text-lg font-medium">Current titan</h3>
-                    </Skeleton>
+                    <h3 className="text-lg font-medium">Active titan</h3>
                 </div>
 
-                <Skeleton isLoaded={!!titan} className="rounded-md">
-                    <div className="flex flex-row items-center gap-2">
-                        {titan && <div className="text-xl font-bold">{titan.name}</div>}
-                        {titan && titan.sequence_index + 1} / {titans.length}
+                <Skeleton isLoaded={!!titan} className="min-w-36 rounded-md">
+                    <div className="flex flex-row items-center justify-end gap-2">
+                        {<div className="text-xl font-bold">{titan?.name}</div>}
+
+                        <Image
+                            src={TitanImageMapping[titan?.name as TitanImageMappingType]}
+                            className="flex h-8 w-8 object-contain"
+                            alt="Titan image"
+                            radius="none"
+                        />
                     </div>
                 </Skeleton>
             </CardHeader>
-
+            <Divider />
             <CardBody className="flex flex-col gap-4">
-                <Divider />
                 <div className="flex justify-between space-x-4 text-sm font-medium">
                     <Skeleton isLoaded={!!titan} className="rounded-md">
                         <span>Titan Debuff</span>
                     </Skeleton>
-                    <Skeleton isLoaded={!!titan} className="rounded-md">
+                    <Skeleton isLoaded={!!titan} className="rounded-md text-right">
                         {titan && titan.area_amount && titan.area_type ? (
                             <span>
-                                {TitanDebuff[titan.area_type as TitanDebuffType]}
+                                {TitanDebuff[titan?.area_type as TitanDebuffType]}
                                 &nbsp;
                                 {titan.area_amount.toString().startsWith('-') ? '' : '+'}
                                 {titan.area_amount.toLocaleString('en', { style: 'percent' })}
@@ -189,7 +180,7 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
                         )}
                     </Skeleton>
                 </div>
-                <Skeleton isLoaded={!!titan} className="rounded-md">
+                <Skeleton isLoaded={!!titan} className="min-w-full rounded-md">
                     {titan && (
                         <TitanHealthBars
                             titanArmourHealthPercentage={getTitanHealthPercentage(titan, 'Armor')}
@@ -202,16 +193,16 @@ export function CurrentTitanStatus({ titan }: CurrentTitanStatusProps) {
 
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row">
-                        <Skeleton isLoaded={!!titan} className="rounded-md">
+                        <Skeleton isLoaded={!!titan} className="min-w-full rounded-md">
                             <h3 className="text-medium font-medium ">{hasActiveConditionals() ? 'Active conditional cards' : null}</h3>
                         </Skeleton>
                     </div>
                     {hasActiveConditionals() ? (
                         <div className="flex flex-row gap-4">
-                            {isVictoryMarch() ? <Image src={VictoryMarchCard} className="h-9 w-9 rounded" /> : null}
-                            {isInsanityVoid() ? <Image src={InsanityVoidCard} className="h-9 w-9 rounded" /> : null}
-                            {isSkeletalSmash() ? <Image src={SkeletalSmashCard} className="h-9 w-9 rounded" /> : null}
-                            {isDecayingStrike() ? <Image src={DecayingStrikeCard} className="h-9 w-9 rounded" /> : null}
+                            {isVictoryMarch() ? <Image src={VictoryMarchCard} className="h-9 w-9" radius="none" /> : null}
+                            {isInsanityVoid() ? <Image src={InsanityVoidCard} className="h-9 w-9" radius="none" /> : null}
+                            {isSkeletalSmash() ? <Image src={SkeletalSmashCard} className="h-9 w-9" radius="none" /> : null}
+                            {isDecayingStrike() ? <Image src={DecayingStrikeCard} className="h-9 w-9" radius="none" /> : null}
                         </div>
                     ) : null}
                 </div>

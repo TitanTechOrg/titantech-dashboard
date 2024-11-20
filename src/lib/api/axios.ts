@@ -9,7 +9,7 @@ export const ENDPOINTS = {
         v2: 'api/v2/raid/attacks',
         v3: 'api/v3/raid/attacks',
     },
-    alchemy_crafts: 'api/v5/alchemy',
+    alchemy_crafts: 'api/v6/alchemy',
     raid_list: '/api/v1/raid/list',
     cycle_data: '/api/v1/raid/cycles',
     overview: '/api/v1/overview/players',

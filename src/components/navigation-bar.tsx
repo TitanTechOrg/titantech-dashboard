@@ -1,21 +1,26 @@
 import Logo from '@/assets/Logo.webp';
 import { ThemeSwitcher } from '@/features/theme';
+import { routePaths } from '@/routes';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-
-// const menuItems = ['dashboard', 'overview', ['alchemy', 'player-export-editor']];
-// const menuItems = ['dashboard', 'overview', 'alchemy', 'player-export-editor'];
-// const protectedRoutes = ['dashboard', 'overview', 'players', 'player-export-editor'];
-const menuItems = ['dashboard', 'overview', 'players'];
-const protectedRoutes = ['dashboard', 'overview', 'players'];
 
 export function NavigationBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
-
     const { checkAuth } = usePreferencesStore.getState();
+    const [routes, setRoutes] = useState(routePaths);
+
+    useEffect(() => {
+        setRoutes(
+            routePaths.filter((route) => {
+                const userAuthenticated = checkAuth();
+                if (userAuthenticated) return route;
+                return !route.protected;
+            })
+        );
+    }, [checkAuth]);
 
     return (
         <Navbar
@@ -55,18 +60,14 @@ export function NavigationBar() {
             </NavbarContent>
 
             <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
-                {menuItems.map((item) => {
+                {routes.map((route) => {
                     // if (typeof item === 'string') {
-                    const path = '/' + item;
+                    const path = '/' + route.path;
 
                     return (
-                        <NavbarItem
-                            key={`menu-${item}`}
-                            isActive={location.pathname === path}
-                            className={protectedRoutes.includes(item) && checkAuth() ? '' : 'hidden'}
-                        >
+                        <NavbarItem key={`menu-${route.path}`} isActive={location.pathname === path}>
                             <NavLink to={path} className={location.pathname === path ? 'text-primary' : 'text-foreground'}>
-                                <span className="capitalize">{item}</span>
+                                <span className="capitalize">{route.path}</span>
                             </NavLink>
                         </NavbarItem>
                     );
@@ -120,22 +121,16 @@ export function NavigationBar() {
             </NavbarContent>
 
             <NavbarMenu className="min-h-lvh pb-32">
-                {menuItems
-                    .flat()
-                    .filter((route) => {
-                        if (!checkAuth() && protectedRoutes.includes(route)) return '';
-                        return route;
-                    })
-                    .map((item) => {
-                        const pageName = item.replace(/-/g, ' ');
-                        return (
-                            <NavbarMenuItem key={`mobile-menu-${item}`} onClick={() => setIsMenuOpen(false)}>
-                                <NavLink className={`/${item}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${item}`}>
-                                    <span className="capitalize">{pageName}</span>
-                                </NavLink>
-                            </NavbarMenuItem>
-                        );
-                    })}
+                {routes.map((route) => {
+                    const pageName = route.path.replace(/-/g, ' ');
+                    return (
+                        <NavbarMenuItem key={`mobile-menu-${route.path}`} onClick={() => setIsMenuOpen(false)}>
+                            <NavLink className={`/${route.path}` === location.pathname ? 'text-primary' : 'text-foreground'} to={`/${route.path}`}>
+                                <span className="capitalize">{pageName}</span>
+                            </NavLink>
+                        </NavbarMenuItem>
+                    );
+                })}
             </NavbarMenu>
         </Navbar>
     );

@@ -11,13 +11,13 @@ import {
     Chart as ChartJS,
     Legend,
     LinearScale,
+    LineElement,
     LogarithmicScale,
     PointElement,
+    registerables,
     Title,
     Tooltip,
-    registerables,
 } from 'chart.js';
-import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
@@ -28,13 +28,12 @@ ChartJS.register(
     BoxAndWiskers,
     CategoryScale,
     LinearScale,
+    LineElement,
     PointElement,
     Title,
     Tooltip,
     Legend,
     LogarithmicScale,
-    MatrixController,
-    MatrixElement,
     ...registerables
 );
 

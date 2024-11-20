@@ -57,14 +57,14 @@ export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOvervi
         <Card>
             <CardHeader className="flex flex-row items-center justify-between text-lg font-medium">
                 Overall Player Damages
-                <ButtonGroup>
+                <ButtonGroup size="sm">
                     <Button
-                        color={selected === 'ALPHABETICAL' || selected === 'ALPHABETICAL_REVERSED' ? 'primary' : undefined}
+                        color={selected === 'ALPHABETICAL' || selected === 'ALPHABETICAL_REVERSED' ? 'primary' : 'default'}
                         onPress={() => handleOnPress(invertSort(selected))}
                     >
                         A-Z
                     </Button>
-                    <Button color={selected === 'AVERAGE' ? 'primary' : undefined} onPress={() => handleOnPress('AVERAGE')}>
+                    <Button color={selected === 'AVERAGE' ? 'primary' : 'default'} onPress={() => handleOnPress('AVERAGE')}>
                         Average
                     </Button>
                 </ButtonGroup>

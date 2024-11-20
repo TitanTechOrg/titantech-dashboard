@@ -8,11 +8,7 @@ type PlayerSelectProps = {
 
 function PlayerSelect({ overviewPlayers, isLoading }: PlayerSelectProps) {
     return (
-        <div className="col-span-2 row-span-1 row-start-1 flex flex-col items-center justify-start gap-4">
-            <div className="text-left">
-                <h1 className="text-2xl font-bold">Player Raid Profile</h1>
-                <p>Select a player to show their raid info</p>
-            </div>
+        <div>
             {!isLoading && overviewPlayers ? (
                 <CustomSelect
                     selectKey="player-selector"

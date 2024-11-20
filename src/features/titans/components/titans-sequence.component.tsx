@@ -1,4 +1,4 @@
-import CardLogo from '@/assets/RaidIcon.webp';
+import TitanSequenceImage from '@/assets/Titan_sequence.webp';
 import JukkAvatar from '@/assets/titans/avatars/Jukk_avatar.webp';
 import KlonkAvatar from '@/assets/titans/avatars/Klonk_avatar.webp';
 import LojakAvatar from '@/assets/titans/avatars/Lojak_avatar.webp';
@@ -63,21 +63,18 @@ export function TitansSequence() {
 
     return (
         <Card className="h-full p-2 dark:bg-neutral-800">
-            <CardHeader>
-                <div className="flex flex-row items-center justify-start gap-4">
-                    <div className="min-w-fit">
-                        <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                            <Image src={CardLogo} className="flex h-8 w-8 rounded object-cover" />
-                        </Skeleton>
-                    </div>
+            <CardHeader className="flex h-[70px] flex-row items-center justify-between">
+                <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
+                    <h3 className="text-lg font-medium">Titan Sequence</h3>
+                </Skeleton>
+                <div className="min-w-fit">
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
-                        <h3 className="text-lg font-medium">Titan Sequence</h3>
+                        <Image src={TitanSequenceImage} className="flex h-8 w-8 object-cover" radius="none" />
                     </Skeleton>
                 </div>
             </CardHeader>
-
+            <Divider />
             <CardBody className="flex flex-col gap-4">
-                <Divider />
                 <div className="flex flex-col items-center justify-center gap-2">
                     <Skeleton isLoaded={!!selectedTitan} className="rounded-md">
                         {selectedTitan && (
@@ -95,11 +92,10 @@ export function TitansSequence() {
                                                         <CheckIcon className="absolute z-10 h-10 w-10 bg-transparent text-green-500" />
                                                     )}
                                                     <Image
-                                                        shadow="sm"
                                                         radius="sm"
                                                         width="100%"
                                                         alt={selectedTitan.name}
-                                                        className={`z-0 h-10 w-10 object-cover ${
+                                                        className={`z-0 h-10 w-10 object-contain ${
                                                             isDefeatedTitan(selectedTitan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                         }`}
                                                         src={TitanImageMapping[selectedTitan.name as TitanImageMappingType]}
@@ -135,11 +131,10 @@ export function TitansSequence() {
                                                             <CheckIcon className="absolute z-10 h-10 w-10 bg-transparent text-green-500" />
                                                         )}
                                                         <Image
-                                                            shadow="sm"
                                                             radius="sm"
                                                             width="100%"
                                                             alt={titan.name}
-                                                            className={`z-0 h-10 w-10 object-cover ${
+                                                            className={`z-0 h-10 w-10 object-contain ${
                                                                 isDefeatedTitan(titan.sequence_index) ? 'grayscale' : 'grayscale-0'
                                                             }`}
                                                             src={TitanImageMapping[titan.name as TitanImageMappingType]}

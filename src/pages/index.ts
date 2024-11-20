@@ -1,4 +1,5 @@
 export * from './404';
+export * from './alchemy';
 export * from './crash';
 export * from './dashboard';
 export * from './error';

@@ -38,13 +38,13 @@ export function AttacksCard({
     };
 
     return (
-        <Card className="dark:bg-neutral-800">
-            <CardHeader className="justify-between">
+        <Card className="px-2 dark:bg-neutral-800">
+            <CardHeader className="h-[70px] justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
                         <Image src={AttacksCardLogo} className="flex h-8 w-8 rounded object-cover" />
                     </div>
-                    <h3 className="text-lg font-medium">Latest Raid Attacks</h3>
+                    <h3 className="text-left text-lg font-medium">Latest Raid Attacks</h3>
                 </div>
                 <Button
                     className="flex sm:hidden"
@@ -57,6 +57,7 @@ export function AttacksCard({
                     <ReloadIcon />
                 </Button>
                 <Button
+                    size="sm"
                     className="hidden sm:flex"
                     color="primary"
                     isLoading={isRefetching}
@@ -66,8 +67,8 @@ export function AttacksCard({
                     Refresh
                 </Button>
             </CardHeader>
+            <Divider />
             <CardBody className="gap-4">
-                <Divider />
                 {isFetching && !isRefetching && <Spinner label="Loading..." color="primary" />}
                 {error && <div>'An error has occurred: ' + {error.message}</div>}
                 {hasData ? (

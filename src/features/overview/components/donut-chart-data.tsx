@@ -1,7 +1,8 @@
-import { Card, CardBody, CardHeader, Code, CodeProps, Divider } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Code, CodeProps, Divider, Spinner } from '@nextui-org/react';
 import { ChartData as ChartDataPropType } from 'chart.js';
-import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import React, { lazy, Suspense } from 'react';
+
+const Doughnut = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Doughnut })));
 
 type DonutChartDataLabels = {
     title: string;
@@ -23,7 +24,9 @@ export function DonutChartData({ chartData, labels, title }: DonutChartDataProps
                 <Divider className="mb-4 mt-0" />
                 <div className="flex flex-col gap-4 sm:flex-row">
                     <div className="h-32 w-32">
-                        <Doughnut data={chartData} />
+                        <Suspense fallback={<Spinner label="Loading chart..." />}>
+                            <Doughnut data={chartData} />
+                        </Suspense>
                     </div>
                     <Divider className="h-auto" orientation="vertical" />
                     <div className="flex w-full flex-col gap-2">

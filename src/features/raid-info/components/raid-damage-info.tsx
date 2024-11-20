@@ -1,13 +1,16 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Spinner } from '@nextui-org/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ChartOptions } from 'chart.js';
-import { useMemo } from 'react';
-import { Line } from 'react-chartjs-2';
+import { lazy, Suspense, useMemo } from 'react';
 import { DamageCardData, RaidCycle, useRaidCycles } from '..';
 
+// Lazy load the `Line` component from `react-chartjs-2`
+const Line = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Line })));
+
+// Other utility functions remain the same...
 const baseChartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -66,6 +69,7 @@ function CardValues({ items }: DamageData) {
         </div>
     );
 }
+
 function getYAxisRange(data: DamageCardData['data']) {
     const allValues = data.flatMap((data) => [data.average, data.overall]);
     const min = Math.min(...allValues);
@@ -174,7 +178,9 @@ export function RaidDamageInfo() {
             <CardBody className="flex h-72 flex-col gap-2">
                 <CardValues items={data.map(({ average }) => formatter().format(average))} />
                 <div className="h-full">
-                    <Line data={chartData} options={options} />
+                    <Suspense fallback={<Spinner label="Loading chart..." />}>
+                        <Line data={chartData} options={options} />
+                    </Suspense>
                 </div>
             </CardBody>
         </Card>

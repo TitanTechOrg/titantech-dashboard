@@ -1,8 +1,12 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { findCard, getCardImageUrl } from '@/utils';
+import { Spinner } from '@nextui-org/react';
 import { ChartOptions } from 'chart.js';
-import { Scatter } from 'react-chartjs-2';
+import { lazy, Suspense } from 'react';
+
+// Lazy load the `Scatter` component from `react-chartjs-2`
+const Scatter = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Scatter })));
 
 interface Card {
     skill_name: string;
@@ -106,7 +110,9 @@ export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
 
     return (
         <div className="flex h-96 w-full items-center justify-center">
-            <Scatter data={data} options={options} />
+            <Suspense fallback={<Spinner label="Loading chart..." />}>
+                <Scatter data={data} options={options} />
+            </Suspense>
         </div>
     );
 }

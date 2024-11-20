@@ -14,7 +14,6 @@ import {
     LineElement,
     LogarithmicScale,
     PointElement,
-    registerables,
     Title,
     Tooltip,
 } from 'chart.js';
@@ -33,8 +32,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    LogarithmicScale,
-    ...registerables
+    LogarithmicScale
 );
 
 const queryClient = new QueryClient();

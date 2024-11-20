@@ -2,11 +2,14 @@ import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { Card, CardBody, CardHeader, Divider, Spinner } from '@nextui-org/react';
 import { ChartOptions } from 'chart.js';
-import { useMemo } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Suspense, lazy, useMemo } from 'react';
 import { useAttackTimeline } from '../hooks/useAttackTimeline';
 import { Timeline } from '../types';
 
+// Lazy load the `Line` component from `react-chartjs-2`
+const Line = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Line })));
+
+// Rest of your existing functions remain the same...
 const generateLabels = () => Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
 
 const pickColour = (index: number) => {
@@ -133,7 +136,9 @@ export function TimelineChart() {
             <Divider />
             <CardBody className="h-72">
                 <div className="h-full">
-                    <Line data={chartData} options={options} />
+                    <Suspense fallback={<Spinner label="Loading chart..." />}>
+                        <Line data={chartData} options={options} />
+                    </Suspense>
                 </div>
             </CardBody>
         </Card>

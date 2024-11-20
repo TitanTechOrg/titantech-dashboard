@@ -1,9 +1,12 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
+import { Spinner } from '@nextui-org/react';
 import { Chart as ChartJS, ChartOptions, Tooltip, TooltipModel } from 'chart.js';
-import { Chart } from 'react-chartjs-2';
+import { lazy, Suspense } from 'react';
 import { PlayerData } from '../types';
+
+const Chart = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Chart })));
 
 Tooltip.positioners.myCustomPositioner = function (elements, position) {
     if (!elements.length) {
@@ -232,7 +235,9 @@ export function BoxPlotChartData({ playersData }: BoxPlotChartDataProps) {
 
     return (
         <div className="relative h-[512px] w-[1024px] sm:h-72 sm:w-dvw sm:max-w-full">
-            <Chart type="boxplot" options={options} data={mapBoxPlotPlayerData(playersData)} />
+            <Suspense fallback={<Spinner label="Loading chart..." />}>
+                <Chart type="boxplot" options={options} data={mapBoxPlotPlayerData(playersData)} />
+            </Suspense>
         </div>
     );
 }

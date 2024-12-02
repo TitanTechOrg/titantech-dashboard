@@ -19,7 +19,7 @@ export function Recipes({ title, ingredients }: RecipesProps) {
         <details>
             <summary className="cursor-pointer font-medium">{title}</summary>
             {ingredients.map((item, idx) => (
-                <div key={idx} className="mb-1 flex gap-1">
+                <div key={title + idx} className="mb-1 flex gap-1">
                     <div className="contents">
                         <Image src={getImageUrl(item.ingredient_one)} className="h-6 w-6 object-contain" radius="none" />
                         +

@@ -8,11 +8,13 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>TitanTech</title>
         <script>
+            const preferences = localStorage.getItem('titan_tech_preferences');
+            const parsedPreferences = preferences ? JSON.parse(preferences) : { state: {} };
+
             document.documentElement.classList.toggle(
                 'dark',
-                JSON.parse(localStorage.getItem('titan_tech_preferences'))?.state.darkMode == true ||
-                    (!('darkMode' in JSON.parse(localStorage.getItem('titan_tech_preferences'))?.state) &&
-                        window.matchMedia('(prefers-color-scheme: dark)').matches)
+                parsedPreferences.state.darkMode === true ||
+                    (!('darkMode' in parsedPreferences.state) && window.matchMedia('(prefers-color-scheme: dark)').matches)
             );
         </script>
     </head>

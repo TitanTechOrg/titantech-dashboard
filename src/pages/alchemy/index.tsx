@@ -15,6 +15,7 @@ export default function Alchemy() {
                 <div className="flex flex-col flex-wrap items-start justify-evenly gap-4 sm:flex-row">
                     <Recipes title="Craftable ingredients" ingredients={ingredientRecipes} />
                     <Recipes title="Wildcard recipes" ingredients={wildcardRecipes} />
+                    {/* <Recipes title="Diamond (equipment) recipes" ingredients={diamondRecipes} /> */}
                 </div>
 
                 <AlchemyCalculator />

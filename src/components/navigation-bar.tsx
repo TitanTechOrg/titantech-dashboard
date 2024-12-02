@@ -3,24 +3,21 @@ import { ThemeSwitcher } from '@/features/theme';
 import { routePaths } from '@/routes';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 export function NavigationBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
-    const { checkAuth } = usePreferencesStore.getState();
-    const [routes, setRoutes] = useState(routePaths);
+    const { token, checkAuth } = usePreferencesStore((state) => ({
+        token: state.token,
+        checkAuth: state.checkAuth,
+    }));
 
-    useEffect(() => {
-        setRoutes(
-            routePaths.filter((route) => {
-                const userAuthenticated = checkAuth();
-                if (userAuthenticated) return route;
-                return !route.protected;
-            })
-        );
-    }, [checkAuth]);
+    const routes = useMemo(() => {
+        const isAuthenticated = checkAuth();
+        return routePaths.filter((route) => (isAuthenticated ? true : !route.protected));
+    }, [token, checkAuth]);
 
     return (
         <Navbar
@@ -61,7 +58,6 @@ export function NavigationBar() {
 
             <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
                 {routes.map((route) => {
-                    // if (typeof item === 'string') {
                     const path = '/' + route.path;
 
                     return (
@@ -71,46 +67,6 @@ export function NavigationBar() {
                             </NavLink>
                         </NavbarItem>
                     );
-                    // } else {
-                    //     return (
-                    //         <Dropdown key={`menu-dropdown`}>
-                    //             <NavbarItem>
-                    //                 <DropdownTrigger>
-                    //                     <Button
-                    //                         disableRipple
-                    //                         className="bg-transparent p-0 text-medium data-[hover=true]:bg-transparent"
-                    //                         endContent={<ChevronDownIcon />}
-                    //                         radius="sm"
-                    //                         variant="light"
-                    //                     >
-                    //                         Tools
-                    //                     </Button>
-                    //                 </DropdownTrigger>
-                    //             </NavbarItem>
-                    //             <DropdownMenu
-                    //                 className="w-[340px]"
-                    //                 itemClasses={{
-                    //                     base: 'gap-4',
-                    //                 }}
-                    //             >
-                    //                 {item.flatMap((dropdownItem) => {
-                    //                     const pageName = dropdownItem.replace(/-/g, ' ');
-                    //                     const dropdownPath = '/' + dropdownItem;
-                    //                     return (
-                    //                         <DropdownItem
-                    //                             key={`menu-dropdown-${dropdownItem}`}
-                    //                             href={dropdownPath}
-                    //                             title={<span className="capitalize">{pageName}</span>}
-                    //                             className={
-                    //                                 location.pathname === dropdownPath ? 'bg-primary/20 text-primary group-hover:bg-primary/20' : ''
-                    //                             }
-                    //                         />
-                    //                     );
-                    //                 })}
-                    //             </DropdownMenu>
-                    //         </Dropdown>
-                    //     );
-                    // }
                 })}
             </NavbarContent>
 

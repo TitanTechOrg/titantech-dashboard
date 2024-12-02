@@ -19,6 +19,7 @@ import {
 } from 'chart.js';
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
+import { usePreferencesStore } from './stores/preferences.store';
 
 ChartJS.register(
     ArcElement,
@@ -38,6 +39,12 @@ ChartJS.register(
 const queryClient = new QueryClient();
 
 export default function App() {
+    const isHydrated = usePreferencesStore.persist.hasHydrated();
+
+    if (!isHydrated) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <ErrorBoundary>
             <QueryClientProvider client={queryClient}>

@@ -46,6 +46,12 @@ export type WildCardRecipe = {
     value: number;
 };
 
+// export type DiamondRecipe = {
+//     ingredient_one: Ingredient;
+//     ingredient_two: Ingredient;
+//     value: number;
+// };
+
 export type IngredientsData = {
     available_ingredients: IngredientValue;
     ingredient_recipes: IngredientRecipe[];

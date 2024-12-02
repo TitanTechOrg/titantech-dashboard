@@ -127,3 +127,88 @@ export const wildcardRecipes: WildCardRecipe[] = [
         value: 84,
     },
 ];
+
+// Selling equipment gives 1 diamond for Common and Event, 5 for Rare, 25 for Legendary, and 100 for Mythic
+
+// export const diamondRecipes: DiamondRecipe[] = [
+//     {
+//         ingredient_one: 'Pepper',
+//         ingredient_two: 'Sand',
+//         value: 18 * 1, // 18 common eq
+//     },
+//     {
+//         ingredient_one: 'Pepper',
+//         ingredient_two: 'Spirit',
+//         value: 32 * 1, // 32 common eq
+//     },
+//     {
+//         ingredient_one: 'Petal',
+//         ingredient_two: 'Pepper',
+//         value: 1 * 1, // 1 event eq
+//     },
+//     {
+//         ingredient_one: 'Petal',
+//         ingredient_two: 'Berries',
+//         value: 1 * 1, // 1 event eq
+//     },
+//     {
+//         ingredient_one: 'Petal',
+//         ingredient_two: 'Mushroom',
+//         value: 1 * 1, // 1 event eq
+//     },
+//     {
+//         ingredient_one: 'Petal',
+//         ingredient_two: 'Feather',
+//         value: 1 * 1, // 1 event eq
+//     },
+//     {
+//         ingredient_one: 'Petal',
+//         ingredient_two: 'Petal',
+//         value: 1 * 1, // 1 event eq
+//     },
+//     {
+//         ingredient_one: 'Sand',
+//         ingredient_two: 'Mushroom',
+//         value: 1 * 5, // 1 rare eq
+//     },
+//     {
+//         ingredient_one: 'Sand',
+//         ingredient_two: 'Sand',
+//         value: 2 * 5, // 2 rare eq
+//     },
+//     {
+//         ingredient_one: 'Sand',
+//         ingredient_two: 'Essence',
+//         value: 6 * 5, // 6 rare eq
+//     },
+//     {
+//         ingredient_one: 'Sand',
+//         ingredient_two: 'Scale',
+//         value: 23 * 5, // 23 rare eq
+//     },
+//     {
+//         ingredient_one: 'Power',
+//         ingredient_two: 'Shadow',
+//         value: 1 * 25, // 1 leg eq
+//     },
+//     {
+//         ingredient_one: 'Power',
+//         ingredient_two: 'Feather',
+//         value: 1 * 25, // 1 leg eq
+//     },
+//     {
+//         ingredient_one: 'Power',
+//         ingredient_two: 'Spirit',
+//         value: 1 * 25, // 1 leg eq
+//     },
+//     {
+//         ingredient_one: 'Power',
+//         ingredient_two: 'Power',
+//         value: 1 * 25, // 1 leg eq
+//     },
+//     {
+//         ingredient_one: 'Scale',
+//         ingredient_two: 'Scale',
+//         value: 1 * 100, // 1 unique eq
+//     },
+// ];

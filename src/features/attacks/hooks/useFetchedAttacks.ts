@@ -8,7 +8,7 @@ export const useFetchedAttacks = () => {
             return fetchAttacks({ pageParam });
         },
         getNextPageParam: (lastPage) => {
-            if (lastPage && lastPage.attack_logs.length > 0) {
+            if (lastPage && Object.prototype.hasOwnProperty.call(lastPage, 'attack_logs') && lastPage?.attack_logs.length > 0) {
                 return lastPage.attack_logs[lastPage.attack_logs.length - 1].occurred_at;
             }
             return undefined;

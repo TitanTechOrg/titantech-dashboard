@@ -30,8 +30,13 @@ export default function PlayerProfile() {
                     <div className="mb-2 flex flex-col items-start justify-center">
                         <h1 className="text-2xl font-bold">Player Raid Profile</h1>
                         <p>Select a player to show their raid info</p>
+                        <p className="text-xs italic">Players are fetched based on previous raid</p>
                     </div>
-                    <PlayerSelect overviewPlayers={overviewPlayers} isLoading={isLoadingOverviewPlayers} />
+                    {overviewPlayers ? (
+                        <PlayerSelect overviewPlayers={overviewPlayers} isLoading={isLoadingOverviewPlayers} />
+                    ) : (
+                        <p>No data yet. Complete a raid and try again.</p>
+                    )}
                 </div>
 
                 {isLoadingProfile ? (

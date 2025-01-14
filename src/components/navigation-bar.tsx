@@ -40,7 +40,7 @@ export function NavigationBar() {
                     'data-[active=true]:after:rounded-[2px]',
                     'data-[active=true]:after:bg-primary',
                 ],
-                wrapper: ['max-w-screen-2xl'],
+                wrapper: ['max-w-screen-2xl', 'px-4'],
             }}
             isBordered={true}
         >

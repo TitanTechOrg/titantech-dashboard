@@ -1,4 +1,5 @@
 import Logo from '@/assets/Logo.webp';
+import { KoFiWidget } from '@/features/donations/kofi';
 import { ThemeSwitcher } from '@/features/theme';
 import { routePaths } from '@/routes';
 import { usePreferencesStore } from '@/stores/preferences.store';
@@ -87,6 +88,9 @@ export function NavigationBar() {
                         </NavbarMenuItem>
                     );
                 })}
+                <div className="mt-auto p-4">
+                    <KoFiWidget />
+                </div>
             </NavbarMenu>
         </Navbar>
     );

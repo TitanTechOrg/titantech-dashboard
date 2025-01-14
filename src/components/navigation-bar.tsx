@@ -52,7 +52,7 @@ export function NavigationBar() {
                         <div className="h-10 w-10">
                             <Image src={Logo} className="rounded" />
                         </div>
-                        <p className="font-bold text-inherit">TitanTech</p>
+                        <p className="hidden font-bold text-inherit sm:block">TitanTech</p>
                     </NavLink>
                 </NavbarBrand>
             </NavbarContent>

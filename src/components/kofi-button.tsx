@@ -48,7 +48,8 @@ export const KoFiButton = () => {
             rel="noopener noreferrer"
             aria-label="Link to Ko-fi donation page (opens in a new tab)"
         >
-            <Button isIconOnly variant="light" aria-label="KoFi donation button">
+            <Button className="bg-orange-500" aria-label="KoFi donation button">
+                <span className="text-xs text-white">Support me</span>
                 <KofiSVG className="h-6 w-6" />
             </Button>
         </Link>

@@ -5,5 +5,6 @@ export * from './dashboard';
 export * from './error';
 export * from './export';
 export * from './landing';
+export * from './leaderboard';
 export * from './overview';
 export * from './profile';

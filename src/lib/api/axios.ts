@@ -14,6 +14,7 @@ export const ENDPOINTS = {
     cycle_data: '/api/v1/raid/cycles',
     overview: '/api/v1/overview/players',
     profile: '/api/v1/players/profile',
+    leaderboard: '/api/v1/overview/master_tier_leaderboard',
 } as const;
 
 const authRequestInterceptor = (config: InternalAxiosRequestConfig) => {

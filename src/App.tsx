@@ -9,6 +9,7 @@ import {
     BarElement,
     CategoryScale,
     Chart as ChartJS,
+    Colors,
     Legend,
     LinearScale,
     LineElement,
@@ -33,7 +34,9 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    LogarithmicScale
+    LogarithmicScale,
+    CategoryScale,
+    Colors
 );
 
 const queryClient = new QueryClient();

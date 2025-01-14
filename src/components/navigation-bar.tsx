@@ -1,11 +1,11 @@
 import Logo from '@/assets/Logo.webp';
-import { KoFiWidget } from '@/features/donations/kofi';
 import { ThemeSwitcher } from '@/features/theme';
 import { routePaths } from '@/routes';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
 import { useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { KoFiButton } from './kofi-button';
 
 export function NavigationBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,8 +72,9 @@ export function NavigationBar() {
             </NavbarContent>
 
             <NavbarContent justify="end">
-                <NavbarItem className="flex flex-row items-center justify-end gap-4">
+                <NavbarItem className="flex flex-row items-center justify-end gap-1">
                     <ThemeSwitcher />
+                    <KoFiButton />
                 </NavbarItem>
             </NavbarContent>
 
@@ -88,9 +89,6 @@ export function NavigationBar() {
                         </NavbarMenuItem>
                     );
                 })}
-                <div className="mt-auto p-4">
-                    <KoFiWidget />
-                </div>
             </NavbarMenu>
         </Navbar>
     );

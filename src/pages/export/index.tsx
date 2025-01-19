@@ -1,139 +1,116 @@
-import Amplify from '@/assets/cards/Amplify.webp';
 import GuardBreak from '@/assets/cards/GuardBreak.webp';
-import InsanityVoid from '@/assets/cards/InsanityVoid.webp';
+import InspiringForce from '@/assets/cards/InspiringForce.webp';
 import Maelstrom from '@/assets/cards/Maelstrom.webp';
-import RadiantKaleidoscope from '@/assets/cards/RadiantKaleidoscope.webp';
 import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
+import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
+import VictoryMarch from '@/assets/cards/VictoryMarch.webp';
 import { PageContainer } from '@/components';
-import { NecrobearResearchTree } from '@/features/editor/components/necrobear-research-tree';
 import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@nextui-org/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
-import fromExponential from 'from-exponential';
 import { useCallback, useMemo, useState } from 'react';
 
-type RaidKey =
-    | 'MoonBeam'
-    | 'Fragmentize'
-    | 'SkullBash'
-    | 'RazorWind'
-    | 'WhipOfLightning'
-    | 'BurstCount'
-    | 'Purify'
-    | 'LimbBurst'
-    | 'FlakShot'
-    | 'Haymaker'
-    | 'ChainLightning'
-    | 'MirrorForce'
-    | 'CelestialStatic'
-    | 'BurningAttack'
-    | 'PoisonAttack'
-    | 'DecayingAttack'
-    | 'Fuse'
-    | 'Shadow'
-    | 'PlagueAttack'
-    | 'Disease'
-    | 'Swarm'
-    | 'RuinousRust'
-    | 'PowerBubble'
-    | 'RuneAttack'
-    | 'MagicPotion'
-    | 'ExecutionersAxe'
-    | 'CrushingVoid'
-    | 'MentalFocus'
-    | 'ImpactAttack'
-    | 'InnerTruth'
-    | 'FinisherAttack'
-    | 'SuperheatMetal'
-    | 'BurstBoost'
-    | 'LimbSupport'
-    | 'TotemFairySkill'
-    | 'TeamTactics'
-    | 'SpinalTap'
-    | 'AstralEcho'
-    | 'TriangleSupport'
-    | 'Weaken'
-    | 'SandsOfTime';
+enum RaidKey {
+    MoonBeam = 'MoonBeam',
+    Fragmentize = 'Fragmentize',
+    SkullBash = 'SkullBash',
+    RazorWind = 'RazorWind',
+    WhipOfLightning = 'WhipOfLightning',
+    BurstCount = 'BurstCount',
+    Purify = 'Purify',
+    LimbBurst = 'LimbBurst',
+    FlakShot = 'FlakShot',
+    Haymaker = 'Haymaker',
+    ChainLightning = 'ChainLightning',
+    MirrorForce = 'MirrorForce',
+    CelestialStatic = 'CelestialStatic',
+    BurningAttack = 'BurningAttack',
+    PoisonAttack = 'PoisonAttack',
+    DecayingAttack = 'DecayingAttack',
+    Fuse = 'Fuse',
+    Shadow = 'Shadow',
+    PlagueAttack = 'PlagueAttack',
+    Disease = 'Disease',
+    Swarm = 'Swarm',
+    RuinousRust = 'RuinousRust',
+    PowerBubble = 'PowerBubble',
+    RuneAttack = 'RuneAttack',
+    MagicPotion = 'MagicPotion',
+    ExecutionersAxe = 'ExecutionersAxe',
+    CrushingVoid = 'CrushingVoid',
+    MentalFocus = 'MentalFocus',
+    ImpactAttack = 'ImpactAttack',
+    InnerTruth = 'InnerTruth',
+    FinisherAttack = 'FinisherAttack',
+    SuperheatMetal = 'SuperheatMetal',
+    BurstBoost = 'BurstBoost',
+    LimbSupport = 'LimbSupport',
+    TotemFairySkill = 'TotemFairySkill',
+    TeamTactics = 'TeamTactics',
+    SpinalTap = 'SpinalTap',
+    AstralEcho = 'AstralEcho',
+    TriangleSupport = 'TriangleSupport',
+    Weaken = 'Weaken',
+    SandsOfTime = 'SandsOfTime',
+}
 
-type RaidKeyMapType = {
-    [key in RaidKey]: string;
+const raidKeyMap: Record<RaidKey, string> = {
+    [RaidKey.MoonBeam]: 'Moon Beam',
+    [RaidKey.Fragmentize]: 'Fragmentize',
+    [RaidKey.SkullBash]: 'Skull Bash',
+    [RaidKey.RazorWind]: 'Razor Wind',
+    [RaidKey.WhipOfLightning]: 'Whip of Lightning',
+    [RaidKey.BurstCount]: 'Clanship Barrage',
+    [RaidKey.Purify]: 'Purifying Blast',
+    [RaidKey.LimbBurst]: 'Psychic Shackles',
+    [RaidKey.FlakShot]: 'Flak Shot',
+    [RaidKey.Haymaker]: 'Cosmic Haymaker',
+    [RaidKey.ChainLightning]: 'Chain of Vengeance',
+    [RaidKey.MirrorForce]: 'Mirror Force',
+    [RaidKey.CelestialStatic]: 'Celestial Static',
+    [RaidKey.BurningAttack]: 'Blazing Inferno',
+    [RaidKey.PoisonAttack]: 'Acid Drench',
+    [RaidKey.DecayingAttack]: 'Decaying Strike',
+    [RaidKey.Fuse]: 'Fusion Bomb',
+    [RaidKey.Shadow]: 'Grim Shadow',
+    [RaidKey.PlagueAttack]: 'Thriving Plague',
+    [RaidKey.Disease]: 'Radioactivity',
+    [RaidKey.Swarm]: 'Ravenous Swarm',
+    [RaidKey.RuinousRust]: 'Ruinous Rain',
+    [RaidKey.PowerBubble]: 'Corrosive Bubbles',
+    [RaidKey.RuneAttack]: 'Maelstrom',
+    [RaidKey.MagicPotion]: 'Amplify',
+    [RaidKey.ExecutionersAxe]: 'Crushing Instinct',
+    [RaidKey.CrushingVoid]: 'Insanity Void',
+    [RaidKey.MentalFocus]: 'Rancid Gas',
+    [RaidKey.ImpactAttack]: 'Inspiring Force',
+    [RaidKey.InnerTruth]: 'Soul Fire',
+    [RaidKey.FinisherAttack]: 'Victory March',
+    [RaidKey.SuperheatMetal]: 'Prismatic Rift',
+    [RaidKey.BurstBoost]: 'Ancestral Favor',
+    [RaidKey.LimbSupport]: 'Grasping Vines',
+    [RaidKey.TotemFairySkill]: 'Totem of Power',
+    [RaidKey.TeamTactics]: 'Team Tactics',
+    [RaidKey.SpinalTap]: 'Skeletal Smash',
+    [RaidKey.AstralEcho]: 'Astral Echo',
+    [RaidKey.TriangleSupport]: 'Radiant Kaleidoscope',
+    [RaidKey.Weaken]: 'Guard Break',
+    [RaidKey.SandsOfTime]: 'Sands of Time',
 };
 
-const raidKeyMap: RaidKeyMapType = {
-    MoonBeam: 'Moon Beam',
-    Fragmentize: 'Fragmentize',
-    SkullBash: 'Skull Bash',
-    RazorWind: 'Razor Wind',
-    WhipOfLightning: 'Whip of Lightning',
-    BurstCount: 'Clanship Barrage',
-    Purify: 'Purifying Blast',
-    LimbBurst: 'Psychic Shackles',
-    FlakShot: 'Flak Shot',
-    Haymaker: 'Cosmic Haymaker',
-    ChainLightning: 'Chain of Vengeance',
-    MirrorForce: 'Mirror Force',
-    CelestialStatic: 'Celestial Static',
-    BurningAttack: 'Blazing Inferno',
-    PoisonAttack: 'Acid Drench',
-    DecayingAttack: 'Decaying Strike',
-    Fuse: 'Fusion Bomb',
-    Shadow: 'Grim Shadow',
-    PlagueAttack: 'Thriving Plague',
-    Disease: 'Radioactivity',
-    Swarm: 'Ravenous Swarm',
-    RuinousRust: 'Ruinous Rain',
-    PowerBubble: 'Corrosive Bubbles',
-    RuneAttack: 'Maelstrom',
-    MagicPotion: 'Amplify',
-    ExecutionersAxe: 'Crushing Instinct',
-    CrushingVoid: 'Insanity Void',
-    MentalFocus: 'Rancid Gas',
-    ImpactAttack: 'Inspiring Force',
-    InnerTruth: 'Soul Fire',
-    FinisherAttack: 'Victory March',
-    SuperheatMetal: 'Prismatic Rift',
-    BurstBoost: 'Ancestral Favor',
-    LimbSupport: 'Grasping Vines',
-    TotemFairySkill: 'Totem of Power',
-    TeamTactics: 'Team Tactics',
-    SpinalTap: 'Skeletal Smash',
-    AstralEcho: 'Astral Echo',
-    TriangleSupport: 'Radiant Kaleidoscope',
-    Weaken: 'Guard Break',
-    SandsOfTime: 'Sands of Time',
+const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
+    [RaidKey.Weaken]: 20,
+    [RaidKey.SandsOfTime]: 20,
+    [RaidKey.RuneAttack]: 10,
 };
 
-const equipmentReplacements = {
-    Jade: 'Anniversary Jade',
+const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
+    [RaidKey.FinisherAttack]: 15,
+    [RaidKey.ImpactAttack]: 15,
+    [RaidKey.SpinalTap]: 15,
 };
 
-const oldSeasonalCardBoosts = {
-    'Insanity Void': 10,
-    Amplify: 20,
-    'Radiant Kaleidoscope': 20,
-};
-
-const newSeasonalCardBoosts = {
-    'Guard Break': 20,
-    'Sands of Time': 20,
-    Maelstrom: 10,
-};
-
-const cardsMap = {
-    old: [
-        { name: 'Insanity Void', level: 10, image: InsanityVoid, isRemoved: false },
-        { name: 'Amplify', level: 20, image: Amplify, isRemoved: false },
-        { name: 'Radiant Kaleidoscope', level: 20, image: RadiantKaleidoscope, isRemoved: false },
-    ],
-    new: [
-        { name: 'Guard Break', level: 20, image: GuardBreak, isRemoved: true },
-        { name: 'Sands of Time', level: 20, image: SandsOfTime, isRemoved: true },
-        { name: 'Maelstrom', level: 10, image: Maelstrom, isRemoved: false },
-    ],
-};
-
-const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string => {
+const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>): string => {
     const raidCardsKey = 'raidCards';
-    const equipmentSetsKey = 'equipmentSets';
 
     try {
         const data = JSON.parse(inputData);
@@ -145,59 +122,62 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
 
             if (typeof cards !== 'object' || cards == null) return '';
 
-            for (const oldKey in keyMap) {
-                if (!Object.prototype.hasOwnProperty.call(cards, oldKey)) {
+            for (const raidKey of Object.values(RaidKey)) {
+                if (!Object.prototype.hasOwnProperty.call(cards, raidKey)) {
                     continue;
                 }
 
-                cards[keyMap[oldKey as keyof RaidKeyMapType]] = cards[oldKey];
+                const card = cards[raidKey];
+                if (!card || typeof card.lv !== 'number') continue;
 
-                if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey as keyof RaidKeyMapType]], 'lv')) {
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = cards[keyMap[oldKey as keyof RaidKeyMapType]].lv;
-                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]].lv;
-                }
-                if (Object.prototype.hasOwnProperty.call(cards[keyMap[oldKey as keyof RaidKeyMapType]], 'num')) {
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].cards = cards[keyMap[oldKey as keyof RaidKeyMapType]].num;
-                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]].num;
-                }
+                const humanReadableName = keyMap[raidKey];
 
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Insanity Void') {
-                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Insanity Void'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
+                // Applying old seasonal boosts
+                if (humanReadableName === keyMap[RaidKey.Weaken]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.Weaken];
+                    if (boost !== undefined) {
+                        card.lv -= boost;
+                    }
                 }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Amplify') {
-                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Amplify'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
+                if (humanReadableName === keyMap[RaidKey.SandsOfTime]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.SandsOfTime];
+                    if (boost !== undefined) {
+                        card.lv -= boost;
+                    }
                 }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Radiant Kaleidoscope') {
-                    const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level - oldSeasonalCardBoosts['Radiant Kaleidoscope'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel; // > 0 ? finalLevel : 0;
-                }
-
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Guard Break') {
-                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]];
-                    // const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Guard Break'];
-                    // cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
-                }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Sands of Time') {
-                    delete cards[keyMap[oldKey as keyof RaidKeyMapType]];
-                    // const finalLevel = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Sands of Time'];
-                    // cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
-                }
-                if (keyMap[oldKey as keyof RaidKeyMapType] === 'Maelstrom') {
-                    const finalLevel: number = cards[keyMap[oldKey as keyof RaidKeyMapType]].level + newSeasonalCardBoosts['Maelstrom'];
-                    cards[keyMap[oldKey as keyof RaidKeyMapType]].level = finalLevel > 100 ? 100 : finalLevel;
+                if (humanReadableName === keyMap[RaidKey.RuneAttack]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.RuneAttack];
+                    if (boost !== undefined) {
+                        card.lv -= boost;
+                    }
                 }
 
-                if (oldKey !== keyMap[oldKey as keyof RaidKeyMapType]) delete cards[oldKey];
+                // Applying new seasonal boosts
+                if (humanReadableName === keyMap[RaidKey.FinisherAttack]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.FinisherAttack];
+                    if (boost !== undefined) {
+                        card.lv += boost;
+                        card.lv = Math.min(card.lv, 100);
+                    }
+                }
+                if (humanReadableName === keyMap[RaidKey.ImpactAttack]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.ImpactAttack];
+                    if (boost !== undefined) {
+                        card.lv += boost;
+                        card.lv = Math.min(card.lv, 100);
+                    }
+                }
+                if (humanReadableName === keyMap[RaidKey.SpinalTap]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.SpinalTap];
+                    if (boost !== undefined) {
+                        card.lv += boost;
+                        card.lv = Math.min(card.lv, 100);
+                    }
+                }
             }
         }
 
-        const equipments = data[equipmentSetsKey];
-
-        if (typeof equipments !== 'object' || equipments == null) return '';
-
-        data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Jade: string }] || item);
+        delete data['raid_card_research'];
 
         return data;
     } catch (err) {
@@ -205,111 +185,123 @@ const updateRaidCardNames = (inputData: string, keyMap: RaidKeyMapType): string 
     }
 };
 
-type NecrobearBonuses = {
-    HeadDamage: string;
-    ChestDamage: string;
-    LimbDamage: string;
-    ArmorDamage: string;
-    BodyDamage: string;
-    RaidEnemy1Damage: string;
-    RaidEnemy2Damage: string;
-    RaidEnemy3Damage: string;
-    RaidEnemy4Damage: string;
-    RaidEnemy5Damage: string;
-    RaidEnemy6Damage: string;
-    RaidEnemy7Damage: string;
-    RaidEnemy8Damage: string;
+const cardsMap = {
+    old: [
+        { name: 'Guard Break', level: 20, image: GuardBreak, isRemoved: false },
+        { name: 'Sands of Time', level: 20, image: SandsOfTime, isRemoved: false },
+        { name: 'Maelstrom', level: 10, image: Maelstrom, isRemoved: false },
+    ],
+    new: [
+        { name: 'Inspiring Force', level: 15, image: InspiringForce, isRemoved: false },
+        { name: 'Skeletal Smash', level: 15, image: SkeletalSmash, isRemoved: false },
+        { name: 'Victory March', level: 15, image: VictoryMarch, isRemoved: false },
+    ],
 };
+// type NecrobearBonuses = {
+//     HeadDamage: string;
+//     ChestDamage: string;
+//     LimbDamage: string;
+//     ArmorDamage: string;
+//     BodyDamage: string;
+//     RaidEnemy1Damage: string;
+//     RaidEnemy2Damage: string;
+//     RaidEnemy3Damage: string;
+//     RaidEnemy4Damage: string;
+//     RaidEnemy5Damage: string;
+//     RaidEnemy6Damage: string;
+//     RaidEnemy7Damage: string;
+//     RaidEnemy8Damage: string;
+// };
 
-type ReadableNecrobearBonuses = {
-    Head: number;
-    Torso: number;
-    Limb: number;
-    Armour: number;
-    Body: number;
-    Lojak: number;
-    Takedar: number;
-    Jukk: number;
-    Sterl: number;
-    Mohaca: number;
-    Terro: number;
-    Klonk: number;
-    Priker: number;
-};
+// type ReadableNecrobearBonuses = {
+//     Head: number;
+//     Torso: number;
+//     Limb: number;
+//     Armour: number;
+//     Body: number;
+//     Lojak: number;
+//     Takedar: number;
+//     Jukk: number;
+//     Sterl: number;
+//     Mohaca: number;
+//     Terro: number;
+//     Klonk: number;
+//     Priker: number;
+// };
 
-type NecroProps = {
-    data: string;
-};
+// type NecroProps = {
+//     data: string;
+// };
 
-function NecrobearBonus({ data }: NecroProps) {
-    const parseNecrobearBonus = (data: string) => {
-        try {
-            const parsed = JSON.parse(data);
+// function NecrobearBonus({ data }: NecroProps) {
+//     const parseNecrobearBonus = (data: string) => {
+//         try {
+//             const parsed = JSON.parse(data);
 
-            if (!Object.prototype.hasOwnProperty.call(parsed, 'research')) return;
+//             if (!Object.prototype.hasOwnProperty.call(parsed, 'research')) return;
 
-            const research: NecrobearBonuses = parsed['research'];
+//             const research: NecrobearBonuses = parsed['research'];
 
-            const bonuses: ReadableNecrobearBonuses = {
-                Head: readDamagePercentage(research, 'HeadDamage'),
-                Torso: readDamagePercentage(research, 'ChestDamage'),
-                Limb: readDamagePercentage(research, 'LimbDamage'),
-                Armour: readDamagePercentage(research, 'ArmorDamage'),
-                Body: readDamagePercentage(research, 'BodyDamage'),
-                Lojak: readDamagePercentage(research, 'RaidEnemy1Damage'),
-                Takedar: readDamagePercentage(research, 'RaidEnemy2Damage'),
-                Jukk: readDamagePercentage(research, 'RaidEnemy3Damage'),
-                Sterl: readDamagePercentage(research, 'RaidEnemy4Damage'),
-                Mohaca: readDamagePercentage(research, 'RaidEnemy5Damage'),
-                Terro: readDamagePercentage(research, 'RaidEnemy6Damage'),
-                Klonk: readDamagePercentage(research, 'RaidEnemy7Damage'),
-                Priker: readDamagePercentage(research, 'RaidEnemy8Damage'),
-            };
-            return bonuses;
-        } catch (err) {
-            return undefined;
-        }
-    };
+//             const bonuses: ReadableNecrobearBonuses = {
+//                 Head: readDamagePercentage(research, 'HeadDamage'),
+//                 Torso: readDamagePercentage(research, 'ChestDamage'),
+//                 Limb: readDamagePercentage(research, 'LimbDamage'),
+//                 Armour: readDamagePercentage(research, 'ArmorDamage'),
+//                 Body: readDamagePercentage(research, 'BodyDamage'),
+//                 Lojak: readDamagePercentage(research, 'RaidEnemy1Damage'),
+//                 Takedar: readDamagePercentage(research, 'RaidEnemy2Damage'),
+//                 Jukk: readDamagePercentage(research, 'RaidEnemy3Damage'),
+//                 Sterl: readDamagePercentage(research, 'RaidEnemy4Damage'),
+//                 Mohaca: readDamagePercentage(research, 'RaidEnemy5Damage'),
+//                 Terro: readDamagePercentage(research, 'RaidEnemy6Damage'),
+//                 Klonk: readDamagePercentage(research, 'RaidEnemy7Damage'),
+//                 Priker: readDamagePercentage(research, 'RaidEnemy8Damage'),
+//             };
+//             return bonuses;
+//         } catch (err) {
+//             return undefined;
+//         }
+//     };
 
-    const readDamagePercentage = (research: NecrobearBonuses, key: keyof NecrobearBonuses) => {
-        const val = research[key];
+//     const readDamagePercentage = (research: NecrobearBonuses, key: keyof NecrobearBonuses) => {
+//         const val = research[key];
 
-        if (Number.isNaN(val)) return 0;
+//         if (Number.isNaN(val)) return 0;
 
-        const exp = fromExponential(val);
+//         const exp = fromExponential(val);
 
-        if (isNaN(Number(exp))) return 0;
+//         if (isNaN(Number(exp))) return 0;
 
-        return Number(exp) * 100;
-    };
+//         return Number(exp) * 100;
+//     };
 
-    const text = parseNecrobearBonus(data);
+//     const text = parseNecrobearBonus(data);
 
-    return (
-        <div className="flex w-full max-w-md shrink-0 flex-col gap-4 text-sm">
-            <h3>Necrobear</h3>
-            <p className="text-left">
-                You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.
-            </p>
-            {text && (
-                <div className="self-center">
-                    <ul className={`${Object.keys(text).length / 2 > 5 ? 'columns-2 sm:columns-3' : 'columns-1'} gap-8`}>
-                        {Object.keys(text).map((key) => {
-                            return (
-                                <li key={key}>
-                                    <div className="flex justify-between gap-4">
-                                        <span>{key}</span>
-                                        <span>{text[key as keyof ReadableNecrobearBonuses]}%</span>
-                                    </div>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            )}
-        </div>
-    );
-}
+//     return (
+//         <div className="flex w-full max-w-md shrink-0 flex-col gap-4 text-sm">
+//             <h3>Necrobear</h3>
+//             <p className="text-left">
+//                 You have the following Forbidden Research raid bonuses. These are not yet taken into account by TT2 Raid Optimizer.
+//             </p>
+//             {text && (
+//                 <div className="self-center">
+//                     <ul className={`${Object.keys(text).length / 2 > 5 ? 'columns-2 sm:columns-3' : 'columns-1'} gap-8`}>
+//                         {Object.keys(text).map((key) => {
+//                             return (
+//                                 <li key={key}>
+//                                     <div className="flex justify-between gap-4">
+//                                         <span>{key}</span>
+//                                         <span>{text[key as keyof ReadableNecrobearBonuses]}%</span>
+//                                     </div>
+//                                 </li>
+//                             );
+//                         })}
+//                     </ul>
+//                 </div>
+//             )}
+//         </div>
+//     );
+// }
 
 type SeasonalCardsInfoSectionProps = {
     title: string;
@@ -326,7 +318,7 @@ function SeasonalCardsInfoSection({ title, data, isNewSeason }: SeasonalCardsInf
                     return (
                         <li key={name}>
                             <div className="flex shrink-0 flex-row items-center gap-4">
-                                <Image src={image} alt={`${name} raid card`} className="h-8 w-8 object-cover" radius="sm" />
+                                <Image src={image} alt={`${name} raid card`} className="h-8 w-8 object-cover" radius="none" />
                                 {isNewSeason ? '+' : '-'}
                                 {level}
                                 {isRemoved && <span className="text-xs">(Removed from player export)</span>}
@@ -385,8 +377,7 @@ export default function PlayerExport() {
                     <div className="flex max-w-md flex-col gap-2 text-left">
                         <p className="text-sm">
                             This tool provides a temporary fix for making TT2 player export compatible with the
-                            <span className="italic">&nbsp;TT2 Raid Optimizer</span> app. If the copied export below is not working, please re-install
-                            the <span className="italic">TT2 Raid Optimizer</span> app and try again.
+                            <span className="italic">&nbsp;TT2 Raid Optimizer</span> app.
                         </p>
                         <Accordion className="px-0">
                             <AccordionItem key="1" aria-label="Show card changes" title="Show card changes" classNames={{ title: ['text-sm'] }}>
@@ -468,9 +459,6 @@ export default function PlayerExport() {
                         </Tooltip>
                     </div>
                 </div>
-                {prettyJson(inputData) && <NecrobearBonus data={inputData} />}
-
-                <NecrobearResearchTree />
             </div>
         </PageContainer>
     );

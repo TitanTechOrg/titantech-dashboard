@@ -7,7 +7,7 @@ const GetStarted = lazy(async () => await import('@/pages/landing'));
 const Dashboard = lazy(async () => await import('@/pages/dashboard'));
 const Overview = lazy(async () => await import('@/pages/overview'));
 const PlayerProfile = lazy(async () => await import('@/pages/profile'));
-// const PlayerExport = lazy(async () => await import('@/pages/export'));
+const PlayerExport = lazy(async () => await import('@/pages/export'));
 // const Alchemy = lazy(async () => await import('@/pages/alchemy'));
 
 type RouteConfigs = {
@@ -20,7 +20,7 @@ export const routePaths: RouteConfigs[] = [
     { path: 'dashboard', protected: true },
     { path: 'overview', protected: true },
     { path: 'players', protected: true },
-    // { path: 'export', protected: false },
+    { path: 'export', protected: false },
     // { path: 'alchemy', protected: false },
 ];
 
@@ -64,14 +64,14 @@ const routesConfig: RouteObject[] = [
             </RouteGuard>
         ),
     },
-    // {
-    //     path: 'export',
-    //     element: (
-    //         <Suspense fallback={<></>}>
-    //             <PlayerExport />
-    //         </Suspense>
-    //     ),
-    // },
+    {
+        path: 'export',
+        element: (
+            <Suspense fallback={<></>}>
+                <PlayerExport />
+            </Suspense>
+        ),
+    },
     // {
     //     path: 'alchemy',
     //     element: (

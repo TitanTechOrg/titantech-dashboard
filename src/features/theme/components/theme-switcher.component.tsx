@@ -1,5 +1,5 @@
 import useDarkMode from '@/hooks/useDarkMode.hooks';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useCallback } from 'react';
 
@@ -11,7 +11,7 @@ export function ThemeSwitcher() {
     }, [setDarkMode]);
 
     return (
-        <Button onClick={toggleDarkMode} isIconOnly variant="light" aria-label="Toggle between dark and light mode">
+        <Button onPress={toggleDarkMode} isIconOnly variant="light" aria-label="Toggle between dark and light mode">
             {darkMode ? <SunIcon /> : <MoonIcon />}
         </Button>
     );

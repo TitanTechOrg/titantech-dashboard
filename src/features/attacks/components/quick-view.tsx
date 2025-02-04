@@ -1,6 +1,6 @@
 import { TitanSequence, TitanSequenceParts } from '@/features/titans';
 import { percentage } from '@/utils';
-import { Image } from '@nextui-org/react';
+import { Image } from "@heroui/react";
 import { MappedArmourColour, MappedArmourType, MappedBodyColour, MappedBodyType, TitanPart } from '..';
 
 import OffStratDamage from '@/assets/titanPartTargets/off-strat-damage.webp';

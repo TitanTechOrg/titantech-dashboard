@@ -2,7 +2,7 @@ import { TitanPartMap, TitanPartMapPlayerPerspective } from '@/constants/titans'
 import { TitanPart } from '@/features/attacks/types';
 import { CurseTypes, TitanCurseData, TitanSequenceParts } from '@/features/titans';
 import { formatter, percentage } from '@/utils';
-import { Progress, Tooltip } from '@nextui-org/react';
+import { Progress, Tooltip } from "@heroui/react";
 import { useMediaQueries } from '@react-hook/media-query';
 
 type CurseColors = 'warning' | 'secondary' | 'default' | 'primary' | 'success' | 'danger' | undefined;

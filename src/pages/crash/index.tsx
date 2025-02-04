@@ -1,5 +1,5 @@
 import { PageContainer } from '@/components';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import { useRouteError } from 'react-router-dom';
 
 export default function AppCrash() {
@@ -37,7 +37,7 @@ export default function AppCrash() {
                 </p>
 
                 <div className="py-4">
-                    <Button color="primary" onClick={handleAppReload}>
+                    <Button color="primary" onPress={handleAppReload}>
                         Click here to reload the app
                     </Button>
                 </div>

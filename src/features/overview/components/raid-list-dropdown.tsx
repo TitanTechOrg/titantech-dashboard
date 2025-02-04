@@ -1,5 +1,5 @@
 import { RaidData, RaidList } from '@/features/raid-info';
-import { Select, SelectItem, SelectedItems } from '@nextui-org/react';
+import { Select, SelectItem, SelectedItems } from "@heroui/react";
 
 type RaidListDropdownProps = {
     selectedItem: string;

@@ -1,6 +1,6 @@
 import type { RaidCardType } from '@/features/attacks';
 import { getCardImageUrl } from '@/utils';
-import { Image } from '@nextui-org/react';
+import { Image } from "@heroui/react";
 
 export function RaidCard({ name: cardName, value: cardLevel, readableName }: RaidCardType) {
     return (

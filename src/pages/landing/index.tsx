@@ -1,5 +1,5 @@
 import { PageContainer } from '@/components';
-import { Button, Code, Link } from '@nextui-org/react';
+import { Button, Code, Link } from "@heroui/react";
 import { DiscordLogoIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 
 export default function GetStarted() {

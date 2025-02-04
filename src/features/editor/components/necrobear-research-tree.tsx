@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@nextui-org/react';
+import { Button, ButtonGroup } from '@heroui/react';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useMemo, useState } from 'react';
 import { raidResearchData } from '../constants/research-tree-data';
@@ -119,10 +119,10 @@ export function NecrobearResearchTree() {
                 <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold">Nodes</h2>
                     <div className="flex space-x-2">
-                        <Button onClick={handleResetAll} color="primary" aria-label="Reset all nodes to level 0">
+                        <Button onPress={handleResetAll} color="primary" aria-label="Reset all nodes to level 0">
                             Reset All
                         </Button>
-                        <Button onClick={handleMaxAll} color="primary" aria-label="Maximize all nodes to their total level">
+                        <Button onPress={handleMaxAll} color="primary" aria-label="Maximize all nodes to their total level">
                             Max All
                         </Button>
                     </div>
@@ -149,7 +149,7 @@ export function NecrobearResearchTree() {
 
                                         <ButtonGroup>
                                             <Button
-                                                onClick={() => handleDecrement(currentNodeIndex)}
+                                                onPress={() => handleDecrement(currentNodeIndex)}
                                                 isIconOnly
                                                 disabled={currentNode.levels.current === 0}
                                                 aria-label={`Decrement ${currentNode.type}`}
@@ -157,7 +157,7 @@ export function NecrobearResearchTree() {
                                                 <MinusIcon />
                                             </Button>
                                             <Button
-                                                onClick={() => handleIncrement(currentNodeIndex)}
+                                                onPress={() => handleIncrement(currentNodeIndex)}
                                                 isIconOnly
                                                 disabled={currentNode.levels.current >= currentNode.levels.total}
                                                 aria-label={`Increment ${currentNode.type}`}
@@ -165,7 +165,7 @@ export function NecrobearResearchTree() {
                                                 <PlusIcon />
                                             </Button>
                                             <Button
-                                                onClick={() => handleMax(currentNodeIndex)}
+                                                onPress={() => handleMax(currentNodeIndex)}
                                                 isIconOnly
                                                 disabled={currentNode.levels.current >= currentNode.levels.total}
                                                 aria-label={`Max out ${currentNode.type}`}

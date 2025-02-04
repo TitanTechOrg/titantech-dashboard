@@ -24,7 +24,7 @@ import {
     Image,
     Selection,
     Skeleton,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { CheckIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 

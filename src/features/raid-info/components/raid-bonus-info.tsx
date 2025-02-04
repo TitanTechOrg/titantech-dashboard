@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image } from '@nextui-org/react';
+import { Accordion, AccordionItem, Card, CardBody, CardHeader, Image } from "@heroui/react";
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { PercentageCardsType } from '..';
 

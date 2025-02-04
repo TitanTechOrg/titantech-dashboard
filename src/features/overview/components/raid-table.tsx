@@ -17,7 +17,7 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { CheckIcon, ChevronDownIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { Key, useCallback, useMemo, useState } from 'react';
 import { useOverviewPlayers } from '../api/get-overview-players';
@@ -114,7 +114,10 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
 
                 return sortDescriptor.direction === 'descending' ? -cmp : cmp;
             })
-            .map((val, index) => ({ ...val, index: index + 1 }) as IndexedPlayerData);
+            .map((val, index) => (({
+            ...val,
+            index: index + 1
+        }) as IndexedPlayerData));
     }, [sortDescriptor, items, raidCycles?.cycles?.length]);
 
     const renderCell = useCallback(

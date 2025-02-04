@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Code, CodeProps, Divider, Spinner } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Code, CodeProps, Divider, Spinner } from "@heroui/react";
 import { ChartData as ChartDataPropType } from 'chart.js';
 import React, { lazy, Suspense } from 'react';
 

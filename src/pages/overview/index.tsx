@@ -4,7 +4,7 @@ import { RaidOverviewInfo, RaidPlayerDamageOverview, RaidTable, useOverviewPlaye
 import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { useSelectStore } from '@/stores/useSelectStore';
 import { convertUTCDateToLocalDate, getRaidLabel } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from "@heroui/react";
 import { useEffect, useMemo } from 'react';
 
 const calculateRounds = (date1: Date, date2: Date) => {

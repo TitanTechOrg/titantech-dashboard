@@ -3,7 +3,7 @@ import { useRaidList } from '@/features/raid-info';
 import { useBoundStore } from '@/stores/bound.store';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
-import { Button, Card, CardBody, CardHeader, Divider, Image, Slider, SliderValue, Spinner, Switch } from '@nextui-org/react';
+import { Button, Card, CardBody, CardHeader, Divider, Image, Slider, SliderValue, Spinner, Switch } from "@heroui/react";
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useMediaQueries } from '@react-hook/media-query';
 import { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';

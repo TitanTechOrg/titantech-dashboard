@@ -1,5 +1,5 @@
 import { CustomSelect } from '@/components';
-import { Skeleton } from '@nextui-org/react';
+import { Skeleton } from "@heroui/react";
 
 type PlayerSelectProps = {
     overviewPlayers: { players_data: { player_id: string; player_name: string }[] } | undefined;

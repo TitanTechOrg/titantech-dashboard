@@ -1,6 +1,6 @@
 import { RaidBuffMapping } from '@/constants/buffs';
 import { convertUTCDateToLocalDate, getOrdinalSuffix, getRaidLabel } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Skeleton, Tooltip } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Skeleton, Tooltip } from "@heroui/react";
 import { RaidBuffMappingType, RaidCycle, RaidData } from '..';
 
 type CardRaidInfoProps = {

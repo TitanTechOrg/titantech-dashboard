@@ -12,7 +12,7 @@ import TakedarAvatar from '@/assets/titans/avatars/Takedar_avatar.webp';
 import TerroAvatar from '@/assets/titans/avatars/Terro_avatar.webp';
 import { useBoundStore } from '@/stores/bound.store';
 import { formatter, percentage } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Image, Progress, Skeleton } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Image, Progress, Skeleton } from "@heroui/react";
 import { TitanSequence } from '..';
 
 const TitanImageMapping = {

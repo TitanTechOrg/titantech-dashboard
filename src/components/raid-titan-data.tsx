@@ -2,7 +2,7 @@ import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
 import { TitanPartMapPlayerPerspective } from '@/constants/titans';
 import { TitanPart } from '@/features/attacks';
 import { TitanCurseData, TitanSequence, TitanSequenceParts } from '@/features/titans';
-import { Image } from '@nextui-org/react';
+import { Image } from "@heroui/react";
 import { RaidTitanPartPlayerPerspective, TitanPartTableData } from '.';
 
 type RaidTitanDataProps = {

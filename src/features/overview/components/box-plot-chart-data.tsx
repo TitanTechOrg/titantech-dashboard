@@ -1,7 +1,7 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 import { Chart as ChartJS, ChartOptions, Tooltip, TooltipModel } from 'chart.js';
 import { lazy, Suspense } from 'react';
 import { PlayerData } from '../types';

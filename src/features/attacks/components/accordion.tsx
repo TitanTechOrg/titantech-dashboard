@@ -2,7 +2,7 @@ import { RaidTitanData } from '@/components/raid-titan-data';
 import { TitanSequence } from '@/features/titans';
 import { useBoundStore } from '@/stores/bound.store';
 import { formatter } from '@/utils';
-import { Accordion, AccordionItem } from '@nextui-org/react';
+import { Accordion, AccordionItem } from "@heroui/react";
 import { useMediaQueries } from '@react-hook/media-query';
 import { useMemo } from 'react';
 import { QuickView } from '..';

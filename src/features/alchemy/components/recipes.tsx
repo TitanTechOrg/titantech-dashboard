@@ -1,4 +1,4 @@
-import { Image } from '@nextui-org/react';
+import { Image } from "@heroui/react";
 import { IngredientRecipe, WildCardRecipe } from '../types';
 
 function getImageUrl(name: string) {

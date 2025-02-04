@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, CardBody, CardHeader } from '@nextui-org/react';
+import { Button, ButtonGroup, Card, CardBody, CardHeader } from "@heroui/react";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PlayerData } from '../types';
 import { BoxPlotChartData } from './box-plot-chart-data';

@@ -1,4 +1,4 @@
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { SVGProps } from 'react';
 
 type SVGElementProps = SVGProps<SVGSVGElement>;

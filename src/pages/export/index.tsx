@@ -5,7 +5,7 @@ import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
 import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
 import VictoryMarch from '@/assets/cards/VictoryMarch.webp';
 import { PageContainer } from '@/components';
-import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@nextui-org/react';
+import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@heroui/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -418,7 +418,7 @@ export default function PlayerExport() {
                             isDisabled={!inputData.length}
                             color="default"
                             aria-label="Clear player export text"
-                            onClick={clearText}
+                            onPress={clearText}
                             className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
                             startContent={<CrossCircledIcon />}
                         >
@@ -450,7 +450,7 @@ export default function PlayerExport() {
                                 isDisabled={!prettyJson(inputData)}
                                 color="primary"
                                 aria-label="Copy player export"
-                                onClick={copyToClipboard}
+                                onPress={copyToClipboard}
                                 className="w-fit self-center"
                                 startContent={<CopyIcon />}
                             >

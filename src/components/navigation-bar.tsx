@@ -2,7 +2,7 @@ import Logo from '@/assets/Logo.webp';
 import { ThemeSwitcher } from '@/features/theme';
 import { routePaths } from '@/routes';
 import { usePreferencesStore } from '@/stores/preferences.store';
-import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@nextui-org/react';
+import { Image, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/react";
 import { useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { KoFiButton } from './kofi-button';
@@ -21,7 +21,7 @@ export function NavigationBar() {
     }, [token, checkAuth]);
 
     return (
-        <Navbar
+        (<Navbar
             onMenuOpenChange={setIsMenuOpen}
             isMenuOpen={isMenuOpen}
             disableAnimation={true}
@@ -56,7 +56,6 @@ export function NavigationBar() {
                     </NavLink>
                 </NavbarBrand>
             </NavbarContent>
-
             <NavbarContent className="hidden gap-4 md:flex lg:flex" justify="center">
                 {routes.map((route) => {
                     const path = '/' + route.path;
@@ -70,14 +69,12 @@ export function NavigationBar() {
                     );
                 })}
             </NavbarContent>
-
             <NavbarContent justify="end">
                 <NavbarItem className="flex flex-row items-center justify-end gap-1">
                     <ThemeSwitcher />
                     <KoFiButton />
                 </NavbarItem>
             </NavbarContent>
-
             <NavbarMenu className="min-h-lvh pb-32">
                 {routes.map((route) => {
                     const pageName = route.path.replace(/-/g, ' ');
@@ -90,6 +87,6 @@ export function NavigationBar() {
                     );
                 })}
             </NavbarMenu>
-        </Navbar>
+        </Navbar>)
     );
 }

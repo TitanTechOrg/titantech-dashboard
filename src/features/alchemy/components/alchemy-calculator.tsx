@@ -1,5 +1,5 @@
+import { Button, Code, Image, Input } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Code, Image, Input } from '@nextui-org/react';
 import { useCallback } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -56,7 +56,7 @@ export function AlchemyCalculator() {
                 <div className="flex w-full flex-col gap-4">
                     <Code className="overflow-x-auto whitespace-pre text-left">{data}</Code>
                     <div>
-                        <Button className="w-2" variant="flat" color="primary" onClick={resetData}>
+                        <Button className="w-2" variant="flat" color="primary" onPress={resetData}>
                             Reset
                         </Button>
                     </div>

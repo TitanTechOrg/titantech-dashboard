@@ -1,5 +1,5 @@
 import { PageContainer } from '@/components';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import React, { Component, ErrorInfo } from 'react';
 
 interface Props {
@@ -26,7 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
             return (
                 <PageContainer>
                     <h1>Something went wrong.</h1>
-                    <Button onClick={() => (window.location.href = '/')}>Click here to reload the app</Button>
+                    <Button onPress={() => (window.location.href = '/')}>Click here to reload the app</Button>
                 </PageContainer>
             );
         }

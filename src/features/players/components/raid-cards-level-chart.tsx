@@ -1,7 +1,7 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { findCard, getCardImageUrl } from '@/utils';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 import { ChartOptions } from 'chart.js';
 import { lazy, Suspense } from 'react';
 

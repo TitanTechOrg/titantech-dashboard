@@ -1,7 +1,7 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
-import { Card, CardBody, CardHeader, Divider, Spinner } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Spinner } from "@heroui/react";
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ChartOptions } from 'chart.js';
 import { lazy, Suspense, useMemo } from 'react';

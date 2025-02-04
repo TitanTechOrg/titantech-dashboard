@@ -1,6 +1,6 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
-import { Card, CardBody, CardHeader, Divider, Spinner } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider, Spinner } from "@heroui/react";
 import { ChartOptions } from 'chart.js';
 import { Suspense, lazy, useMemo } from 'react';
 import { useAttackTimeline } from '../hooks/useAttackTimeline';

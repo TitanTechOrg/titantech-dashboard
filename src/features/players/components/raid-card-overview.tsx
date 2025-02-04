@@ -1,6 +1,6 @@
 import { FILTER_OPTIONS, PlayerProfileType, RaidCards, useFilterStore } from '@/features/players';
 import { addSpacesBetweenCapitalLetters, findCard } from '@/utils';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 
 type PlayerRaidCardsOverviewProps = {
@@ -19,9 +19,9 @@ function PlayerRaidCardsOverview({ cards }: PlayerRaidCardsOverviewProps) {
         <div className="col-span-2 row-start-3 flex flex-col gap-4">
             <h1 className="text-2xl font-bold">Raid Cards</h1>
             <div className="flex gap-2">
-                <Button onClick={() => toggleFilter('sortBy')}>{filters.sortBy}</Button>
+                <Button onPress={() => toggleFilter('sortBy')}>{filters.sortBy}</Button>
                 <Button
-                    onClick={() => toggleFilter('sortOrder')}
+                    onPress={() => toggleFilter('sortOrder')}
                     endContent={filters.sortOrder === FILTER_OPTIONS.sortOrder[0] ? <ArrowUpIcon /> : <ArrowDownIcon />}
                 >
                     {filters.sortOrder}

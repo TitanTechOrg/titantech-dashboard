@@ -1,5 +1,5 @@
 import { useSelectStore } from '@/stores/useSelectStore';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -57,7 +57,7 @@ export function CustomSelect({ options, label, placeholder = 'Select an option',
         <div className="group relative inline-flex w-full min-w-72 max-w-xs flex-col duration-150 transition-background motion-reduce:transition-none">
             <div className="flex w-full flex-col" ref={dropdownRef}>
                 <Button
-                    onClick={handleSelectToggle}
+                    onPress={handleSelectToggle}
                     className="inline-flex w-full items-center justify-start px-3 py-7 shadow-sm outline-none"
                     color="primary"
                     variant="flat"

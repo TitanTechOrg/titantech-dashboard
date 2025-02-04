@@ -2,7 +2,7 @@ import { TitanPartMap, TitanPartMapPlayerPerspective } from '@/constants/titans'
 import { TitanPart } from '@/features/attacks/types';
 import { CurseTypes, TitanCurseData, TitanSequenceParts } from '@/features/titans';
 import { formatter, percentage } from '@/utils';
-import { Progress, Tooltip } from "@heroui/react";
+import { Progress, Tooltip } from '@heroui/react';
 import { useMediaQueries } from '@react-hook/media-query';
 
 type CurseColors = 'warning' | 'secondary' | 'default' | 'primary' | 'success' | 'danger' | undefined;
@@ -232,7 +232,7 @@ function TitanPartCellData({ partNames, showHealthbars, parts, damagedPartsValue
     );
 }
 
-export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: TitanPartTableDataProps): JSX.Element {
+export function TitanPartTableData({ damagedParts, titanData, showHealthbars }: TitanPartTableDataProps) {
     const { curse_type, parts: cursedParts, name } = titanData;
     const { matches } = useMediaQueries({
         screen: 'screen',

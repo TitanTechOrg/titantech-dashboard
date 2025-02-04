@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, CardBody, CardHeader } from "@heroui/react";
+import { Button, ButtonGroup, Card, CardBody, CardHeader } from '@heroui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PlayerData } from '../types';
 import { BoxPlotChartData } from './box-plot-chart-data';
@@ -20,7 +20,7 @@ type ToggleGroupValues = keyof typeof TOGGLE_GROUP_VALUE;
 
 export function RaidPlayerDamageOverview({ playersData }: RaidPlayerDamageOverview) {
     const [selected, setSelected] = useState<ToggleGroupValues>('AVERAGE');
-    const prevSelected = useRef<ToggleGroupValues>();
+    const prevSelected = useRef<ToggleGroupValues>('AVERAGE');
     const [sortedData, setSortedData] = useState<PlayerData[]>(playersData);
 
     const handleOnPress = useCallback((btnNumber: ToggleGroupValues) => {

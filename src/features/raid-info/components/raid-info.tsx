@@ -14,7 +14,11 @@ export function RaidInfo({ raidCycle, raidData }: CardRaidInfoProps) {
             <CardHeader className="flex h-[70px] flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <Skeleton isLoaded={!!raidData} className="rounded-md">
-                        {raidData && <h3 className="text-left text-lg font-medium">{getRaidLabel(raidData.tier, raidData.level)}</h3>}
+                        {raidData && (
+                            <h3 className="text-left text-lg font-medium">
+                                {getRaidLabel({ tierLabel: raidData.tierLabel, level: raidData.level })}
+                            </h3>
+                        )}
                     </Skeleton>
                 </div>
 

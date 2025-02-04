@@ -5,4 +5,3 @@ export * from './components/raid-damage-info';
 export * from './components/raid-info';
 export * from './constants';
 export * from './types';
-export * from './utils/mapRaidTier';

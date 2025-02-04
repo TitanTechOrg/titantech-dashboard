@@ -3,7 +3,7 @@ import { RaidBuffMapping } from '@/constants/buffs';
 import { RaidOverviewInfo, RaidPlayerDamageOverview, RaidTable, useOverviewPlayers } from '@/features/overview';
 import { RaidBuffMappingType, RaidCycle, useRaidCycles, useRaidList } from '@/features/raid-info';
 import { useSelectStore } from '@/stores/useSelectStore';
-import { convertUTCDateToLocalDate } from '@/utils';
+import { convertUTCDateToLocalDate, getRaidLabel } from '@/utils';
 import { Card, CardBody, CardHeader, Divider, Spinner, Tooltip } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 
@@ -68,7 +68,7 @@ export default function Overview() {
                             labelTextSize="text-xs"
                             options={raidList.raids.map((raid) => ({
                                 value: raid.raid_id,
-                                label: `${raid.tier === 'Master Tier' ? 'M' : raid.tier} - Zone ${raid.level} | Season ${raid.raid_season_sequence}`,
+                                label: `${getRaidLabel({ tierLabel: raid.tierLabel, level: raid.level })} | Season ${raid.raid_season_sequence}`,
                             }))}
                         />
                         {findRaid && (

@@ -29,7 +29,8 @@ export type RaidData = {
     raid_season_sequence: number;
     started_at: string;
     ended_at?: string;
-    tier: RaidTierType | string;
+    tier: number;
+    tierLabel?: string;
     attacksPerTier: number;
 };
 export type RaidList = {

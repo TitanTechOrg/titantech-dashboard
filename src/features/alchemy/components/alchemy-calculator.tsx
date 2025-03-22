@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { ingredientRecipes, ingredients, wildcardRecipes } from '../constants';
+import { ingredientRecipes, ingredients, raidcardRecipes, wildcardRecipes } from '../constants';
 import { useCalculateAlchemy } from '../hooks/useCalculateAlchemy';
 import { IngredientsData } from '../types';
 
@@ -38,8 +38,9 @@ export function AlchemyCalculator() {
             ingredient_recipes: ingredientRecipes, // Add dynamic or static recipes
             dust_recipes: [], // Add dynamic or static recipes
             wild_card_recipes: wildcardRecipes, // Add dynamic or static recipes
+            raid_card_recipes: raidcardRecipes,
             base_ingredients: ingredients.filter((ingredient) => ingredient.base).map((ingredient) => ingredient.name),
-            ignore_ingredients: ingredients.filter((ingredient) => !ingredient.active).map((ingredient) => ingredient.name),
+            ignore_ingredients: [], // ingredients.filter((ingredient) => !ingredient.active).map((ingredient) => ingredient.name),
         };
 
         mutate(payload);
@@ -73,21 +74,19 @@ export function AlchemyCalculator() {
                         .filter((ingredient) => ingredient.active)
                         .sort((a, b) => (b.base ? 1 : 0) - (a.base ? 1 : 0))
                         .map(({ name }) => (
-                            <div>
-                                <Input
-                                    className="max-w-xs"
-                                    key={name}
-                                    type="number"
-                                    label={name}
-                                    labelPlacement="outside"
-                                    isRequired={true}
-                                    {...register(name, { valueAsNumber: true })}
-                                    errorMessage={errors[name]?.message?.toString()}
-                                    isInvalid={errors[name]?.message != null}
-                                    color={errors[name]?.message != null ? 'danger' : 'default'}
-                                    startContent={<Image key={name + 'avatar'} src={getImageUrl(name)} radius="none" className="h-6 w-6" />}
-                                />
-                            </div>
+                            <Input
+                                className="max-w-xs"
+                                key={name}
+                                type="number"
+                                label={name}
+                                labelPlacement="outside"
+                                isRequired={true}
+                                {...register(name, { valueAsNumber: true })}
+                                errorMessage={errors[name]?.message?.toString()}
+                                isInvalid={errors[name]?.message != null}
+                                color={errors[name]?.message != null ? 'danger' : 'default'}
+                                startContent={<Image key={name + 'avatar'} src={getImageUrl(name)} radius="none" className="h-6 w-6" />}
+                            />
                         ))}
                 </div>
                 <Button type="submit" variant="solid" color="primary" isLoading={isPending} disabled={isPending}>

@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { IngredientFieldConfig, IngredientRecipe, WildCardRecipe } from '../types';
+import { IngredientFieldConfig, IngredientRecipe, RaidCardRecipe, WildCardRecipe } from '../types';
 
 const validation = z
     .number({ message: 'Please enter a number between 0 and 128' })
@@ -44,6 +44,11 @@ export const ingredientRecipes: IngredientRecipe[] = [
         value: 'Petal',
     },
     {
+        ingredient_one: 'Pepper',
+        ingredient_two: 'Sand',
+        value: 'Feather',
+    },
+    {
         ingredient_one: 'Berries',
         ingredient_two: 'Mushroom',
         value: 'Acorn',
@@ -54,77 +59,150 @@ export const ingredientRecipes: IngredientRecipe[] = [
         value: 'Spirit',
     },
     {
-        ingredient_one: 'Sand',
-        ingredient_two: 'Acorn',
-        value: 'Feather',
-    },
-    {
         ingredient_one: 'Acorn',
         ingredient_two: 'Petal',
         value: 'Shadow',
     },
     {
-        ingredient_one: 'Shadow',
+        ingredient_one: 'Acorn',
         ingredient_two: 'Feather',
-        value: 'Power',
+        value: 'Essence',
     },
     {
-        ingredient_one: 'Spirit',
+        ingredient_one: 'Shadow',
         ingredient_two: 'Feather',
         value: 'Beetle',
     },
     {
         ingredient_one: 'Spirit',
         ingredient_two: 'Shadow',
-        value: 'Essence',
+        value: 'Power',
     },
     {
         ingredient_one: 'Power',
-        ingredient_two: 'Essence',
+        ingredient_two: 'Spirit',
         value: 'Steel',
     },
     {
         ingredient_one: 'Beetle',
-        ingredient_two: 'Essence',
+        ingredient_two: 'Power',
         value: 'Flame',
     },
     {
-        ingredient_one: 'Beetle',
+        ingredient_one: 'Essence',
         ingredient_two: 'Power',
         value: 'Tooth',
     },
     {
         ingredient_one: 'Steel',
-        ingredient_two: 'Flame',
+        ingredient_two: 'Tooth',
         value: 'Scale',
     },
 ];
 
 export const wildcardRecipes: WildCardRecipe[] = [
     {
-        ingredient_one: 'Flame',
-        ingredient_two: 'Sand',
-        value: 30,
-    },
-    {
-        ingredient_one: 'Flame',
-        ingredient_two: 'Shadow',
-        value: 34,
-    },
-    {
-        ingredient_one: 'Flame',
+        ingredient_one: 'Sand',
         ingredient_two: 'Power',
+        value: 16,
+    },
+    {
+        ingredient_one: 'Power',
+        ingredient_two: 'Steel',
         value: 41,
     },
     {
-        ingredient_one: 'Flame',
-        ingredient_two: 'Tooth',
-        value: 55,
+        ingredient_one: 'Tooth',
+        ingredient_two: 'Scale',
+        value: 84,
     },
     {
         ingredient_one: 'Flame',
         ingredient_two: 'Scale',
         value: 84,
+    },
+];
+
+export const raidcardRecipes: RaidCardRecipe[] = [
+    {
+        ingredient_one: 'Sand',
+        ingredient_two: 'Mushroom',
+        value: 6,
+    },
+    {
+        ingredient_one: 'Berries',
+        ingredient_two: 'Spirit',
+        value: 10,
+    },
+    {
+        ingredient_one: 'Mushroom',
+        ingredient_two: 'Spirit',
+        value: 10,
+    },
+    {
+        ingredient_one: 'Sand',
+        ingredient_two: 'Shadow',
+        value: 12,
+    },
+    {
+        ingredient_one: 'Acorn',
+        ingredient_two: 'Shadow',
+        value: 12,
+    },
+    {
+        ingredient_one: 'Pepper',
+        ingredient_two: 'Essence',
+        value: 20,
+    },
+    {
+        ingredient_one: 'Acorn',
+        ingredient_two: 'Power',
+        value: 22,
+    },
+    {
+        ingredient_one: 'Petal',
+        ingredient_two: 'Beetle',
+        value: 22,
+    },
+    {
+        ingredient_one: 'Feather',
+        ingredient_two: 'Beetle',
+        value: 26,
+    },
+    {
+        ingredient_one: 'Spirit',
+        ingredient_two: 'Beetle',
+        value: 26,
+    },
+    {
+        ingredient_one: 'Acorn',
+        ingredient_two: 'Flame',
+        value: 40,
+    },
+    {
+        ingredient_one: 'Flame',
+        ingredient_two: 'Feather',
+        value: 45,
+    },
+    {
+        ingredient_one: 'Steel',
+        ingredient_two: 'Feather',
+        value: 45,
+    },
+    {
+        ingredient_one: 'Essence',
+        ingredient_two: 'Flame',
+        value: 54,
+    },
+    {
+        ingredient_one: 'Essence',
+        ingredient_two: 'Steel',
+        value: 54,
+    },
+    {
+        ingredient_one: 'Acorn',
+        ingredient_two: 'Scale',
+        value: 79,
     },
 ];
 

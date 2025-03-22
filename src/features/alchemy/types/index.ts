@@ -46,6 +46,12 @@ export type WildCardRecipe = {
     value: number;
 };
 
+export type RaidCardRecipe = {
+    ingredient_one: Ingredient;
+    ingredient_two: Ingredient;
+    value: number;
+};
+
 // export type DiamondRecipe = {
 //     ingredient_one: Ingredient;
 //     ingredient_two: Ingredient;
@@ -57,6 +63,7 @@ export type IngredientsData = {
     ingredient_recipes: IngredientRecipe[];
     dust_recipes: DustRecipe[];
     wild_card_recipes: WildCardRecipe[];
+    raid_card_recipes: RaidCardRecipe[];
     base_ingredients: Ingredient[];
     ignore_ingredients: Ingredient[];
 };

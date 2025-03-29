@@ -17,8 +17,8 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
-} from "@heroui/react";
-import { CheckIcon, ChevronDownIcon, Cross2Icon } from '@radix-ui/react-icons';
+} from '@heroui/react';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { Key, useCallback, useMemo, useState } from 'react';
 import { useOverviewPlayers } from '../api/get-overview-players';
 import { CycleOptions, PlayerData } from '../types';
@@ -114,10 +114,13 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
 
                 return sortDescriptor.direction === 'descending' ? -cmp : cmp;
             })
-            .map((val, index) => (({
-            ...val,
-            index: index + 1
-        }) as IndexedPlayerData));
+            .map(
+                (val, index) =>
+                    ({
+                        ...val,
+                        index: index + 1,
+                    }) as IndexedPlayerData
+            );
     }, [sortDescriptor, items, raidCycles?.cycles?.length]);
 
     const renderCell = useCallback(
@@ -148,12 +151,14 @@ export function RaidTable({ raidId, raid }: RaidTableProps) {
                 case 'mirror_force_used':
                     return (
                         <div className="flex flex-row items-center justify-center">
-                            {cellValue ? <CheckIcon className="text-green-500" /> : <Cross2Icon className="text-red-500" />}
+                            <Chip color={Number(cellValue) >= 1 ? 'success' : 'danger'} size="sm" variant="flat">
+                                {cellValue}
+                            </Chip>
                         </div>
                     );
 
                 case 'attack_count':
-                    const currentCycle = selectedStatusValue === 'all' ? raidCycles?.cycles?.length ?? 1 : 1;
+                    const currentCycle = selectedStatusValue === 'all' ? (raidCycles?.cycles?.length ?? 1) : 1;
                     return (
                         <div className="flex flex-row items-center justify-center">
                             <Chip color={getAttacksStatusColour(currentCycle, player.attack_count, raid.attacksPerTier)} size="sm" variant="flat">

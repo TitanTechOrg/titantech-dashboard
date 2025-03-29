@@ -8,8 +8,8 @@ export type PlayerData = {
     damage_range: number;
     attack_count: number;
     duration: number | string;
-    team_tactics_used: boolean;
-    mirror_force_used: boolean;
+    team_tactics_used: number;
+    mirror_force_used: number;
 };
 
 export type PlayersData = {
@@ -17,7 +17,6 @@ export type PlayersData = {
     cycle: number;
     players_data: PlayerData[];
 };
-
 
 export type CycleOptions = {
     name: string;

@@ -48,7 +48,7 @@ export function CardBonusData({ data }: CardBonusDataProps) {
                                 <CardHeader className="flex flex-row items-center justify-between gap-4">
                                     <div className="flex flex-row items-center justify-start gap-4">
                                         <div className="min-w-fit">
-                                            <Image src={imageUrl} className="h-8 w-8 rounded object-cover" />
+                                            <Image src={imageUrl} className="h-8 w-8 rounded-sm object-cover" />
                                         </div>
                                         <h3 className="text-lg font-medium">{title}</h3>
                                     </div>

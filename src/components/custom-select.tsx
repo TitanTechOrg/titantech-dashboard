@@ -58,7 +58,7 @@ export function CustomSelect({ options, label, placeholder = 'Select an option',
             <div className="flex w-full flex-col" ref={dropdownRef}>
                 <Button
                     onPress={handleSelectToggle}
-                    className="inline-flex w-full items-center justify-start px-3 py-7 shadow-sm outline-none"
+                    className="inline-flex w-full items-center justify-start px-3 py-7 shadow-xs outline-none"
                     color="primary"
                     variant="flat"
                     aria-haspopup="listbox"

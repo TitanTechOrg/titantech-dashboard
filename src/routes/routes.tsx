@@ -9,6 +9,7 @@ const Overview = lazy(async () => await import('@/pages/overview'));
 const PlayerProfile = lazy(async () => await import('@/pages/profile'));
 // const PlayerExport = lazy(async () => await import('@/pages/export'));
 const Alchemy = lazy(async () => await import('@/pages/alchemy'));
+const RaidSimulator = lazy(async () => await import('@/pages/simulator'));
 
 type RouteConfigs = {
     path: string;
@@ -22,6 +23,7 @@ export const routePaths: RouteConfigs[] = [
     { path: 'players', protected: true },
     // { path: 'export', protected: false },
     { path: 'alchemy', protected: false },
+    { path: 'simulator', protected: false },
 ];
 
 const routesConfig: RouteObject[] = [
@@ -88,6 +90,14 @@ const routesConfig: RouteObject[] = [
                     <PlayerProfile />
                 </Suspense>
             </RouteGuard>
+        ),
+    },
+    {
+        path: 'simulator',
+        element: (
+            <Suspense fallback={<></>}>
+                <RaidSimulator />
+            </Suspense>
         ),
     },
     {

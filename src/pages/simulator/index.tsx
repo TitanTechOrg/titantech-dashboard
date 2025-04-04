@@ -1,0 +1,16 @@
+import TitanSelector from '@/features/raid-simulator/components/titan-selector';
+import { Button } from '@heroui/react';
+
+export default function RaidSimulator() {
+    return (
+        <div className="flex h-dvh flex-col items-center justify-center">
+            <div className="flex w-full max-w-3xl flex-col items-center justify-center">
+                <h1 className="text-2xl font-bold">Raid Simulator</h1>
+                <p className="mb-4 text-center">Simulate your raid with the cards you have.</p>
+                <p className="text-xs italic">This is a work in progress. Please report any bugs.</p>
+            </div>
+            <Button color="primary">Button</Button>
+            <TitanSelector />
+        </div>
+    );
+}

@@ -209,13 +209,13 @@ function TitanPartCellData({ partNames, showHealthbars, parts, damagedPartsValue
     return (
         <div className={`relative flex min-w-fit flex-col gap-y-2 rounded-lg border-4 ${borders}`}>
             <div
-                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[-45deg] rounded border-2 ${
+                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[-45deg] rounded-sm border-2 ${
                     isTargetPart ? 'hidden' : 'border-red-500/50'
                 }`}
             />
 
             <div
-                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[45deg] rounded border-2 ${
+                className={`${showHealthbars ? '' : 'hidden'} absolute left-0 top-[34px] z-10 w-[100%] rotate-[45deg] rounded-sm border-2 ${
                     isTargetPart ? 'hidden' : 'border-red-500/50'
                 }`}
             />

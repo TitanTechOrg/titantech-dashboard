@@ -47,7 +47,7 @@ function SkeletalSmashCard({ text }: SkeletalSmashCardProps) {
     return (
         <div className="mx-auto mt-4 flex max-w-fit flex-row items-center justify-center gap-2 rounded-lg bg-default p-2">
             <div className="min-w-fit">
-                <Image src={SkeletalSmash} className="flex h-8 w-8 rounded object-cover" alt="Skeletal Smash icon" />
+                <Image src={SkeletalSmash} className="flex h-8 w-8 rounded-sm object-cover" alt="Skeletal Smash icon" />
             </div>
             <span className='"text-sm font-medium'>{text}</span>
         </div>

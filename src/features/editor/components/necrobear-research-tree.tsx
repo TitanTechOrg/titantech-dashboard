@@ -138,7 +138,7 @@ export function NecrobearResearchTree() {
                             }
 
                             return (
-                                <div key={currentNode.id} className="flex-grow rounded-lg border p-4">
+                                <div key={currentNode.id} className="grow rounded-lg border p-4">
                                     <div className="flex flex-col items-center gap-2 text-left">
                                         <h3 className="text-lg font-bold">{currentNode.type}</h3>
                                         <p>Bonus per Level: {currentNode.levels.bonusPer}%</p>

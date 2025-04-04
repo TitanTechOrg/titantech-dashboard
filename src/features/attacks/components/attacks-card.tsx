@@ -42,7 +42,7 @@ export function AttacksCard({
             <CardHeader className="h-[70px] justify-between">
                 <div className="flex flex-row items-center justify-start gap-4">
                     <div className="min-w-fit">
-                        <Image src={AttacksCardLogo} className="flex h-8 w-8 rounded object-cover" />
+                        <Image src={AttacksCardLogo} className="flex h-8 w-8 rounded-sm object-cover" />
                     </div>
                     <h3 className="text-left text-lg font-medium">Latest Raid Attacks</h3>
                 </div>

@@ -50,7 +50,7 @@ export function NavigationBar() {
                 <NavbarBrand>
                     <NavLink to="/" className="flex min-w-fit flex-row items-center gap-2 text-foreground">
                         <div className="h-10 w-10">
-                            <Image src={Logo} className="rounded" />
+                            <Image src={Logo} className="rounded-sm" />
                         </div>
                         <p className="hidden font-bold text-inherit sm:block">TitanTech</p>
                     </NavLink>

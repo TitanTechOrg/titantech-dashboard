@@ -30,7 +30,7 @@ export default function GetStarted() {
                     </ol>
                     <Code className="mt-4 text-wrap">
                         <div className="flex items-center">
-                            <InfoCircledIcon className="h-4 w-4 flex-shrink-0 object-cover sm:mr-4" />
+                            <InfoCircledIcon className="h-4 w-4 shrink-0 object-cover sm:mr-4" />
                             <span>Please note that only (Grand) Master rank can generate a token for your clan</span>
                         </div>
                     </Code>

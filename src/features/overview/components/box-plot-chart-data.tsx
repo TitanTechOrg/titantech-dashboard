@@ -35,7 +35,7 @@ const getOrCreateTooltip = (chart: any) => {
 
     if (!tooltipEl) {
         tooltipEl = document.createElement('div');
-        tooltipEl.className = 'rounded text-white opacity-100 pointer-events-none absolute w-44 bg-black/50';
+        tooltipEl.className = 'rounded-sm text-white opacity-100 pointer-events-none absolute w-44 bg-black/50';
         tooltipEl.style.transform = 'translate(-50%, 0)';
         tooltipEl.style.transition = 'all .1s ease';
 

@@ -1,8 +1,8 @@
-import GuardBreak from '@/assets/cards/GuardBreak.webp';
+import FusionBomb from '@/assets/cards/FusionBomb.webp';
 import InspiringForce from '@/assets/cards/InspiringForce.webp';
-import Maelstrom from '@/assets/cards/Maelstrom.webp';
-import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
+import RavenousSwarm from '@/assets/cards/RavenousSwarm.webp';
 import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
+import SoulFire from '@/assets/cards/SoulFire.webp';
 import VictoryMarch from '@/assets/cards/VictoryMarch.webp';
 import { PageContainer } from '@/components';
 import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@heroui/react';
@@ -98,19 +98,24 @@ const raidKeyMap: Record<RaidKey, string> = {
 };
 
 const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
-    [RaidKey.Weaken]: 20,
-    [RaidKey.SandsOfTime]: 20,
-    [RaidKey.RuneAttack]: 10,
-};
-
-const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
     [RaidKey.FinisherAttack]: 15,
     [RaidKey.ImpactAttack]: 15,
     [RaidKey.SpinalTap]: 15,
 };
 
+const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
+    [RaidKey.Fuse]: 15,
+    [RaidKey.Swarm]: 15,
+    [RaidKey.InnerTruth]: 15,
+};
+
+const equipmentReplacements = {
+    Moth: 'Moonlit Mothcaller',
+};
+
 const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>): string => {
     const raidCardsKey = 'raidCards';
+    const equipmentSetsKey = 'equipmentSets';
 
     try {
         const data = JSON.parse(inputData);
@@ -133,42 +138,42 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
                 const humanReadableName = keyMap[raidKey];
 
                 // Applying old seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.Weaken]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.Weaken];
+                if (humanReadableName === keyMap[RaidKey.FinisherAttack]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.FinisherAttack];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.SandsOfTime]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.SandsOfTime];
+                if (humanReadableName === keyMap[RaidKey.ImpactAttack]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.ImpactAttack];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.RuneAttack]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.RuneAttack];
+                if (humanReadableName === keyMap[RaidKey.SpinalTap]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.SpinalTap];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
 
                 // Applying new seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.FinisherAttack]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.FinisherAttack];
+                if (humanReadableName === keyMap[RaidKey.Fuse]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.Fuse];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.ImpactAttack]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.ImpactAttack];
+                if (humanReadableName === keyMap[RaidKey.Swarm]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.Swarm];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.SpinalTap]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.SpinalTap];
+                if (humanReadableName === keyMap[RaidKey.InnerTruth]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.InnerTruth];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
@@ -177,7 +182,11 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
             }
         }
 
-        delete data['raid_card_research'];
+        const equipments = data[equipmentSetsKey];
+
+        if (typeof equipments !== 'object' || equipments == null) return '';
+
+        data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Moth: string }] || item);
 
         return data;
     } catch (err) {
@@ -187,14 +196,14 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
 
 const cardsMap = {
     old: [
-        { name: 'Guard Break', level: 20, image: GuardBreak, isRemoved: false },
-        { name: 'Sands of Time', level: 20, image: SandsOfTime, isRemoved: false },
-        { name: 'Maelstrom', level: 10, image: Maelstrom, isRemoved: false },
-    ],
-    new: [
         { name: 'Inspiring Force', level: 15, image: InspiringForce, isRemoved: false },
         { name: 'Skeletal Smash', level: 15, image: SkeletalSmash, isRemoved: false },
         { name: 'Victory March', level: 15, image: VictoryMarch, isRemoved: false },
+    ],
+    new: [
+        { name: 'Fusion Bomb', level: 15, image: FusionBomb, isRemoved: false },
+        { name: 'Ravenous Swarm', level: 15, image: RavenousSwarm, isRemoved: false },
+        { name: 'Soul Fire', level: 15, image: SoulFire, isRemoved: false },
     ],
 };
 // type NecrobearBonuses = {

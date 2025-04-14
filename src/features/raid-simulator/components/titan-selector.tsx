@@ -17,6 +17,8 @@ import Mohaca from '@/assets/titans/Mohaca.webp';
 import Priker from '@/assets/titans/Priker.webp';
 import Sterl from '@/assets/titans/Sterl.webp';
 import Terro from '@/assets/titans/Terro.webp';
+import { CustomSelect } from '@/components/custom-select';
+import { RaidBuffMapping, RaidEnemyBuffMapping } from '@/constants/buffs';
 import { abbreviateNumber } from '@/utils/number-formatter';
 import { useState } from 'react';
 
@@ -59,7 +61,7 @@ const formatter = new Intl.NumberFormat('en', {
 
 export default function TitanSelector() {
     const [selectedTitan, setSelectedTitan] = useState<TitanSelection>(titans[0]);
-    const [selectedTitanPart, setSelectedTitanPart] = useState<string | null>(null);
+    const [selectedTitanPart, setSelectedTitanPart] = useState<string>('head');
 
     const selectedTitanHealth = Object.values(titanBodyParts).reduce((prev, curr) => prev + curr.health, 0);
 
@@ -67,76 +69,118 @@ export default function TitanSelector() {
         <div className="flex h-dvh w-full max-w-3xl flex-col items-center justify-center gap-4">
             <h1 className="text-2xl font-bold">Titan Selector</h1>
 
-            <div className="flex flex-col gap-8 rounded-lg border-4 border-solid p-4">
-                <div className="flex flex-col">
-                    <div className="relative">
-                        <Progress
-                            aria-label="titan total armour"
-                            radius="sm"
-                            size="lg"
-                            value={selectedTitanHealth * Math.random()}
-                            maxValue={selectedTitanHealth}
-                            color="default"
-                            label={<span className="absolute left-1 top-2.5 z-10 text-tiny font-bold text-white">Armour</span>}
-                            showValueLabel
-                            valueLabel={
-                                <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
-                                    {formatter.format(selectedTitanHealth)} AP
-                                </span>
-                            }
-                            classNames={{ track: 'bg-default-900/50', indicator: 'bg-default-700' }}
-                        />
-                    </div>
-                    <div className="relative">
-                        <Progress
-                            aria-label="titan total health"
-                            radius="sm"
-                            size="lg"
-                            value={selectedTitanHealth * Math.random()}
-                            maxValue={selectedTitanHealth}
-                            color="primary"
-                            label={<span className="absolute left-1 top-2.5 z-10 text-tiny font-bold text-white">{selectedTitan.name}</span>}
-                            showValueLabel
-                            valueLabel={
-                                <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
-                                    {formatter.format(selectedTitanHealth)} HP
-                                </span>
-                            }
-                            classNames={{ track: 'bg-default-900/50' }}
-                        />
-                    </div>
-                </div>
-                <div className="relative flex w-fit flex-col items-center justify-center">
-                    <Image src={selectedTitan?.bodyImg} alt={selectedTitan?.name} className="h-64 w-64 object-contain" />
-                    {Object.entries(titanBodyParts).map(([key, value]) => {
-                        return (
+            <div className="flex flex-row items-center justify-center gap-4">
+                <div className="flex flex-col gap-8 rounded-lg border-4 border-solid p-4">
+                    <div className="flex flex-col">
+                        <div className="relative">
                             <Progress
-                                key={key}
-                                aria-label={key}
-                                // label={
-                                //     <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
-                                //         {abbreviateNumber(value.health)}
-                                //     </span>
-                                // }
+                                aria-label="titan total armour"
+                                radius="sm"
+                                size="lg"
+                                value={selectedTitanHealth * Math.random()}
+                                maxValue={selectedTitanHealth}
+                                color="default"
+                                label={<span className="absolute left-1 top-2.5 z-10 text-tiny font-bold text-white">Armour</span>}
                                 showValueLabel
                                 valueLabel={
                                     <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
-                                        {abbreviateNumber(value.health)}
+                                        {formatter.format(selectedTitanHealth)} AP
                                     </span>
                                 }
-                                radius="sm"
-                                className={`absolute z-10 max-w-16 ${value.position}`}
-                                classNames={{ track: 'bg-default-900/50 inset-ring-2 inset-ring-blue-500' }}
-                                value={value.health * Math.random()}
-                                maxValue={value.health}
-                                size="lg"
-                                onClick={() => setSelectedTitanPart(key)}
+                                classNames={{ track: 'bg-default-900/50', indicator: 'bg-default-700' }}
                             />
-                        );
-                    })}
+                        </div>
+                        <div className="relative">
+                            <Progress
+                                aria-label="titan total health"
+                                radius="sm"
+                                size="lg"
+                                value={selectedTitanHealth * Math.random()}
+                                maxValue={selectedTitanHealth}
+                                color="primary"
+                                label={<span className="absolute left-1 top-2.5 z-10 text-tiny font-bold text-white">{selectedTitan.name}</span>}
+                                showValueLabel
+                                valueLabel={
+                                    <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
+                                        {formatter.format(selectedTitanHealth)} HP
+                                    </span>
+                                }
+                                classNames={{ track: 'bg-default-900/50' }}
+                            />
+                        </div>
+                    </div>
+                    <div className="relative flex w-fit flex-col items-center justify-center">
+                        <Image src={selectedTitan?.bodyImg} alt={selectedTitan?.name} className="h-64 w-64 object-cover" />
+                        {Object.entries(titanBodyParts).map(([key, value]) => {
+                            return (
+                                <Progress
+                                    key={key}
+                                    aria-label={key}
+                                    // label={
+                                    //     <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
+                                    //         {abbreviateNumber(value.health)}
+                                    //     </span>
+                                    // }
+                                    showValueLabel
+                                    valueLabel={
+                                        <span className="absolute right-1 top-2.5 z-10 text-tiny font-bold text-white">
+                                            {abbreviateNumber(value.health)}
+                                        </span>
+                                    }
+                                    radius="sm"
+                                    className={`absolute z-10 max-w-16 ${value.position}`}
+                                    classNames={{ track: `bg-default-900/50 ${selectedTitanPart === key ? 'border-4 border-green-500' : ''}` }}
+                                    value={value.health * Math.random()}
+                                    maxValue={value.health}
+                                    size="lg"
+                                    onClick={() => setSelectedTitanPart(key)}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+                <div className="flex h-full flex-col items-start justify-start gap-2">
+                    <CustomSelect
+                        selectKey="raid-sim-area-bonus-selector"
+                        label="Area Bonus"
+                        labelTextSize="text-xs"
+                        placeholder="No bonus"
+                        options={Object.entries(RaidBuffMapping).map(([key, value]) => ({
+                            value: value,
+                            label: value,
+                            id: key,
+                        }))}
+                    />
+
+                    <CustomSelect
+                        selectKey="raid-sim-enemy-bonus-selector"
+                        label="Enemy Bonus"
+                        labelTextSize="text-xs"
+                        placeholder="No bonus"
+                        options={Object.entries(RaidEnemyBuffMapping).flatMap(([key, values]) =>
+                            values.map((value, index) => ({
+                                value: value,
+                                label: `${key}: ${value}`,
+                                id: `${key}-${index}`,
+                            }))
+                        )}
+                    />
+
+                    <CustomSelect
+                        selectKey="raid-sim-enemy-cursed-armour-selector"
+                        label="Enemy Cursed Armour"
+                        labelTextSize="text-xs"
+                        placeholder="No bonus"
+                        options={Object.entries(RaidEnemyBuffMapping).flatMap(([key, values]) =>
+                            values.map((value, index) => ({
+                                value: value,
+                                label: `${key}: ${value}`,
+                                id: `${key}-${index}`,
+                            }))
+                        )}
+                    />
                 </div>
             </div>
-
             <div className="flex flex-col items-center justify-center gap-4">
                 <ButtonGroup>
                     {titans.map((titan) => (
@@ -149,7 +193,7 @@ export default function TitanSelector() {
                         </Button>
                     ))}
                 </ButtonGroup>
-                {selectedTitanPart}
+                <div className="text-medium capitalize">Part selected: {selectedTitanPart}</div>
             </div>
         </div>
     );

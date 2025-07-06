@@ -1,6 +1,6 @@
 import type { RaidCardType } from '@/features/attacks';
 import { getCardImageUrl } from '@/utils';
-import { Image } from "@heroui/react";
+import { Image } from '@heroui/react';
 
 export function RaidCard({ name: cardName, value: cardLevel, readableName }: RaidCardType) {
     return (

@@ -97,17 +97,9 @@ const raidKeyMap: Record<RaidKey, string> = {
     [RaidKey.SandsOfTime]: 'Sands of Time',
 };
 
-const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
-    [RaidKey.Weaken]: 20,
-    [RaidKey.SandsOfTime]: 20,
-    [RaidKey.RuneAttack]: 10,
-};
+const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = { [RaidKey.Weaken]: 20, [RaidKey.SandsOfTime]: 20, [RaidKey.RuneAttack]: 10 };
 
-const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
-    [RaidKey.FinisherAttack]: 15,
-    [RaidKey.ImpactAttack]: 15,
-    [RaidKey.SpinalTap]: 15,
-};
+const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = { [RaidKey.FinisherAttack]: 15, [RaidKey.ImpactAttack]: 15, [RaidKey.SpinalTap]: 15 };
 
 const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>): string => {
     const raidCardsKey = 'raidCards';
@@ -303,11 +295,7 @@ const cardsMap = {
 //     );
 // }
 
-type SeasonalCardsInfoSectionProps = {
-    title: string;
-    data: typeof cardsMap.new;
-    isNewSeason: boolean;
-};
+type SeasonalCardsInfoSectionProps = { title: string; data: typeof cardsMap.new; isNewSeason: boolean };
 
 function SeasonalCardsInfoSection({ title, data, isNewSeason }: SeasonalCardsInfoSectionProps) {
     return (
@@ -402,7 +390,7 @@ export default function PlayerExport() {
                             className="max-w-xs"
                             classNames={{ label: ['text-left'] }}
                             value={inputData}
-                            onValueChange={(val) => {
+                            onValueChange={(val: string) => {
                                 const pretty = prettyJson(val);
                                 setInputData(val);
                                 typeof pretty === 'string'

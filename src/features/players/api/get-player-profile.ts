@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import type { PlayerProfileType } from '../types';
 
-export function usePlayerProfile(playerId: string | undefined) {
+export function usePlayerProfile(playerId: string) {
     return useQuery({
         queryKey: ['player_profile', playerId],
         queryFn: async () => await fetchPlayerProfile(playerId),
@@ -13,10 +13,12 @@ export function usePlayerProfile(playerId: string | undefined) {
 
 async function fetchPlayerProfile(clan_player_id: string | undefined) {
     let params = '';
-
+    if (!clan_player_id) {
+        throw new Error('No player ID provided');
+        // This error will be caught by React Query's error handling
+    }
     const searchParams = new URLSearchParams();
-
-    if (clan_player_id) searchParams.append('clan_player_id', clan_player_id);
+    searchParams.append('clan_player_id', clan_player_id);
 
     if (searchParams.size) {
         params += '?';

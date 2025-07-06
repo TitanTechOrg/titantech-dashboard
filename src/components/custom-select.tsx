@@ -14,51 +14,76 @@ interface SelectComponentProps {
     placeholder?: string;
     selectKey: string;
     labelTextSize?: 'text-xs' | 'text-sm' | 'text-base';
+    isOpen?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
 }
 
-export function CustomSelect({ options, label, placeholder = 'Select an option', selectKey, labelTextSize = 'text-base' }: SelectComponentProps) {
+export function CustomSelect({
+    options,
+    label,
+    placeholder = 'Select an option',
+    selectKey,
+    labelTextSize = 'text-base',
+    isOpen,
+    onOpenChange,
+}: SelectComponentProps) {
     const { selectedValues, setSelectedValue } = useSelectStore();
-    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+    const [internalDropdownOpen, setInternalDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const selectedOptionRef = useRef<HTMLLIElement | null>(null);
-
+    const dropdownOpen = isOpen !== undefined ? isOpen : internalDropdownOpen;
     const selectedValue = selectedValues[selectKey];
 
     const handleSelectToggle = () => {
-        setDropdownOpen((prevOpen) => !prevOpen);
+        if (onOpenChange) {
+            // Call external handler if provided
+            onOpenChange(!dropdownOpen);
+        } else {
+            // Use internal state if no external handler
+            setInternalDropdownOpen(!dropdownOpen);
+        }
     };
 
     const handleOptionClick = (value: string) => {
-        const newValue = value === selectedValue ? '' : value;
+        const newValue = value === selectedValues[selectKey] ? '' : value;
         setSelectedValue(selectKey, newValue);
-        setDropdownOpen(false);
+
+        // Close dropdown
+        if (onOpenChange) {
+            onOpenChange(false);
+        } else {
+            setInternalDropdownOpen(false);
+        }
     };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setDropdownOpen(false);
+                // Handle closing based on mode
+                if (onOpenChange && isOpen) {
+                    onOpenChange(false);
+                } else if (internalDropdownOpen) {
+                    setInternalDropdownOpen(false);
+                }
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        // Always add the listener if dropdown is open (in either mode)
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
-
-    useEffect(() => {
-        if (dropdownOpen && selectedOptionRef.current) {
-            selectedOptionRef.current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-    }, [dropdownOpen]);
+    }, [dropdownOpen, onOpenChange, isOpen, internalDropdownOpen]);
 
     return (
         <div className="group relative inline-flex w-full min-w-72 max-w-xs flex-col duration-150 transition-background motion-reduce:transition-none">
             <div className="flex w-full flex-col" ref={dropdownRef}>
                 <Button
                     onPress={handleSelectToggle}
-                    className="inline-flex w-full items-center justify-start px-3 py-7 shadow-xs outline-none"
+                    className="shadow-xs inline-flex w-full items-center justify-start px-3 py-7 outline-none"
                     color="primary"
                     variant="flat"
                     aria-haspopup="listbox"

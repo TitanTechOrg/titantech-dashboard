@@ -6,7 +6,7 @@ import PlayerStats from '@/features/players/components/player-stats';
 import PlayerRaidCardsOverview from '@/features/players/components/raid-card-overview';
 import { useRaidList } from '@/features/raid-info';
 import { useSelectStore } from '@/stores/useSelectStore';
-import { Spinner } from "@heroui/react";
+import { Spinner } from '@heroui/react';
 
 export default function PlayerProfile() {
     const { data: raidList, isLoading: isLoadingRaidList } = useRaidList();

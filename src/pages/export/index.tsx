@@ -1,9 +1,9 @@
-import GuardBreak from '@/assets/cards/GuardBreak.webp';
-import InspiringForce from '@/assets/cards/InspiringForce.webp';
-import Maelstrom from '@/assets/cards/Maelstrom.webp';
-import SandsOfTime from '@/assets/cards/SandsOfTime.webp';
-import SkeletalSmash from '@/assets/cards/SkeletalSmash.webp';
-import VictoryMarch from '@/assets/cards/VictoryMarch.webp';
+import ClanshipBarrage from '@/assets/cards/ClanshipBarrage.webp';
+import ElectroZap from '@/assets/cards/ElectroZap.webp';
+import Fragmentize from '@/assets/cards/Fragmentize.webp';
+import FusionBomb from '@/assets/cards/FusionBomb.webp';
+import RavenousSwarm from '@/assets/cards/RavenousSwarm.webp';
+import SoulFire from '@/assets/cards/SoulFire.webp';
 import { PageContainer } from '@/components';
 import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@heroui/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
@@ -51,6 +51,7 @@ enum RaidKey {
     TriangleSupport = 'TriangleSupport',
     Weaken = 'Weaken',
     SandsOfTime = 'SandsOfTime',
+    CosmicBarb = 'CosmicBarb',
 }
 
 const raidKeyMap: Record<RaidKey, string> = {
@@ -95,14 +96,28 @@ const raidKeyMap: Record<RaidKey, string> = {
     [RaidKey.TriangleSupport]: 'Radiant Kaleidoscope',
     [RaidKey.Weaken]: 'Guard Break',
     [RaidKey.SandsOfTime]: 'Sands of Time',
+    [RaidKey.CosmicBarb]: 'Electro Zap',
 };
 
-const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = { [RaidKey.Weaken]: 20, [RaidKey.SandsOfTime]: 20, [RaidKey.RuneAttack]: 10 };
+const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
+    [RaidKey.Fuse]: 15,
+    [RaidKey.Swarm]: 15,
+    [RaidKey.InnerTruth]: 15,
+};
 
-const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = { [RaidKey.FinisherAttack]: 15, [RaidKey.ImpactAttack]: 15, [RaidKey.SpinalTap]: 15 };
+const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
+    [RaidKey.BurstCount]: 15,
+    [RaidKey.Fragmentize]: 15,
+    [RaidKey.CosmicBarb]: 20,
+};
+
+// const equipmentReplacements = {
+//     Moth: 'Moonlit Mothcaller',
+// };
 
 const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>): string => {
     const raidCardsKey = 'raidCards';
+    const equipmentSetsKey = 'equipmentSets';
 
     try {
         const data = JSON.parse(inputData);
@@ -125,42 +140,42 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
                 const humanReadableName = keyMap[raidKey];
 
                 // Applying old seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.Weaken]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.Weaken];
+                if (humanReadableName === keyMap[RaidKey.Fuse]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.Fuse];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.SandsOfTime]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.SandsOfTime];
+                if (humanReadableName === keyMap[RaidKey.Swarm]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.Swarm];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.RuneAttack]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.RuneAttack];
+                if (humanReadableName === keyMap[RaidKey.InnerTruth]) {
+                    const boost = oldSeasonalCardBoosts[RaidKey.InnerTruth];
                     if (boost !== undefined) {
                         card.lv -= boost;
                     }
                 }
 
                 // Applying new seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.FinisherAttack]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.FinisherAttack];
+                if (humanReadableName === keyMap[RaidKey.BurstCount]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.BurstCount];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.ImpactAttack]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.ImpactAttack];
+                if (humanReadableName === keyMap[RaidKey.Fragmentize]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.Fragmentize];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
                     }
                 }
-                if (humanReadableName === keyMap[RaidKey.SpinalTap]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.SpinalTap];
+                if (humanReadableName === keyMap[RaidKey.CosmicBarb]) {
+                    const boost = newSeasonalCardBoosts[RaidKey.CosmicBarb];
                     if (boost !== undefined) {
                         card.lv += boost;
                         card.lv = Math.min(card.lv, 100);
@@ -169,7 +184,11 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
             }
         }
 
-        delete data['raid_card_research'];
+        const equipments = data[equipmentSetsKey];
+
+        if (typeof equipments !== 'object' || equipments == null) return '';
+
+        // data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Moth: string }] || item);
 
         return data;
     } catch (err) {
@@ -178,15 +197,15 @@ const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>)
 };
 
 const cardsMap = {
-    old: [
-        { name: 'Guard Break', level: 20, image: GuardBreak, isRemoved: false },
-        { name: 'Sands of Time', level: 20, image: SandsOfTime, isRemoved: false },
-        { name: 'Maelstrom', level: 10, image: Maelstrom, isRemoved: false },
-    ],
     new: [
-        { name: 'Inspiring Force', level: 15, image: InspiringForce, isRemoved: false },
-        { name: 'Skeletal Smash', level: 15, image: SkeletalSmash, isRemoved: false },
-        { name: 'Victory March', level: 15, image: VictoryMarch, isRemoved: false },
+        { name: 'Clanship Barrage', level: 15, image: ClanshipBarrage, isRemoved: false },
+        { name: 'Fragmentize', level: 15, image: Fragmentize, isRemoved: false },
+        { name: 'Electro Zap', level: 20, image: ElectroZap, isRemoved: false },
+    ],
+    old: [
+        { name: 'Fusion Bomb', level: 15, image: FusionBomb, isRemoved: false },
+        { name: 'Ravenous Swarm', level: 15, image: RavenousSwarm, isRemoved: false },
+        { name: 'Soul Fire', level: 15, image: SoulFire, isRemoved: false },
     ],
 };
 // type NecrobearBonuses = {

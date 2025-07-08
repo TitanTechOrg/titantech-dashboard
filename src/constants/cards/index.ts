@@ -41,6 +41,7 @@ export const RaidCardMap = {
     RadiantKaleidoscope: { name: 'TriangleSupport', type: 'Support' },
     GuardBreak: { name: 'Weaken', type: 'Burst' },
     SandsOfTime: { name: 'SandsOfTime', type: 'Affliction' },
+    CosmicBarb: { name: 'CosmicBarb', type: 'Affliction' },
 
     Wildcard: { name: 'Wildcard', type: 'Support' },
 } as const;

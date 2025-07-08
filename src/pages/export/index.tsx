@@ -1,5 +1,5 @@
 import ClanshipBarrage from '@/assets/cards/ClanshipBarrage.webp';
-import ElectroZap from '@/assets/cards/ElectroZap.webp';
+import CosmicBarb from '@/assets/cards/CosmicBarb.webp';
 import Fragmentize from '@/assets/cards/Fragmentize.webp';
 import FusionBomb from '@/assets/cards/FusionBomb.webp';
 import RavenousSwarm from '@/assets/cards/RavenousSwarm.webp';
@@ -200,7 +200,7 @@ const cardsMap = {
     new: [
         { name: 'Clanship Barrage', level: 15, image: ClanshipBarrage, isRemoved: false },
         { name: 'Fragmentize', level: 15, image: Fragmentize, isRemoved: false },
-        { name: 'Electro Zap', level: 20, image: ElectroZap, isRemoved: false },
+        { name: 'Electro Zap', level: 20, image: CosmicBarb, isRemoved: false },
     ],
     old: [
         { name: 'Fusion Bomb', level: 15, image: FusionBomb, isRemoved: false },

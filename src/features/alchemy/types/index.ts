@@ -73,4 +73,5 @@ export type IngredientFieldConfig = {
     fieldType: z.ZodNumber;
     active: boolean;
     base?: boolean;
+    order: number;
 };

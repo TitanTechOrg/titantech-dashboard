@@ -1,0 +1,143 @@
+{
+    "deck": [
+        {
+            "title": "MoonBeam",
+            "level": 40
+        }
+    ],
+    "player": {
+        "raid_level": 1040,
+        "event_bonus": "Non",
+        "equipments": ["Jade", "SoloRaid", "FirstMate", "Runestone", "RaidMythic"],
+        "raid_research_tree": {
+            "armor_damage": 100,
+            "body_damage": 100,
+            "chest_damage": 100,
+            "head_damage": 100,
+            "limb_damage": 100,
+            "raid_enemy1_damage": 100,
+            "raid_enemy2_damage": 100,
+            "raid_enemy3_damage": 100,
+            "raid_enemy4_damage": 100,
+            "raid_enemy5_damage": 100,
+            "raid_enemy6_damage": 100,
+            "raid_enemy7_damage": 100,
+            "raid_enemy8_damage": 100
+        },
+        "raid_research_bonuses": {
+            "raid_base_damage": 100,
+            "affliction_base_damage": 100,
+            "burst_base_damage": 100,
+            "armor_base_damage": 100,
+            "body_base_damage": 100,
+            "head_base_damage": 100,
+            "limb_base_damage": 100,
+            "torso_base_damage": 100,
+            "head_armor_base_damage": 100,
+            "limb_armor_base_damage": 100,
+            "torso_armor_base_damage": 100,
+            "head_body_base_damage": 100,
+            "limb_body_base_damage": 100,
+            "torso_body_base_damage": 100,
+            "enemy1_base_damage": 100,
+            "enemy2_base_damage": 100,
+            "enemy3_base_damage": 100,
+            "enemy4_base_damage": 100,
+            "enemy5_base_damage": 100,
+            "enemy6_base_damage": 100,
+            "enemy7_base_damage": 100,
+            "enemy8_base_damage": 100,
+            "enemy1_affliction_base_damage": 100,
+            "enemy2_affliction_base_damage": 100,
+            "enemy3_affliction_base_damage": 100,
+            "enemy4_affliction_base_damage": 100,
+            "enemy5_affliction_base_damage": 100,
+            "enemy6_affliction_base_damage": 100,
+            "enemy7_affliction_base_damage": 100,
+            "enemy8_affliction_base_damage": 100,
+            "enemy1_burst_base_damage": 100,
+            "enemy2_burst_base_damage": 100,
+            "enemy3_burst_base_damage": 100,
+            "enemy4_burst_base_damage": 100,
+            "enemy5_burst_base_damage": 100,
+            "enemy6_burst_base_damage": 100,
+            "enemy7_burst_base_damage": 100,
+            "enemy8_burst_base_damage": 100
+        },
+        "cards": [
+            {
+                "title": "MoonBeam",
+                "level": 40
+            }
+        ]
+    },
+    "titan": {
+        "titan_id": null,
+        "total_body": 1000000,
+        "total_armour": 1000000,
+        "current_body": 8000000,
+        "current_armour": 8000000,
+        "curse_type": null,
+        "area_buff": null,
+        "area_buff_amount": 0,
+        "raid_bonus": null,
+        "clan_damage_bonus": 0,
+        "loyalty_bonus": 0,
+        "head": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "torso": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "arm_right": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "arm_left": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "leg_right": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "leg_left": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "hand_right": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        },
+        "hand_left": {
+            "curse": 0,
+            "total_body": 1000000,
+            "total_armour": 1000000,
+            "current_body": 1000000,
+            "current_armour": 1000000
+        }
+    }
+}

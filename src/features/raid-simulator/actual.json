@@ -1,0 +1,315 @@
+{
+    "player": {
+        "raid_level": 1355,
+        "event_bonus": "Non",
+        "equipments": ["Jade", "SoloRaid", "FirstMate", "Runestone", "RaidMythic"],
+        "raid_research_tree": {
+            "armor_damage": 0.375,
+            "body_damage": 0.375,
+            "chest_damage": 0.3,
+            "head_damage": 0.3,
+            "limb_damage": 0.3,
+            "raid_enemy1_damage": 0.375,
+            "raid_enemy2_damage": 0.375,
+            "raid_enemy3_damage": 0.375,
+            "raid_enemy4_damage": 0.375,
+            "raid_enemy5_damage": 0.375,
+            "raid_enemy6_damage": 0.375,
+            "raid_enemy7_damage": 0.375,
+            "raid_enemy8_damage": 0.375
+        },
+        "raid_research_bonuses": {
+            "raid_base_damage": 156,
+            "affliction_base_damage": 150,
+            "burst_base_damage": 150,
+            "armor_base_damage": 156,
+            "body_base_damage": 156,
+            "head_base_damage": 122,
+            "limb_base_damage": 122,
+            "torso_base_damage": 122,
+            "head_armor_base_damage": 50,
+            "limb_armor_base_damage": 50,
+            "torso_armor_base_damage": 50,
+            "head_body_base_damage": 50,
+            "limb_body_base_damage": 50,
+            "torso_body_base_damage": 50,
+            "enemy1_base_damage": 60,
+            "enemy2_base_damage": 116,
+            "enemy3_base_damage": 60,
+            "enemy4_base_damage": 60,
+            "enemy5_base_damage": 116,
+            "enemy6_base_damage": 60,
+            "enemy7_base_damage": 102,
+            "enemy8_base_damage": 60,
+            "enemy1_affliction_base_damage": 54,
+            "enemy2_affliction_base_damage": 54,
+            "enemy3_affliction_base_damage": 54,
+            "enemy4_affliction_base_damage": 54,
+            "enemy5_affliction_base_damage": 54,
+            "enemy6_affliction_base_damage": 54,
+            "enemy7_affliction_base_damage": 54,
+            "enemy8_affliction_base_damage": 54,
+            "enemy1_burst_base_damage": 54,
+            "enemy2_burst_base_damage": 54,
+            "enemy3_burst_base_damage": 54,
+            "enemy4_burst_base_damage": 54,
+            "enemy5_burst_base_damage": 54,
+            "enemy6_burst_base_damage": 54,
+            "enemy7_burst_base_damage": 54,
+            "enemy8_burst_base_damage": 54
+        },
+        "cards": [
+            {
+                "title": "MoonBeam",
+                "level": 40
+            },
+            {
+                "title": "Fragmentize",
+                "level": 40
+            },
+            {
+                "title": "SkullBash",
+                "level": 41
+            },
+            {
+                "title": "RazorWind",
+                "level": 41
+            },
+            {
+                "title": "WhipOfLightning",
+                "level": 50
+            },
+            {
+                "title": "BurstCount",
+                "level": 50
+            },
+            {
+                "title": "Purify",
+                "level": 63
+            },
+            {
+                "title": "LimbBurst",
+                "level": 41
+            },
+            {
+                "title": "FlakShot",
+                "level": 40
+            },
+            {
+                "title": "Haymaker",
+                "level": 56
+            },
+            {
+                "title": "ChainLightning",
+                "level": 43
+            },
+            {
+                "title": "MirrorForce",
+                "level": 70
+            },
+            {
+                "title": "CelestialStatic",
+                "level": 70
+            },
+            {
+                "title": "Weaken",
+                "level": 59
+            },
+            {
+                "title": "BurningAttack",
+                "level": 44
+            },
+            {
+                "title": "PoisonAttack",
+                "level": 36
+            },
+            {
+                "title": "DecayingAttack",
+                "level": 55
+            },
+            {
+                "title": "Fuse",
+                "level": 48
+            },
+            {
+                "title": "Shadow",
+                "level": 44
+            },
+            {
+                "title": "PlagueAttack",
+                "level": 56
+            },
+            {
+                "title": "Disease",
+                "level": 49
+            },
+            {
+                "title": "Swarm",
+                "level": 41
+            },
+            {
+                "title": "RuinousRust",
+                "level": 43
+            },
+            {
+                "title": "PowerBubble",
+                "level": 48
+            },
+            {
+                "title": "RuneAttack",
+                "level": 60
+            },
+            {
+                "title": "MagicPotion",
+                "level": 71
+            },
+            {
+                "title": "SandsOfTime",
+                "level": 43
+            },
+            {
+                "title": "CosmicBarb",
+                "level": 55
+            },
+            {
+                "title": "ExecutionersAxe",
+                "level": 44
+            },
+            {
+                "title": "CrushingVoid",
+                "level": 71
+            },
+            {
+                "title": "MentalFocus",
+                "level": 52
+            },
+            {
+                "title": "ImpactAttack",
+                "level": 38
+            },
+            {
+                "title": "InnerTruth",
+                "level": 42
+            },
+            {
+                "title": "FinisherAttack",
+                "level": 42
+            },
+            {
+                "title": "SuperheatMetal",
+                "level": 40
+            },
+            {
+                "title": "BurstBoost",
+                "level": 53
+            },
+            {
+                "title": "LimbSupport",
+                "level": 41
+            },
+            {
+                "title": "TotemFairySkill",
+                "level": 64
+            },
+            {
+                "title": "TeamTactics",
+                "level": 48
+            },
+            {
+                "title": "SpinalTap",
+                "level": 60
+            },
+            {
+                "title": "AstralEcho",
+                "level": 47
+            },
+            {
+                "title": "TriangleSupport",
+                "level": 61
+            }
+        ]
+    },
+    "titan": {
+        "titan_id": "Enemy1",
+        "total_body": 80000000000,
+        "total_armour": 80000000000,
+        "current_body": 70000000000,
+        "current_armour": 70000000000,
+        "curse_type": 3,
+        "area_buff": "ArmorArmsHPMult",
+        "area_buff_amount": 0,
+        "raid_bonus": "AfflictedDamage",
+        "clan_damage_bonus": 29,
+        "loyalty_bonus": 34,
+        "head": {
+            "curse": true,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "torso": {
+            "curse": true,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "arm_right": {
+            "curse": true,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "arm_left": {
+            "curse": true,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "hand_right": {
+            "curse": false,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 0,
+            "current_armour": 0
+        },
+        "hand_left": {
+            "curse": false,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "leg_right": {
+            "curse": false,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        },
+        "leg_left": {
+            "curse": false,
+            "total_body": 10000000000,
+            "total_armour": 10000000000,
+            "current_body": 10000000000,
+            "current_armour": 10000000000
+        }
+    },
+    "deck": [
+        {
+            "title": "Purify",
+            "level": 63
+        },
+        {
+            "title": "InnerTruth",
+            "level": 42
+        },
+        {
+            "title": "PoisonAttack",
+            "level": 36
+        }
+    ]
+}

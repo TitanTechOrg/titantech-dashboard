@@ -8,9 +8,7 @@ export default function RaidSimulator() {
                 {/* <p className="mb-4 text-center">Simulate your raid with the cards you have.</p> */}
                 {/* <p className="text-xs italic">This is a work in progress. Please report any bugs.</p> */}
             </div>
-            <div>
-                <TitanSelector />
-            </div>
+            <TitanSelector />
         </div>
     );
 }

@@ -72,7 +72,7 @@ export function AlchemyCalculator() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {ingredients
                         .filter((ingredient) => ingredient.active)
-                        .sort((a, b) => (b.base ? 1 : 0) - (a.base ? 1 : 0))
+                        .sort((a, b) => a.order - b.order)
                         .map(({ name }) => (
                             <Input
                                 className="max-w-xs"

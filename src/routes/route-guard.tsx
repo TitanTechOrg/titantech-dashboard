@@ -1,6 +1,6 @@
 import { usePreferencesStore } from '@/stores/preferences.store';
-import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const uuidSchema = z.string().uuid();
@@ -9,7 +9,7 @@ const validateUUID = (uuid: string | undefined): boolean => {
     return uuidSchema.safeParse(uuid).success;
 };
 
-export default function RouteGuard({ children }: React.PropsWithChildren<{}>) {
+export default function RouteGuard({ children }: PropsWithChildren) {
     const { clan_token } = useParams<{ clan_token: string }>();
     const navigate = useNavigate();
     const { login, checkAuth, logout } = usePreferencesStore();

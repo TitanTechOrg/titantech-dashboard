@@ -5,208 +5,229 @@ import FusionBomb from '@/assets/cards/FusionBomb.webp';
 import RavenousSwarm from '@/assets/cards/RavenousSwarm.webp';
 import SoulFire from '@/assets/cards/SoulFire.webp';
 import { PageContainer } from '@/components';
-import { Accordion, AccordionItem, Button, Image, Textarea, Tooltip } from '@heroui/react';
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  Image,
+  Textarea,
+  Tooltip,
+} from '@heroui/react';
 import { CopyIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import { useCallback, useMemo, useState } from 'react';
 
 enum RaidKey {
-    MoonBeam = 'MoonBeam',
-    Fragmentize = 'Fragmentize',
-    SkullBash = 'SkullBash',
-    RazorWind = 'RazorWind',
-    WhipOfLightning = 'WhipOfLightning',
-    BurstCount = 'BurstCount',
-    Purify = 'Purify',
-    LimbBurst = 'LimbBurst',
-    FlakShot = 'FlakShot',
-    Haymaker = 'Haymaker',
-    ChainLightning = 'ChainLightning',
-    MirrorForce = 'MirrorForce',
-    CelestialStatic = 'CelestialStatic',
-    BurningAttack = 'BurningAttack',
-    PoisonAttack = 'PoisonAttack',
-    DecayingAttack = 'DecayingAttack',
-    Fuse = 'Fuse',
-    Shadow = 'Shadow',
-    PlagueAttack = 'PlagueAttack',
-    Disease = 'Disease',
-    Swarm = 'Swarm',
-    RuinousRust = 'RuinousRust',
-    PowerBubble = 'PowerBubble',
-    RuneAttack = 'RuneAttack',
-    MagicPotion = 'MagicPotion',
-    ExecutionersAxe = 'ExecutionersAxe',
-    CrushingVoid = 'CrushingVoid',
-    MentalFocus = 'MentalFocus',
-    ImpactAttack = 'ImpactAttack',
-    InnerTruth = 'InnerTruth',
-    FinisherAttack = 'FinisherAttack',
-    SuperheatMetal = 'SuperheatMetal',
-    BurstBoost = 'BurstBoost',
-    LimbSupport = 'LimbSupport',
-    TotemFairySkill = 'TotemFairySkill',
-    TeamTactics = 'TeamTactics',
-    SpinalTap = 'SpinalTap',
-    AstralEcho = 'AstralEcho',
-    TriangleSupport = 'TriangleSupport',
-    Weaken = 'Weaken',
-    SandsOfTime = 'SandsOfTime',
-    CosmicBarb = 'CosmicBarb',
+  MoonBeam = 'MoonBeam',
+  Fragmentize = 'Fragmentize',
+  SkullBash = 'SkullBash',
+  RazorWind = 'RazorWind',
+  WhipOfLightning = 'WhipOfLightning',
+  BurstCount = 'BurstCount',
+  Purify = 'Purify',
+  LimbBurst = 'LimbBurst',
+  FlakShot = 'FlakShot',
+  Haymaker = 'Haymaker',
+  ChainLightning = 'ChainLightning',
+  MirrorForce = 'MirrorForce',
+  CelestialStatic = 'CelestialStatic',
+  BurningAttack = 'BurningAttack',
+  PoisonAttack = 'PoisonAttack',
+  DecayingAttack = 'DecayingAttack',
+  Fuse = 'Fuse',
+  Shadow = 'Shadow',
+  PlagueAttack = 'PlagueAttack',
+  Disease = 'Disease',
+  Swarm = 'Swarm',
+  RuinousRust = 'RuinousRust',
+  PowerBubble = 'PowerBubble',
+  RuneAttack = 'RuneAttack',
+  MagicPotion = 'MagicPotion',
+  ExecutionersAxe = 'ExecutionersAxe',
+  CrushingVoid = 'CrushingVoid',
+  MentalFocus = 'MentalFocus',
+  ImpactAttack = 'ImpactAttack',
+  InnerTruth = 'InnerTruth',
+  FinisherAttack = 'FinisherAttack',
+  SuperheatMetal = 'SuperheatMetal',
+  BurstBoost = 'BurstBoost',
+  LimbSupport = 'LimbSupport',
+  TotemFairySkill = 'TotemFairySkill',
+  TeamTactics = 'TeamTactics',
+  SpinalTap = 'SpinalTap',
+  AstralEcho = 'AstralEcho',
+  TriangleSupport = 'TriangleSupport',
+  Weaken = 'Weaken',
+  SandsOfTime = 'SandsOfTime',
+  CosmicBarb = 'CosmicBarb',
 }
 
 const raidKeyMap: Record<RaidKey, string> = {
-    [RaidKey.MoonBeam]: 'Moon Beam',
-    [RaidKey.Fragmentize]: 'Fragmentize',
-    [RaidKey.SkullBash]: 'Skull Bash',
-    [RaidKey.RazorWind]: 'Razor Wind',
-    [RaidKey.WhipOfLightning]: 'Whip of Lightning',
-    [RaidKey.BurstCount]: 'Clanship Barrage',
-    [RaidKey.Purify]: 'Purifying Blast',
-    [RaidKey.LimbBurst]: 'Psychic Shackles',
-    [RaidKey.FlakShot]: 'Flak Shot',
-    [RaidKey.Haymaker]: 'Cosmic Haymaker',
-    [RaidKey.ChainLightning]: 'Chain of Vengeance',
-    [RaidKey.MirrorForce]: 'Mirror Force',
-    [RaidKey.CelestialStatic]: 'Celestial Static',
-    [RaidKey.BurningAttack]: 'Blazing Inferno',
-    [RaidKey.PoisonAttack]: 'Acid Drench',
-    [RaidKey.DecayingAttack]: 'Decaying Strike',
-    [RaidKey.Fuse]: 'Fusion Bomb',
-    [RaidKey.Shadow]: 'Grim Shadow',
-    [RaidKey.PlagueAttack]: 'Thriving Plague',
-    [RaidKey.Disease]: 'Radioactivity',
-    [RaidKey.Swarm]: 'Ravenous Swarm',
-    [RaidKey.RuinousRust]: 'Ruinous Rain',
-    [RaidKey.PowerBubble]: 'Corrosive Bubbles',
-    [RaidKey.RuneAttack]: 'Maelstrom',
-    [RaidKey.MagicPotion]: 'Amplify',
-    [RaidKey.ExecutionersAxe]: 'Crushing Instinct',
-    [RaidKey.CrushingVoid]: 'Insanity Void',
-    [RaidKey.MentalFocus]: 'Rancid Gas',
-    [RaidKey.ImpactAttack]: 'Inspiring Force',
-    [RaidKey.InnerTruth]: 'Soul Fire',
-    [RaidKey.FinisherAttack]: 'Victory March',
-    [RaidKey.SuperheatMetal]: 'Prismatic Rift',
-    [RaidKey.BurstBoost]: 'Ancestral Favor',
-    [RaidKey.LimbSupport]: 'Grasping Vines',
-    [RaidKey.TotemFairySkill]: 'Totem of Power',
-    [RaidKey.TeamTactics]: 'Team Tactics',
-    [RaidKey.SpinalTap]: 'Skeletal Smash',
-    [RaidKey.AstralEcho]: 'Astral Echo',
-    [RaidKey.TriangleSupport]: 'Radiant Kaleidoscope',
-    [RaidKey.Weaken]: 'Guard Break',
-    [RaidKey.SandsOfTime]: 'Sands of Time',
-    [RaidKey.CosmicBarb]: 'Electro Zap',
+  [RaidKey.MoonBeam]: 'Moon Beam',
+  [RaidKey.Fragmentize]: 'Fragmentize',
+  [RaidKey.SkullBash]: 'Skull Bash',
+  [RaidKey.RazorWind]: 'Razor Wind',
+  [RaidKey.WhipOfLightning]: 'Whip of Lightning',
+  [RaidKey.BurstCount]: 'Clanship Barrage',
+  [RaidKey.Purify]: 'Purifying Blast',
+  [RaidKey.LimbBurst]: 'Psychic Shackles',
+  [RaidKey.FlakShot]: 'Flak Shot',
+  [RaidKey.Haymaker]: 'Cosmic Haymaker',
+  [RaidKey.ChainLightning]: 'Chain of Vengeance',
+  [RaidKey.MirrorForce]: 'Mirror Force',
+  [RaidKey.CelestialStatic]: 'Celestial Static',
+  [RaidKey.BurningAttack]: 'Blazing Inferno',
+  [RaidKey.PoisonAttack]: 'Acid Drench',
+  [RaidKey.DecayingAttack]: 'Decaying Strike',
+  [RaidKey.Fuse]: 'Fusion Bomb',
+  [RaidKey.Shadow]: 'Grim Shadow',
+  [RaidKey.PlagueAttack]: 'Thriving Plague',
+  [RaidKey.Disease]: 'Radioactivity',
+  [RaidKey.Swarm]: 'Ravenous Swarm',
+  [RaidKey.RuinousRust]: 'Ruinous Rain',
+  [RaidKey.PowerBubble]: 'Corrosive Bubbles',
+  [RaidKey.RuneAttack]: 'Maelstrom',
+  [RaidKey.MagicPotion]: 'Amplify',
+  [RaidKey.ExecutionersAxe]: 'Crushing Instinct',
+  [RaidKey.CrushingVoid]: 'Insanity Void',
+  [RaidKey.MentalFocus]: 'Rancid Gas',
+  [RaidKey.ImpactAttack]: 'Inspiring Force',
+  [RaidKey.InnerTruth]: 'Soul Fire',
+  [RaidKey.FinisherAttack]: 'Victory March',
+  [RaidKey.SuperheatMetal]: 'Prismatic Rift',
+  [RaidKey.BurstBoost]: 'Ancestral Favor',
+  [RaidKey.LimbSupport]: 'Grasping Vines',
+  [RaidKey.TotemFairySkill]: 'Totem of Power',
+  [RaidKey.TeamTactics]: 'Team Tactics',
+  [RaidKey.SpinalTap]: 'Skeletal Smash',
+  [RaidKey.AstralEcho]: 'Astral Echo',
+  [RaidKey.TriangleSupport]: 'Radiant Kaleidoscope',
+  [RaidKey.Weaken]: 'Guard Break',
+  [RaidKey.SandsOfTime]: 'Sands of Time',
+  [RaidKey.CosmicBarb]: 'Electro Zap',
 };
 
 const oldSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
-    [RaidKey.Fuse]: 15,
-    [RaidKey.Swarm]: 15,
-    [RaidKey.InnerTruth]: 15,
+  [RaidKey.Fuse]: 15,
+  [RaidKey.Swarm]: 15,
+  [RaidKey.InnerTruth]: 15,
 };
 
 const newSeasonalCardBoosts: Partial<Record<RaidKey, number>> = {
-    [RaidKey.BurstCount]: 15,
-    [RaidKey.Fragmentize]: 15,
-    [RaidKey.CosmicBarb]: 20,
+  [RaidKey.BurstCount]: 15,
+  [RaidKey.Fragmentize]: 15,
+  [RaidKey.CosmicBarb]: 20,
 };
 
 // const equipmentReplacements = {
 //     Moth: 'Moonlit Mothcaller',
 // };
 
-const updateRaidCardNames = (inputData: string, keyMap: Record<RaidKey, string>): string => {
-    const raidCardsKey = 'raidCards';
-    const equipmentSetsKey = 'equipmentSets';
+const updateRaidCardNames = (
+  inputData: string,
+  keyMap: Record<RaidKey, string>
+): string => {
+  const raidCardsKey = 'raidCards';
+  const equipmentSetsKey = 'equipmentSets';
 
-    try {
-        const data = JSON.parse(inputData);
+  try {
+    const data = JSON.parse(inputData);
 
-        if (!data || typeof data !== 'object') return '';
+    if (!data || typeof data !== 'object') return '';
 
-        if (Object.prototype.hasOwnProperty.call(data, raidCardsKey)) {
-            const cards = data[raidCardsKey];
+    if (Object.prototype.hasOwnProperty.call(data, raidCardsKey)) {
+      const cards = data[raidCardsKey];
 
-            if (typeof cards !== 'object' || cards == null) return '';
+      if (typeof cards !== 'object' || cards == null) return '';
 
-            for (const raidKey of Object.values(RaidKey)) {
-                if (!Object.prototype.hasOwnProperty.call(cards, raidKey)) {
-                    continue;
-                }
-
-                const card = cards[raidKey];
-                if (!card || typeof card.lv !== 'number') continue;
-
-                const humanReadableName = keyMap[raidKey];
-
-                // Applying old seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.Fuse]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.Fuse];
-                    if (boost !== undefined) {
-                        card.lv -= boost;
-                    }
-                }
-                if (humanReadableName === keyMap[RaidKey.Swarm]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.Swarm];
-                    if (boost !== undefined) {
-                        card.lv -= boost;
-                    }
-                }
-                if (humanReadableName === keyMap[RaidKey.InnerTruth]) {
-                    const boost = oldSeasonalCardBoosts[RaidKey.InnerTruth];
-                    if (boost !== undefined) {
-                        card.lv -= boost;
-                    }
-                }
-
-                // Applying new seasonal boosts
-                if (humanReadableName === keyMap[RaidKey.BurstCount]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.BurstCount];
-                    if (boost !== undefined) {
-                        card.lv += boost;
-                        card.lv = Math.min(card.lv, 100);
-                    }
-                }
-                if (humanReadableName === keyMap[RaidKey.Fragmentize]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.Fragmentize];
-                    if (boost !== undefined) {
-                        card.lv += boost;
-                        card.lv = Math.min(card.lv, 100);
-                    }
-                }
-                if (humanReadableName === keyMap[RaidKey.CosmicBarb]) {
-                    const boost = newSeasonalCardBoosts[RaidKey.CosmicBarb];
-                    if (boost !== undefined) {
-                        card.lv += boost;
-                        card.lv = Math.min(card.lv, 100);
-                    }
-                }
-            }
+      for (const raidKey of Object.values(RaidKey)) {
+        if (!Object.prototype.hasOwnProperty.call(cards, raidKey)) {
+          continue;
         }
 
-        const equipments = data[equipmentSetsKey];
+        const card = cards[raidKey];
+        if (!card || typeof card.lv !== 'number') continue;
 
-        if (typeof equipments !== 'object' || equipments == null) return '';
+        const humanReadableName = keyMap[raidKey];
 
-        // data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Moth: string }] || item);
+        // Applying old seasonal boosts
+        if (humanReadableName === keyMap[RaidKey.Fuse]) {
+          const boost = oldSeasonalCardBoosts[RaidKey.Fuse];
+          if (boost !== undefined) {
+            card.lv -= boost;
+          }
+        }
+        if (humanReadableName === keyMap[RaidKey.Swarm]) {
+          const boost = oldSeasonalCardBoosts[RaidKey.Swarm];
+          if (boost !== undefined) {
+            card.lv -= boost;
+          }
+        }
+        if (humanReadableName === keyMap[RaidKey.InnerTruth]) {
+          const boost = oldSeasonalCardBoosts[RaidKey.InnerTruth];
+          if (boost !== undefined) {
+            card.lv -= boost;
+          }
+        }
 
-        return data;
-    } catch (err) {
-        return '';
+        // Applying new seasonal boosts
+        if (humanReadableName === keyMap[RaidKey.BurstCount]) {
+          const boost = newSeasonalCardBoosts[RaidKey.BurstCount];
+          if (boost !== undefined) {
+            card.lv += boost;
+            card.lv = Math.min(card.lv, 100);
+          }
+        }
+        if (humanReadableName === keyMap[RaidKey.Fragmentize]) {
+          const boost = newSeasonalCardBoosts[RaidKey.Fragmentize];
+          if (boost !== undefined) {
+            card.lv += boost;
+            card.lv = Math.min(card.lv, 100);
+          }
+        }
+        if (humanReadableName === keyMap[RaidKey.CosmicBarb]) {
+          const boost = newSeasonalCardBoosts[RaidKey.CosmicBarb];
+          if (boost !== undefined) {
+            card.lv += boost;
+            card.lv = Math.min(card.lv, 100);
+          }
+        }
+      }
     }
+
+    const equipments = data[equipmentSetsKey];
+
+    if (typeof equipments !== 'object' || equipments == null) return '';
+
+    // data[equipmentSetsKey] = data[equipmentSetsKey].map((item: string) => equipmentReplacements[item as keyof { Moth: string }] || item);
+
+    return data;
+  } catch (err) {
+    console.log(err);
+    return '';
+  }
 };
 
 const cardsMap = {
-    new: [
-        { name: 'Clanship Barrage', level: 15, image: ClanshipBarrage, isRemoved: false },
-        { name: 'Fragmentize', level: 15, image: Fragmentize, isRemoved: false },
-        { name: 'Electro Zap', level: 20, image: CosmicBarb, isRemoved: false },
-    ],
-    old: [
-        { name: 'Fusion Bomb', level: 15, image: FusionBomb, isRemoved: false },
-        { name: 'Ravenous Swarm', level: 15, image: RavenousSwarm, isRemoved: false },
-        { name: 'Soul Fire', level: 15, image: SoulFire, isRemoved: false },
-    ],
+  new: [
+    {
+      name: 'Clanship Barrage',
+      level: 15,
+      image: ClanshipBarrage,
+      isRemoved: false,
+    },
+    { name: 'Fragmentize', level: 15, image: Fragmentize, isRemoved: false },
+    { name: 'Electro Zap', level: 20, image: CosmicBarb, isRemoved: false },
+  ],
+  old: [
+    { name: 'Fusion Bomb', level: 15, image: FusionBomb, isRemoved: false },
+    {
+      name: 'Ravenous Swarm',
+      level: 15,
+      image: RavenousSwarm,
+      isRemoved: false,
+    },
+    { name: 'Soul Fire', level: 15, image: SoulFire, isRemoved: false },
+  ],
 };
 // type NecrobearBonuses = {
 //     HeadDamage: string;
@@ -315,162 +336,187 @@ const cardsMap = {
 // }
 
 type SeasonalCardsInfoSectionProps = {
-    title: string;
-    data: typeof cardsMap.new;
-    isNewSeason: boolean;
+  title: string;
+  data: typeof cardsMap.new;
+  isNewSeason: boolean;
 };
 
-function SeasonalCardsInfoSection({ title, data, isNewSeason }: SeasonalCardsInfoSectionProps) {
-    return (
-        <div className="flex flex-col gap-2 text-sm">
-            <p>{title}</p>
-            <ul className="grid columns-1 gap-0.5">
-                {data.map(({ name, level, image, isRemoved }) => {
-                    return (
-                        <li key={name}>
-                            <div className="flex shrink-0 flex-row items-center gap-4">
-                                <Image src={image} alt={`${name} raid card`} className="h-8 w-8 object-cover" radius="none" />
-                                {isNewSeason ? '+' : '-'}
-                                {level}
-                                {isRemoved && <span className="text-xs">(Removed from player export)</span>}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
-    );
+function SeasonalCardsInfoSection({
+  title,
+  data,
+  isNewSeason,
+}: SeasonalCardsInfoSectionProps) {
+  return (
+    <div className="flex flex-col gap-2 text-sm">
+      <p>{title}</p>
+      <ul className="grid columns-1 gap-0.5">
+        {data.map(({ name, level, image, isRemoved }) => {
+          return (
+            <li key={name}>
+              <div className="flex shrink-0 flex-row items-center gap-4">
+                <Image
+                  src={image}
+                  alt={`${name} raid card`}
+                  className="h-8 w-8 object-cover"
+                  radius="none"
+                />
+                {isNewSeason ? '+' : '-'}
+                {level}
+                {isRemoved && (
+                  <span className="text-xs">(Removed from player export)</span>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 export default function PlayerExport() {
-    const [inputData, setInputData] = useState('');
-    const [outputData, setOutputData] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
+  const [inputData, setInputData] = useState('');
+  const [outputData, setOutputData] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
-    const prettyJson = useMemo(
-        () => (data: string) => {
-            if (!data) {
-                return null;
-            }
+  const prettyJson = useMemo(
+    () => (data: string) => {
+      if (!data) {
+        return null;
+      }
 
-            try {
-                return JSON.stringify(JSON.parse(data), null, 2);
-            } catch (err) {
-                return null;
-            }
-        },
-        []
-    );
+      try {
+        return JSON.stringify(JSON.parse(data), null, 2);
+      } catch (err) {
+        console.log(err);
+        return null;
+      }
+    },
+    []
+  );
 
-    const copyToClipboard = useCallback(async () => {
-        try {
-            await navigator.clipboard.writeText(outputData);
+  const copyToClipboard = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(outputData);
 
-            setIsOpen(true);
-            setTimeout(() => {
-                setIsOpen(false);
-            }, 1000);
-        } catch (err) {
-            return;
-        }
-    }, [prettyJson, inputData, outputData]);
+      setIsOpen(true);
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  }, [outputData]);
 
-    const clearText = () => {
-        setInputData('');
-        setOutputData('');
-    };
+  const clearText = () => {
+    setInputData('');
+    setOutputData('');
+  };
 
-    return (
-        <PageContainer>
-            <div className="flex flex-col items-center justify-center gap-8">
-                <div className="flex max-w-md flex-col font-normal">
-                    <h3 className="pb-2 text-base">What is Player Export Editor?</h3>
-                    <div className="flex max-w-md flex-col gap-2 text-left">
-                        <p className="text-sm">
-                            This tool provides a temporary fix for making TT2 player export compatible with the
-                            <span className="italic">&nbsp;TT2 Raid Optimizer</span> app.
-                        </p>
-                        <Accordion className="px-0">
-                            <AccordionItem key="1" aria-label="Show card changes" title="Show card changes" classNames={{ title: ['text-sm'] }}>
-                                <div className="flex max-w-md flex-col gap-4">
-                                    <SeasonalCardsInfoSection
-                                        title="Changes to card levels in the raid app"
-                                        data={cardsMap.old}
-                                        isNewSeason={false}
-                                    />
-                                    <SeasonalCardsInfoSection title="Current seasonal card buffs" data={cardsMap.new} isNewSeason={true} />
-                                </div>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
+  return (
+    <PageContainer>
+      <div className="flex flex-col items-center justify-center gap-8">
+        <div className="flex max-w-md flex-col font-normal">
+          <h3 className="pb-2 text-base">What is Player Export Editor?</h3>
+          <div className="flex max-w-md flex-col gap-2 text-left">
+            <p className="text-sm">
+              This tool provides a temporary fix for making TT2 player export
+              compatible with the
+              <span className="italic">&nbsp;TT2 Raid Optimizer</span> app.
+            </p>
+            <Accordion className="px-0">
+              <AccordionItem
+                key="1"
+                aria-label="Show card changes"
+                title="Show card changes"
+                classNames={{ title: ['text-sm'] }}
+              >
+                <div className="flex max-w-md flex-col gap-4">
+                  <SeasonalCardsInfoSection
+                    title="Changes to card levels in the raid app"
+                    data={cardsMap.old}
+                    isNewSeason={false}
+                  />
+                  <SeasonalCardsInfoSection
+                    title="Current seasonal card buffs"
+                    data={cardsMap.new}
+                    isNewSeason={true}
+                  />
                 </div>
-                <div className="flex w-full max-w-md flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
-                    <div className="flex flex-col items-center justify-center gap-4">
-                        <Textarea
-                            label="Player Export"
-                            labelPlacement="outside"
-                            placeholder="Paste here"
-                            className="max-w-xs"
-                            classNames={{ label: ['text-left'] }}
-                            value={inputData}
-                            onValueChange={(val) => {
-                                const pretty = prettyJson(val);
-                                setInputData(val);
-                                typeof pretty === 'string'
-                                    ? setOutputData(JSON.stringify(updateRaidCardNames(pretty, raidKeyMap)))
-                                    : setOutputData('');
-                            }}
-                            errorMessage={'Invalid JSON data'}
-                            aria-errormessage="Invalid JSON data"
-                            isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
-                            size="lg"
-                        />
-                        <Button
-                            isDisabled={!inputData.length}
-                            color="default"
-                            aria-label="Clear player export text"
-                            onPress={clearText}
-                            className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
-                            startContent={<CrossCircledIcon />}
-                        >
-                            Clear
-                        </Button>
-                    </div>
-                    <div className="flex flex-col items-center justify-center gap-4">
-                        <Textarea
-                            label="Fixed Player Export"
-                            labelPlacement="outside"
-                            placeholder="Copy to TT2 Raid Optimizer app"
-                            className="max-w-xs"
-                            classNames={{ label: ['text-left'] }}
-                            value={outputData}
-                            onValueChange={setOutputData}
-                            isReadOnly={true}
-                            errorMessage={'Something went wrong...'}
-                            size="lg"
-                        />
-                        <Tooltip
-                            aria-label="Copied to clipboard tooltip"
-                            isDisabled={!prettyJson(inputData)}
-                            isOpen={isOpen}
-                            content="Copied"
-                            showArrow={true}
-                            placement="right"
-                        >
-                            <Button
-                                isDisabled={!prettyJson(inputData)}
-                                color="primary"
-                                aria-label="Copy player export"
-                                onPress={copyToClipboard}
-                                className="w-fit self-center"
-                                startContent={<CopyIcon />}
-                            >
-                                Copy
-                            </Button>
-                        </Tooltip>
-                    </div>
-                </div>
-            </div>
-        </PageContainer>
-    );
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+        <div className="flex w-full max-w-md flex-col items-center justify-center gap-8 sm:flex-row sm:items-start">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <Textarea
+              label="Player Export"
+              labelPlacement="outside"
+              placeholder="Paste here"
+              className="max-w-xs"
+              classNames={{ label: ['text-left'] }}
+              value={inputData}
+              onValueChange={(val) => {
+                const pretty = prettyJson(val);
+                setInputData(val);
+                typeof pretty === 'string'
+                  ? setOutputData(
+                      JSON.stringify(updateRaidCardNames(pretty, raidKeyMap))
+                    )
+                  : setOutputData('');
+              }}
+              errorMessage={'Invalid JSON data'}
+              aria-errormessage="Invalid JSON data"
+              isInvalid={inputData.length > 0 && prettyJson(inputData) == null}
+              size="lg"
+            />
+            <Button
+              isDisabled={!inputData.length}
+              color="default"
+              aria-label="Clear player export text"
+              onPress={clearText}
+              className={`w-fit self-center ${!inputData.length ? 'hidden' : 'inline-flex'}`}
+              startContent={<CrossCircledIcon />}
+            >
+              Clear
+            </Button>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <Textarea
+              label="Fixed Player Export"
+              labelPlacement="outside"
+              placeholder="Copy to TT2 Raid Optimizer app"
+              className="max-w-xs"
+              classNames={{ label: ['text-left'] }}
+              value={outputData}
+              onValueChange={setOutputData}
+              isReadOnly={true}
+              errorMessage={'Something went wrong...'}
+              size="lg"
+            />
+            <Tooltip
+              aria-label="Copied to clipboard tooltip"
+              isDisabled={!prettyJson(inputData)}
+              isOpen={isOpen}
+              content="Copied"
+              showArrow={true}
+              placement="right"
+            >
+              <Button
+                isDisabled={!prettyJson(inputData)}
+                color="primary"
+                aria-label="Copy player export"
+                onPress={copyToClipboard}
+                className="w-fit self-center"
+                startContent={<CopyIcon />}
+              >
+                Copy
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
+      </div>
+    </PageContainer>
+  );
 }

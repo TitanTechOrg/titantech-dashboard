@@ -4,26 +4,28 @@ import { AxiosResponse } from 'axios';
 import type { PlayerProfileType } from '../types';
 
 export function usePlayerProfile(playerId: string | undefined) {
-    return useQuery({
-        queryKey: ['player_profile', playerId],
-        queryFn: async () => await fetchPlayerProfile(playerId),
-        enabled: !!playerId,
-    });
+  return useQuery({
+    queryKey: ['player_profile', playerId],
+    queryFn: async () => await fetchPlayerProfile(playerId),
+    enabled: !!playerId,
+  });
 }
 
 async function fetchPlayerProfile(clan_player_id: string | undefined) {
-    let params = '';
+  let params = '';
 
-    const searchParams = new URLSearchParams();
+  const searchParams = new URLSearchParams();
 
-    if (clan_player_id) searchParams.append('clan_player_id', clan_player_id);
+  if (clan_player_id) searchParams.append('clan_player_id', clan_player_id);
 
-    if (searchParams.size) {
-        params += '?';
-        params += searchParams;
-    }
+  if (searchParams.size) {
+    params += '?';
+    params += searchParams;
+  }
 
-    const url = ENDPOINTS.profile + params;
+  const url = ENDPOINTS.profile + params;
 
-    return await axios.get<AxiosResponse<PlayerProfileType>, PlayerProfileType>(url);
+  return await axios.get<AxiosResponse<PlayerProfileType>, PlayerProfileType>(
+    url
+  );
 }

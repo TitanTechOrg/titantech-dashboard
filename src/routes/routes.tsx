@@ -11,97 +11,105 @@ const PlayerExport = lazy(async () => await import('@/pages/export'));
 // const Alchemy = lazy(async () => await import('@/pages/alchemy'));
 
 type RouteConfigs = {
-    path: string;
-    protected: boolean;
+  path: string;
+  protected: boolean;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const routePaths: RouteConfigs[] = [
-    // { path: '/', protected: false },
-    { path: 'dashboard', protected: true },
-    { path: 'overview', protected: true },
-    { path: 'players', protected: true },
-    { path: 'export', protected: false },
-    // { path: 'alchemy', protected: false },
+  // { path: '/', protected: false },
+  { path: 'dashboard', protected: true },
+  { path: 'overview', protected: true },
+  { path: 'players', protected: true },
+  { path: 'export', protected: false },
+  // { path: 'alchemy', protected: false },
 ];
 
 const routesConfig: RouteObject[] = [
-    {
-        path: '/',
-        element: (
-            <Suspense fallback={<></>}>
-                <GetStarted />
-            </Suspense>
-        ),
-        index: true,
-    },
-    {
-        path: ':clan_token',
-        element: (
-            <RouteGuard>
-                <Suspense fallback={<></>}>
-                    <Dashboard />
-                </Suspense>
-            </RouteGuard>
-        ),
-    },
-    {
-        path: 'dashboard',
-        element: (
-            <RouteGuard>
-                <Suspense fallback={<></>}>
-                    <Dashboard />
-                </Suspense>
-            </RouteGuard>
-        ),
-    },
-    {
-        path: 'overview',
-        element: (
-            <RouteGuard>
-                <Suspense fallback={<></>}>
-                    <Overview />
-                </Suspense>
-            </RouteGuard>
-        ),
-    },
-    {
-        path: 'export',
-        element: (
-            <Suspense fallback={<></>}>
-                <PlayerExport />
-            </Suspense>
-        ),
-    },
-    // {
-    //     path: 'alchemy',
-    //     element: (
-    //         <Suspense fallback={<></>}>
-    //             <Alchemy />
-    //         </Suspense>
-    //     ),
-    // },
-    {
-        path: 'players',
-        element: (
-            <RouteGuard>
-                <Suspense fallback={<></>}>
-                    <PlayerProfile />
-                </Suspense>
-            </RouteGuard>
-        ),
-    },
-    {
-        path: '*',
-        element: (
-            <Suspense fallback={<></>}>
-                <FourOhFour />
-            </Suspense>
-        ),
-    },
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<></>}>
+        <GetStarted />
+      </Suspense>
+    ),
+    index: true,
+  },
+  {
+    path: ':clan_token',
+    element: (
+      <RouteGuard>
+        <Suspense fallback={<></>}>
+          <Dashboard />
+        </Suspense>
+      </RouteGuard>
+    ),
+  },
+  {
+    path: 'dashboard',
+    element: (
+      <RouteGuard>
+        <Suspense fallback={<></>}>
+          <Dashboard />
+        </Suspense>
+      </RouteGuard>
+    ),
+  },
+  {
+    path: 'overview',
+    element: (
+      <RouteGuard>
+        <Suspense fallback={<></>}>
+          <Overview />
+        </Suspense>
+      </RouteGuard>
+    ),
+  },
+  {
+    path: 'export',
+    element: (
+      <Suspense fallback={<></>}>
+        <PlayerExport />
+      </Suspense>
+    ),
+  },
+  // {
+  //     path: 'alchemy',
+  //     element: (
+  //         <Suspense fallback={<></>}>
+  //             <Alchemy />
+  //         </Suspense>
+  //     ),
+  // },
+  {
+    path: 'players',
+    element: (
+      <RouteGuard>
+        <Suspense fallback={<></>}>
+          <PlayerProfile />
+        </Suspense>
+      </RouteGuard>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<></>}>
+        <FourOhFour />
+      </Suspense>
+    ),
+  },
 ];
 
 const createRoutes = (routes: RouteObject[]) => {
-    return routes.map((route, index) => <Route key={index} path={route.path} element={route.element} index={route.index} />);
+  return routes.map((route, index) => (
+    <Route
+      key={index}
+      path={route.path}
+      element={route.element}
+      index={route.index}
+    />
+  ));
 };
 
 export const Routes = createRoutes(routesConfig);

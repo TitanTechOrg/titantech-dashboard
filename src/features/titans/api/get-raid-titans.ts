@@ -4,8 +4,11 @@ import { AxiosResponse } from 'axios';
 import { TitanSequences } from '..';
 
 export function useRaidTitans() {
-    return useQuery({
-        queryKey: ['raid_titans'],
-        queryFn: async () => await axios.get<AxiosResponse<TitanSequences>, TitanSequences>(ENDPOINTS.titans),
-    });
+  return useQuery({
+    queryKey: ['raid_titans'],
+    queryFn: async () =>
+      await axios.get<AxiosResponse<TitanSequences>, TitanSequences>(
+        ENDPOINTS.titans
+      ),
+  });
 }

@@ -3,7 +3,10 @@ import { formatter } from '@/utils';
 import { PlayerData, PlayersData } from '../types';
 import { DonutChartData } from './donut-chart-data';
 
-const calculateSum = (obj: any[], field: string) => obj.map((items) => items[field]).reduce((prev: number, curr: number) => prev + curr, 0);
+const calculateSum = (obj: any[], field: string) =>
+  obj
+    .map((items) => items[field])
+    .reduce((prev: number, curr: number) => prev + curr, 0);
 
 // const calculateAverageDamage = (overviewPlayers: PlayerData[] | undefined) => {
 //     if (overviewPlayers == null) return 0;
@@ -15,14 +18,16 @@ const calculateSum = (obj: any[], field: string) => obj.map((items) => items[fie
 // };
 
 const calculateAverageDamage2 = (overviewPlayers: PlayerData[] | undefined) => {
-    if (overviewPlayers == null) return 0;
+  if (overviewPlayers == null) return 0;
 
-    const avgDamage = calculateSum(overviewPlayers, 'average_damage') / overviewPlayers.length || 0;
-    // const formattedDamage = formatter().format(avgDamage);
+  const avgDamage =
+    calculateSum(overviewPlayers, 'average_damage') / overviewPlayers.length ||
+    0;
+  // const formattedDamage = formatter().format(avgDamage);
 
-    // return formattedDamage;
+  // return formattedDamage;
 
-    return avgDamage;
+  return avgDamage;
 };
 
 // const calculateTotalDamage = (overviewPlayers: PlayerData[] | undefined) => {
@@ -35,12 +40,12 @@ const calculateAverageDamage2 = (overviewPlayers: PlayerData[] | undefined) => {
 // };
 
 const calculateTotalDamage2 = (overviewPlayers: PlayerData[] | undefined) => {
-    if (overviewPlayers == null) return 0;
+  if (overviewPlayers == null) return 0;
 
-    const totalDamage = calculateSum(overviewPlayers, 'total_damage');
-    // const formattedDamage = formatter().format(totalDamage);
+  const totalDamage = calculateSum(overviewPlayers, 'total_damage');
+  // const formattedDamage = formatter().format(totalDamage);
 
-    return totalDamage;
+  return totalDamage;
 };
 
 // const countAttacks = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
@@ -54,14 +59,18 @@ const calculateTotalDamage2 = (overviewPlayers: PlayerData[] | undefined) => {
 //     return `${attackCount}/${totalAttacks}`;
 // };
 
-const countAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
-    if (overviewPlayers == null || cycleAmount == null) return 0;
+const countAttacks2 = (
+  cycleAmount: number | undefined,
+  overviewPlayers: PlayerData[] | undefined,
+  attacksPerTier: number
+) => {
+  if (overviewPlayers == null || cycleAmount == null) return 0;
 
-    // const attackCount = calculateSum(overviewPlayers, 'attack_count');
+  // const attackCount = calculateSum(overviewPlayers, 'attack_count');
 
-    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
+  const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
 
-    return totalAttacks;
+  return totalAttacks;
 };
 
 // const countMissedAttacks = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
@@ -76,15 +85,19 @@ const countAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerD
 //     return `${missedAttacks}`;
 // };
 
-const countMissedAttacks2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
-    if (overviewPlayers == null || cycleAmount == null) return 0;
+const countMissedAttacks2 = (
+  cycleAmount: number | undefined,
+  overviewPlayers: PlayerData[] | undefined,
+  attacksPerTier: number
+) => {
+  if (overviewPlayers == null || cycleAmount == null) return 0;
 
-    const attackCount = calculateSum(overviewPlayers, 'attack_count');
+  const attackCount = calculateSum(overviewPlayers, 'attack_count');
 
-    const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
-    const missedAttacks = totalAttacks - attackCount;
+  const totalAttacks = cycleAmount * overviewPlayers.length * attacksPerTier;
+  const missedAttacks = totalAttacks - attackCount;
 
-    return missedAttacks;
+  return missedAttacks;
 };
 
 // const countMissingDamage = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, raidTier: string | undefined) => {
@@ -101,99 +114,160 @@ const countMissedAttacks2 = (cycleAmount: number | undefined, overviewPlayers: P
 //     return formattedDamage;
 // };
 
-const countMissingDamage2 = (cycleAmount: number | undefined, overviewPlayers: PlayerData[] | undefined, attacksPerTier: number) => {
-    if (overviewPlayers == null || cycleAmount == null) return 0;
+const countMissingDamage2 = (
+  cycleAmount: number | undefined,
+  overviewPlayers: PlayerData[] | undefined,
+  attacksPerTier: number
+) => {
+  if (overviewPlayers == null || cycleAmount == null) return 0;
 
-    const attacksPerCycle = attacksPerTier * cycleAmount;
-    const playersMissingAttacks = overviewPlayers.filter(({ attack_count }: PlayerData) => attack_count !== attacksPerCycle);
-    const totalMissingDamage = playersMissingAttacks
-        .map(({ average_damage, attack_count }: PlayerData) => average_damage * (attacksPerCycle - attack_count))
-        .reduce((prev: number, curr: number) => prev + curr, 0);
+  const attacksPerCycle = attacksPerTier * cycleAmount;
+  const playersMissingAttacks = overviewPlayers.filter(
+    ({ attack_count }: PlayerData) => attack_count !== attacksPerCycle
+  );
+  const totalMissingDamage = playersMissingAttacks
+    .map(
+      ({ average_damage, attack_count }: PlayerData) =>
+        average_damage * (attacksPerCycle - attack_count)
+    )
+    .reduce((prev: number, curr: number) => prev + curr, 0);
 
-    return totalMissingDamage;
+  return totalMissingDamage;
 };
 
 type RaidOverviewInfoProps = {
-    raidId: string;
-    raid: RaidData;
-    overviewPlayers: PlayersData | undefined;
+  raidId: string;
+  raid: RaidData;
+  overviewPlayers: PlayersData | undefined;
 };
 
-export function RaidOverviewInfo({ raidId, raid, overviewPlayers }: RaidOverviewInfoProps) {
-    const { data: raidCycles } = useRaidCycles(raidId);
-    return (
-        <>
-            <DonutChartData
-                title="Attacks"
-                chartData={{
-                    labels: undefined,
-                    datasets: [
-                        {
-                            data: [
-                                calculateSum(overviewPlayers?.players_data || [], 'attack_count'),
-                                countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
-                            ],
-                            backgroundColor: ['rgba(16, 185, 129, 0.2)', 'rgba(244, 63, 94, 0.2)'],
-                            borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
-                            borderWidth: 2,
-                        },
-                    ],
-                }}
-                labels={[
-                    { title: 'Submitted', colour: 'success', value: calculateSum(overviewPlayers?.players_data || [], 'attack_count') },
-                    {
-                        title: 'Missing',
-                        colour: 'danger',
-                        value: countMissedAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
-                    },
-                    {
-                        title: 'Total',
-                        colour: 'default',
-                        value: countAttacks2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
-                    },
-                ]}
-            />
+export function RaidOverviewInfo({
+  raidId,
+  raid,
+  overviewPlayers,
+}: RaidOverviewInfoProps) {
+  const { data: raidCycles } = useRaidCycles(raidId);
+  return (
+    <>
+      <DonutChartData
+        title="Attacks"
+        chartData={{
+          labels: undefined,
+          datasets: [
+            {
+              data: [
+                calculateSum(
+                  overviewPlayers?.players_data || [],
+                  'attack_count'
+                ),
+                countMissedAttacks2(
+                  raidCycles?.cycles?.length,
+                  overviewPlayers?.players_data,
+                  raid.attacksPerTier
+                ),
+              ],
+              backgroundColor: [
+                'rgba(16, 185, 129, 0.2)',
+                'rgba(244, 63, 94, 0.2)',
+              ],
+              borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
+              borderWidth: 2,
+            },
+          ],
+        }}
+        labels={[
+          {
+            title: 'Submitted',
+            colour: 'success',
+            value: calculateSum(
+              overviewPlayers?.players_data || [],
+              'attack_count'
+            ),
+          },
+          {
+            title: 'Missing',
+            colour: 'danger',
+            value: countMissedAttacks2(
+              raidCycles?.cycles?.length,
+              overviewPlayers?.players_data,
+              raid.attacksPerTier
+            ),
+          },
+          {
+            title: 'Total',
+            colour: 'default',
+            value: countAttacks2(
+              raidCycles?.cycles?.length,
+              overviewPlayers?.players_data,
+              raid.attacksPerTier
+            ),
+          },
+        ]}
+      />
 
-            <DonutChartData
-                title="Damage"
-                chartData={{
-                    labels: undefined,
-                    datasets: [
-                        {
-                            data: [
-                                calculateTotalDamage2(overviewPlayers?.players_data),
-                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier),
-                            ],
-                            backgroundColor: ['rgba(16, 185, 129, 0.2)', 'rgba(244, 63, 94, 0.2)'],
-                            borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
-                            borderWidth: 2,
-                        },
-                    ],
-                }}
-                labels={[
-                    { title: 'Submitted', colour: 'success', value: formatter().format(calculateTotalDamage2(overviewPlayers?.players_data)) },
-                    {
-                        title: 'Missing',
-                        colour: 'danger',
-                        value: formatter().format(
-                            countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier)
-                        ),
-                    },
-                    {
-                        title: 'Est. Total',
-                        colour: 'default',
-                        value: formatter().format(
-                            calculateTotalDamage2(overviewPlayers?.players_data) +
-                                countMissingDamage2(raidCycles?.cycles?.length, overviewPlayers?.players_data, raid.attacksPerTier)
-                        ),
-                    },
-                    {
-                        title: 'Average',
-                        colour: 'default',
-                        value: formatter().format(calculateAverageDamage2(overviewPlayers?.players_data)),
-                    },
-                ]}
-            />
-        </>
-    );
+      <DonutChartData
+        title="Damage"
+        chartData={{
+          labels: undefined,
+          datasets: [
+            {
+              data: [
+                calculateTotalDamage2(overviewPlayers?.players_data),
+                countMissingDamage2(
+                  raidCycles?.cycles?.length,
+                  overviewPlayers?.players_data,
+                  raid.attacksPerTier
+                ),
+              ],
+              backgroundColor: [
+                'rgba(16, 185, 129, 0.2)',
+                'rgba(244, 63, 94, 0.2)',
+              ],
+              borderColor: ['rgba(16, 185, 129, 1)', 'rgba(244, 63, 94, 1)'],
+              borderWidth: 2,
+            },
+          ],
+        }}
+        labels={[
+          {
+            title: 'Submitted',
+            colour: 'success',
+            value: formatter().format(
+              calculateTotalDamage2(overviewPlayers?.players_data)
+            ),
+          },
+          {
+            title: 'Missing',
+            colour: 'danger',
+            value: formatter().format(
+              countMissingDamage2(
+                raidCycles?.cycles?.length,
+                overviewPlayers?.players_data,
+                raid.attacksPerTier
+              )
+            ),
+          },
+          {
+            title: 'Est. Total',
+            colour: 'default',
+            value: formatter().format(
+              calculateTotalDamage2(overviewPlayers?.players_data) +
+                countMissingDamage2(
+                  raidCycles?.cycles?.length,
+                  overviewPlayers?.players_data,
+                  raid.attacksPerTier
+                )
+            ),
+          },
+          {
+            title: 'Average',
+            colour: 'default',
+            value: formatter().format(
+              calculateAverageDamage2(overviewPlayers?.players_data)
+            ),
+          },
+        ]}
+      />
+    </>
+  );
 }

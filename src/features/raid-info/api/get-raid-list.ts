@@ -5,19 +5,21 @@ import { AttacksRaidTierMapping } from '../constants';
 import { RaidList } from '../types';
 
 export function useRaidList() {
-    return useQuery({
-        queryKey: ['raid_list'],
-        queryFn: async () => await axios.get<AxiosResponse<RaidList>, RaidList>(ENDPOINTS.raid_list),
-        select(data) {
-            const mutatedData = data.raids.map((raidData) => {
-                const { label, attacks } = AttacksRaidTierMapping[raidData.tier as number];
-                return { ...raidData, tierLabel: label, attacksPerTier: attacks };
-            });
+  return useQuery({
+    queryKey: ['raid_list'],
+    queryFn: async () =>
+      await axios.get<AxiosResponse<RaidList>, RaidList>(ENDPOINTS.raid_list),
+    select(data) {
+      const mutatedData = data.raids.map((raidData) => {
+        const { label, attacks } =
+          AttacksRaidTierMapping[raidData.tier as number];
+        return { ...raidData, tierLabel: label, attacksPerTier: attacks };
+      });
 
-            data.raids = mutatedData;
+      data.raids = mutatedData;
 
-            return data;
-        },
-        placeholderData: keepPreviousData,
-    });
+      return data;
+    },
+    placeholderData: keepPreviousData,
+  });
 }

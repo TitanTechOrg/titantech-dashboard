@@ -1,3 +1,5 @@
-export function PageContainer({ children }: React.PropsWithChildren<{}>) {
-    return <div className="mx-auto max-w-2xl">{children}</div>;
+import { PropsWithChildren } from 'react';
+
+export function PageContainer({ children }: PropsWithChildren) {
+  return <div className="mx-auto max-w-2xl">{children}</div>;
 }

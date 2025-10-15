@@ -1,36 +1,38 @@
 import { PageContainer } from '@/components';
 import { Button } from '@heroui/react';
-import React, { Component, ErrorInfo } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
-    children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface State {
-    hasError: boolean;
+  hasError: boolean;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = { hasError: false };
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught an error: ', error, errorInfo);
+    this.setState({ hasError: true });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <PageContainer>
+          <h1>Something went wrong.</h1>
+          <Button onPress={() => (window.location.href = '/')}>
+            Click here to reload the app
+          </Button>
+        </PageContainer>
+      );
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.error('ErrorBoundary caught an error: ', error, errorInfo);
-        this.setState({ hasError: true });
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <PageContainer>
-                    <h1>Something went wrong.</h1>
-                    <Button onPress={() => (window.location.href = '/')}>Click here to reload the app</Button>
-                </PageContainer>
-            );
-        }
-
-        return this.props.children;
-    }
+    return this.props.children;
+  }
 }

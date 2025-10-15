@@ -1,7 +1,7 @@
-import { TooltipPositionerFunction } from 'chart.js';
+import { ChartType, TooltipPositionerFunction } from 'chart.js';
 
 declare module 'chart.js' {
-    interface TooltipPositionerMap {
-        myCustomPositioner: TooltipPositionerFunction<ChartType>;
-    }
+  interface TooltipPositionerMap {
+    myCustomPositioner: TooltipPositionerFunction<ChartType>;
+  }
 }

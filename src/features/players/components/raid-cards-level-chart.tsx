@@ -1,118 +1,120 @@
 import { CHART_GRID_COLOUR } from '@/constants/theme';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { findCard, getCardImageUrl } from '@/utils';
-import { Spinner } from "@heroui/react";
+import { Spinner } from '@heroui/react';
 import { ChartOptions } from 'chart.js';
 import { lazy, Suspense } from 'react';
 
 // Lazy load the `Scatter` component from `react-chartjs-2`
-const Scatter = lazy(() => import('react-chartjs-2').then((module) => ({ default: module.Scatter })));
+const Scatter = lazy(() =>
+  import('react-chartjs-2').then((module) => ({ default: module.Scatter }))
+);
 
 interface Card {
-    skill_name: string;
-    level: number;
-    quantity_received: number;
-    quantity_spent: number;
+  skill_name: string;
+  level: number;
+  quantity_received: number;
+  quantity_spent: number;
 }
 
 interface CardLevelChartProps {
-    cards: Card[];
+  cards: Card[];
 }
 
 const imgSize: number = 20;
 
 export function RaidCardsLevelChart({ cards }: CardLevelChartProps) {
-    const { darkMode: darkModeStorage } = usePreferencesStore();
+  const { darkMode: darkModeStorage } = usePreferencesStore();
 
-    const cardData = cards.map((card, index) => {
-        const img = new Image(imgSize, imgSize);
-        img.src = getCardImageUrl(card.skill_name);
-        return {
-            x: card.level,
-            y: index,
-            label: findCard(card.skill_name),
-            pointStyle: img || undefined,
-        };
-    });
-
-    const data = {
-        datasets: [
-            {
-                label: 'Card Levels',
-                data: cardData,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                pointRadius: imgSize / 2,
-                pointHoverRadius: imgSize / 2 + 2,
-                pointStyle: cardData.map((item) => item.pointStyle),
-            },
-        ],
+  const cardData = cards.map((card, index) => {
+    const img = new Image(imgSize, imgSize);
+    img.src = getCardImageUrl(card.skill_name);
+    return {
+      x: card.level,
+      y: index,
+      label: findCard(card.skill_name),
+      pointStyle: img || undefined,
     };
+  });
 
-    const options: ChartOptions<'scatter'> = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                beginAtZero: true,
-                max: 100,
-                title: {
-                    display: true,
-                    text: 'Levels',
-                },
-                grid: {
-                    color() {
-                        if (darkModeStorage) return CHART_GRID_COLOUR.dark;
-                        return CHART_GRID_COLOUR.light;
-                    },
-                },
-            },
-            y: {
-                ticks: {
-                    display: false,
-                },
-                title: {
-                    display: false,
-                },
-                grid: {
-                    color() {
-                        if (darkModeStorage) return CHART_GRID_COLOUR.dark;
-                        return CHART_GRID_COLOUR.light;
-                    },
-                },
-            },
-        },
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                callbacks: {
-                    label: (tooltipItem) => {
-                        const card = cards[tooltipItem.dataIndex];
-                        return `${findCard(card.skill_name)
-                            .replace(/([A-Z])/g, ' $1')
-                            .trim()}: Level ${card.level}`;
-                    },
-                },
-                displayColors: false,
-            },
-            title: {
-                display: true,
-                text: 'Card Level Distribution',
-                font: {
-                    size: 18,
-                    weight: 'bold',
-                },
-            },
-        },
-    };
+  const data = {
+    datasets: [
+      {
+        label: 'Card Levels',
+        data: cardData,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        pointRadius: imgSize / 2,
+        pointHoverRadius: imgSize / 2 + 2,
+        pointStyle: cardData.map((item) => item.pointStyle),
+      },
+    ],
+  };
 
-    return (
-        <div className="flex h-96 w-full items-center justify-center">
-            <Suspense fallback={<Spinner label="Loading chart..." />}>
-                <Scatter data={data} options={options} />
-            </Suspense>
-        </div>
-    );
+  const options: ChartOptions<'scatter'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100,
+        title: {
+          display: true,
+          text: 'Levels',
+        },
+        grid: {
+          color() {
+            if (darkModeStorage) return CHART_GRID_COLOUR.dark;
+            return CHART_GRID_COLOUR.light;
+          },
+        },
+      },
+      y: {
+        ticks: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+        grid: {
+          color() {
+            if (darkModeStorage) return CHART_GRID_COLOUR.dark;
+            return CHART_GRID_COLOUR.light;
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => {
+            const card = cards[tooltipItem.dataIndex];
+            return `${findCard(card.skill_name)
+              .replace(/([A-Z])/g, ' $1')
+              .trim()}: Level ${card.level}`;
+          },
+        },
+        displayColors: false,
+      },
+      title: {
+        display: true,
+        text: 'Card Level Distribution',
+        font: {
+          size: 18,
+          weight: 'bold',
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="flex h-96 w-full items-center justify-center">
+      <Suspense fallback={<Spinner label="Loading chart..." />}>
+        <Scatter data={data} options={options} />
+      </Suspense>
+    </div>
+  );
 }

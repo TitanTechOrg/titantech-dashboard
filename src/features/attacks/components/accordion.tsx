@@ -2,7 +2,7 @@ import { RaidTitanData } from '@/components/raid-titan-data';
 import { TitanSequence } from '@/features/titans';
 import { useBoundStore } from '@/stores/bound.store';
 import { formatter } from '@/utils';
-import { Accordion, AccordionItem } from "@heroui/react";
+import { Accordion, AccordionItem } from '@heroui/react';
 import { useMediaQueries } from '@react-hook/media-query';
 import { useMemo } from 'react';
 import { QuickView } from '..';
@@ -10,127 +10,201 @@ import { RaidAttack, TitanPart } from '../types';
 import { RaidDeck } from './raid-deck';
 
 type RaidLogProps = {
-    data: RaidAttack[];
+  data: RaidAttack[];
 };
 
 const mapUniqueParts = (parts: TitanPart[]) => {
-    const summedUpValueInParts = parts.reduce((accumulator: TitanPart[], cur: TitanPart) => {
-        const name = cur.name;
-        const found = accumulator.find(function (elem) {
-            return elem.name === name;
-        });
-        if (found) found.value += cur.value;
-        else accumulator.push(cur);
-        return accumulator;
-    }, []);
+  const summedUpValueInParts = parts.reduce(
+    (accumulator: TitanPart[], cur: TitanPart) => {
+      const name = cur.name;
+      const found = accumulator.find(function (elem) {
+        return elem.name === name;
+      });
+      if (found) found.value += cur.value;
+      else accumulator.push(cur);
+      return accumulator;
+    },
+    []
+  );
 
-    return summedUpValueInParts;
+  return summedUpValueInParts;
 };
 
 type MobileViewProps = {
-    data: RaidAttack[];
-    titan: (id: string) => TitanSequence | undefined;
+  data: RaidAttack[];
+  titan: (id: string) => TitanSequence | undefined;
 };
 
 function MobileView({ data, titan }: MobileViewProps) {
-    return (
-        <Accordion selectionMode="multiple">
-            {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts, raid_titan_id }: RaidAttack) => (
-                <AccordionItem
-                    key={titan_attack_id}
-                    aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
-                    title={
-                        <div className="flex flex-row items-center justify-between gap-4">
-                            <RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />
-                            <p className="text-lg font-bold">{formatter().format(damage)}</p>
-                        </div>
-                    }
-                    subtitle={
-                        <div className="flex flex-row items-center justify-between gap-4">
-                            <span className="text-sm font-normal text-black dark:text-white">{player_name}</span>
-                            <span className="text-xs font-light">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
-                        </div>
-                    }
-                >
-                    <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
-                </AccordionItem>
-            ))}
-        </Accordion>
-    );
+  return (
+    <Accordion selectionMode="multiple">
+      {data.map(
+        ({
+          sources,
+          damage,
+          titan_attack_id,
+          player_name,
+          occurred_at,
+          parts,
+          raid_titan_id,
+        }: RaidAttack) => (
+          <AccordionItem
+            key={titan_attack_id}
+            aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
+            title={
+              <div className="flex flex-row items-center justify-between gap-4">
+                <RaidDeck
+                  id={`${titan_attack_id}${occurred_at}${player_name}`}
+                  sources={sources}
+                />
+                <p className="text-lg font-bold">
+                  {formatter().format(damage)}
+                </p>
+              </div>
+            }
+            subtitle={
+              <div className="flex flex-row items-center justify-between gap-4">
+                <span className="text-sm font-normal text-black dark:text-white">
+                  {player_name}
+                </span>
+                <span className="text-xs font-light">
+                  {new Date(occurred_at + 'Z').toLocaleTimeString([], {
+                    timeStyle: 'short',
+                  })}
+                </span>
+              </div>
+            }
+          >
+            <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
+          </AccordionItem>
+        )
+      )}
+    </Accordion>
+  );
 }
 
 function MobileCompactView({ data, titan }: MobileViewProps) {
-    return (
-        <Accordion selectionMode="multiple">
-            {data.map(({ damage, titan_attack_id, player_name, occurred_at, parts, raid_titan_id }: RaidAttack) => (
-                <AccordionItem
-                    key={titan_attack_id}
-                    aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
-                    startContent={<QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} isCompactView={true} />}
-                    title={
-                        <div className="flex flex-col items-end justify-center">
-                            <div className="flex flex-col items-end justify-center">
-                                <p className="text-lg font-bold">{formatter().format(damage)}</p>
-                                <span className="text-sm font-normal text-black dark:text-white">{player_name}</span>
-                            </div>
-                            <span className="text-xs font-light">{new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}</span>
-                        </div>
-                    }
-                >
-                    <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
-                </AccordionItem>
-            ))}
-        </Accordion>
-    );
+  return (
+    <Accordion selectionMode="multiple">
+      {data.map(
+        ({
+          damage,
+          titan_attack_id,
+          player_name,
+          occurred_at,
+          parts,
+          raid_titan_id,
+        }: RaidAttack) => (
+          <AccordionItem
+            key={titan_attack_id}
+            aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
+            startContent={
+              <QuickView
+                titan={titan(raid_titan_id)}
+                data={mapUniqueParts(parts)}
+                isCompactView={true}
+              />
+            }
+            title={
+              <div className="flex flex-col items-end justify-center">
+                <div className="flex flex-col items-end justify-center">
+                  <p className="text-lg font-bold">
+                    {formatter().format(damage)}
+                  </p>
+                  <span className="text-sm font-normal text-black dark:text-white">
+                    {player_name}
+                  </span>
+                </div>
+                <span className="text-xs font-light">
+                  {new Date(occurred_at + 'Z').toLocaleTimeString([], {
+                    timeStyle: 'short',
+                  })}
+                </span>
+              </div>
+            }
+          >
+            <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
+          </AccordionItem>
+        )
+      )}
+    </Accordion>
+  );
 }
 
 function DesktopView({ data, titan }: MobileViewProps) {
-    return (
-        <Accordion selectionMode="multiple">
-            {data.map(({ sources, damage, titan_attack_id, player_name, occurred_at, parts, raid_titan_id }: RaidAttack) => (
-                <AccordionItem
-                    key={titan_attack_id}
-                    aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
-                    startContent={<RaidDeck id={`${titan_attack_id}${occurred_at}${player_name}`} sources={sources} />}
-                    title={<p className="flex flex-row items-center justify-between pl-2">{formatter().format(damage)}</p>}
-                    subtitle={
-                        <div className="relative">
-                            <QuickView titan={titan(raid_titan_id)} data={mapUniqueParts(parts)} />
-                            <p className="flex flex-row items-center justify-between pl-2 font-bold">
-                                {player_name}
-                                <span className="pl-2 text-xs font-light">
-                                    {new Date(occurred_at + 'Z').toLocaleTimeString([], { timeStyle: 'short' })}
-                                </span>
-                            </p>
-                        </div>
-                    }
-                >
-                    <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
-                </AccordionItem>
-            ))}
-        </Accordion>
-    );
+  return (
+    <Accordion selectionMode="multiple">
+      {data.map(
+        ({
+          sources,
+          damage,
+          titan_attack_id,
+          player_name,
+          occurred_at,
+          parts,
+          raid_titan_id,
+        }: RaidAttack) => (
+          <AccordionItem
+            key={titan_attack_id}
+            aria-label={`${player_name} did ${damage} damage at ${occurred_at}`}
+            startContent={
+              <RaidDeck
+                id={`${titan_attack_id}${occurred_at}${player_name}`}
+                sources={sources}
+              />
+            }
+            title={
+              <p className="flex flex-row items-center justify-between pl-2">
+                {formatter().format(damage)}
+              </p>
+            }
+            subtitle={
+              <div className="relative">
+                <QuickView
+                  titan={titan(raid_titan_id)}
+                  data={mapUniqueParts(parts)}
+                />
+                <p className="flex flex-row items-center justify-between pl-2 font-bold">
+                  {player_name}
+                  <span className="pl-2 text-xs font-light">
+                    {new Date(occurred_at + 'Z').toLocaleTimeString([], {
+                      timeStyle: 'short',
+                    })}
+                  </span>
+                </p>
+              </div>
+            }
+          >
+            <RaidTitanData titan={titan(raid_titan_id)} damagedParts={parts} />
+          </AccordionItem>
+        )
+      )}
+    </Accordion>
+  );
 }
 
 export function RaidLog({ data }: RaidLogProps) {
-    const { matches } = useMediaQueries({
-        screen: 'screen',
-        width: '(max-width: 640px)',
-    });
+  const { matches } = useMediaQueries({
+    screen: 'screen',
+    width: '(max-width: 640px)',
+  });
 
-    const { titans, showRaidCards } = useBoundStore();
+  const { titans, showRaidCards } = useBoundStore();
 
-    if (data.length === 0) return null;
+  const titan = useMemo(
+    () => (id: string) => titans.find((titan) => titan.id === id),
+    [titans]
+  );
 
-    const titan = useMemo(() => (id: string) => titans.find((titan) => titan.id === id), [titans]);
+  if (data.length === 0) return null;
 
-    if (matches.width) {
-        if (showRaidCards) {
-            return <MobileView data={data} titan={titan} />;
-        }
-
-        return <MobileCompactView data={data} titan={titan} />;
+  if (matches.width) {
+    if (showRaidCards) {
+      return <MobileView data={data} titan={titan} />;
     }
 
-    return <DesktopView data={data} titan={titan} />;
+    return <MobileCompactView data={data} titan={titan} />;
+  }
+
+  return <DesktopView data={data} titan={titan} />;
 }

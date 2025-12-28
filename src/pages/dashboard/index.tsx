@@ -7,6 +7,7 @@ import {
   RaidCycle,
   RaidDamageInfo,
   RaidInfo,
+  useIsRaidStarted,
   useRaidCycles,
   useRaidList,
 } from '@/features/raid-info';
@@ -28,19 +29,7 @@ export default function Dashboard() {
   const { data: raidListData } = useRaidList();
   const raidAttacks = useFetchedAttacks();
 
-  const startedAt = raidListData?.raids[0]?.started_at;
-
-  const isRaidStarted = useMemo(() => {
-    if (!startedAt) return false;
-
-    const startTime = new Date(startedAt);
-    if (!isFinite(+startTime)) return false;
-
-    const nowUTC =
-      new Date().getTime() - new Date().getTimezoneOffset() * 60000;
-
-    return nowUTC > startTime.getTime();
-  }, [startedAt]);
+  const isRaidStarted = useIsRaidStarted();
 
   useEffect(() => {
     if (raidTitansData?.titans) {

@@ -1,5 +1,5 @@
 import AttacksCardLogo from '@/assets/Attack.webp';
-import { useRaidList } from '@/features/raid-info';
+import { useIsRaidStarted, useRaidList } from '@/features/raid-info';
 import { useBoundStore } from '@/stores/bound.store';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import { formatter } from '@/utils';
@@ -43,6 +43,9 @@ export function AttacksCard({
     data?.pages[0]?.attack_logs?.length > 0
   );
 
+  const isRaidStarted = useIsRaidStarted();
+  const shouldDisableRefresh = !isRaidStarted || !!raidList?.raids[0]?.ended_at;
+
   const { showRaidCards, setShowRaidCards } = useBoundStore();
   const { offstratDamageThreshold, setOffstratDamageThreshold } =
     usePreferencesStore();
@@ -71,7 +74,7 @@ export function AttacksCard({
           isLoading={isRefetching}
           onPress={() => refetch()}
           isIconOnly
-          isDisabled={!!raidList?.raids[0]?.ended_at}
+          isDisabled={shouldDisableRefresh}
         >
           <ReloadIcon />
         </Button>
@@ -81,7 +84,7 @@ export function AttacksCard({
           color="primary"
           isLoading={isRefetching}
           onPress={() => refetch()}
-          isDisabled={!!raidList?.raids[0]?.ended_at}
+          isDisabled={shouldDisableRefresh}
         >
           Refresh
         </Button>

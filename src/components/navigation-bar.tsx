@@ -19,17 +19,14 @@ import { KoFiButton } from './kofi-button';
 export function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { checkAuth } = usePreferencesStore((state) => ({
-    token: state.token,
-    checkAuth: state.checkAuth,
-  }));
+  const token = usePreferencesStore((state) => state.token);
 
   const routes = useMemo(() => {
-    const isAuthenticated = checkAuth();
+    const isAuthenticated = !!token;
     return routePaths.filter((route) =>
       isAuthenticated ? true : !route.protected
     );
-  }, [checkAuth]);
+  }, [token]);
 
   return (
     <Navbar

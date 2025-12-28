@@ -54,7 +54,12 @@ const baseChartOptions: ChartOptions<'line'> = {
     tooltip: {
       callbacks: {
         title: (tooltipItems) => {
-          const hour = parseInt(tooltipItems[0]?.label.split(':')[0], 10);
+          const labelParts = tooltipItems[0]?.label?.split(':') || [];
+          if (labelParts.length === 0) return '';
+
+          const hour = parseInt(labelParts[0], 10);
+          if (isNaN(hour)) return tooltipItems[0]?.label || '';
+
           const startTime = `${hour.toString().padStart(2, '0')}:00`;
           const endTime = `${(hour + 1 === 24 ? 0 : hour + 1).toString().padStart(2, '0')}:00`;
           return `${startTime} - ${endTime}`;

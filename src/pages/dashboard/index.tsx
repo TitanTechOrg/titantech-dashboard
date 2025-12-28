@@ -116,7 +116,7 @@ export default function Dashboard() {
   // }, [raidCycles?.cycles.length]);
 
   useEffect(() => {
-    if (!titans) return;
+    if (!titans || titans.length === 0) return;
     if (!raidAttacks?.data?.pages || !raidAttacks?.data?.pages?.length) return;
 
     let foundLatestTitan: TitanSequence | undefined = undefined;

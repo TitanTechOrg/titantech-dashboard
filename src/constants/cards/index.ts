@@ -42,6 +42,8 @@ export const RaidCardMap = {
   GuardBreak: { name: 'Weaken', type: 'Burst' },
   SandsOfTime: { name: 'SandsOfTime', type: 'Affliction' },
   CosmicBarb: { name: 'CosmicBarb', type: 'Affliction' },
+  BattleDrums: { name: 'BattleDrums', type: 'Support' },
+  BarbedMorningstar: { name: 'BarbedMorningstar', type: 'Burst' },
 
   Wildcard: { name: 'Wildcard', type: 'Support' },
 } as const;
